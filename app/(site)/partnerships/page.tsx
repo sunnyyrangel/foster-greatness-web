@@ -32,64 +32,76 @@ const itemVariants = {
 
 const currentPartners = [
   {
-    name: 'EatWell Meal Kits',
-    description: 'Provides healthy meal kits and community cooking sessions via Zoom, bringing people together through shared meals.',
-    logo: '/images/partners/eatwell.png',
-    impact: 'Monthly cooking events for 50+ community members'
-  },
-  {
-    name: 'StaffMark Group',
-    description: 'Equips foster youth with employment tools, resources, and skills for sustainable employment while expanding employer access to diverse talent.',
+    name: 'Staffmark',
+    description: 'Our largest partnership brings the first-of-its-kind Foster Greatness Comprehensive Employment Support Pipeline program. We offer career support services including resume building, curated mock interviews, a skilled Career Advisor, skill-marketing, and access to a secure job board. Staffmark hosts free career development workshops in our Community and sponsors events like our Thanksgiving Community Cooking Event.',
     logo: '/images/partners/smg.png',
-    impact: '100+ job placements and ongoing career support'
-  },
-  {
-    name: 'Foster Care Alumni of America',
-    description: 'Monthly advocacy events with advocates and alumni focused on policy change and systemic improvement.',
-    logo: '/images/partners/fcalumni.png',
-    impact: 'National policy advocacy reaching 10,000+ alumni'
+    impact: 'Comprehensive employment pipeline program'
   },
   {
     name: 'One Simple Wish',
-    description: 'Wish-granting platform connecting foster youth with donor-sponsored gifts and essential needs.',
+    description: 'Our partnership ensures those directly impacted by foster care always have access to support and well-wishes. Each holiday season, we host a large "Holiday Wish Round-Up" allowing individuals with lived experience, regardless of age, to submit their holiday wishes. Year-round, we connect individuals to One Simple Wish through our resource support services.',
     logo: '/images/partners/osw.png',
-    impact: '$50K+ in wishes granted to community members'
+    impact: 'Year-round wish fulfillment for all ages'
   },
   {
-    name: 'Lotus Grove Counseling',
-    description: 'Mental health and parenting support services tailored to the unique needs of foster care alumni.',
-    logo: '/images/partners/lotus-grove.png',
-    impact: 'Specialized trauma-informed therapy services'
-  },
-  {
-    name: 'Youth Voices Rising',
-    description: 'Teaches storytelling and op-ed writing, empowering youth to shape community narratives through their voices.',
-    logo: '/images/partners/youth-voices-rising.png',
-    impact: '30+ published stories amplifying lived experiences'
+    name: 'EatWell',
+    description: 'Every year, we partner with EatWell to host a virtual live Thanksgiving Community Gathering. This partnership provides former foster youth and their families with meals for Thanksgiving week, creates a Foster Greatness Community Cookbook with recipes for allies and community members, and hosts a virtual cooking class and gathering.',
+    logo: '/images/partners/eatwell.png',
+    impact: 'Annual Thanksgiving meals and community gatherings'
   },
   {
     name: 'First Star',
-    description: 'Provides educational support and college preparation programs specifically designed for foster youth.',
+    description: 'We hosted the 2025 First Star Creation Conference virtually in the Foster Greatness Community. We\'ve created a private space within our app for First Star program alumni to connect, share updates, and stay engaged while accessing resources, events, and opportunities throughout the Foster Greatness Community.',
     logo: '/images/partners/firststar.png',
-    impact: 'College readiness programs for foster youth'
+    impact: 'Virtual conference hosting and alumni community space'
   },
   {
-    name: 'Comfort Cases',
-    description: 'Provides comfort and dignity to children entering foster care by delivering backpacks filled with essential items.',
-    logo: '/images/partners/comfort-cases.png',
-    impact: 'Essential supplies for youth entering care'
+    name: 'Foster Care Alumni of America',
+    description: 'A partnership in shared effort to set the standard of empowerment and support for individuals of all ages impacted by foster care. This strengthens our impact by connecting us with organizations respected by all generations of foster youth and alumni. We ensure our members access FCAA\'s monthly policy calls and they share our events and opportunities with their members.',
+    logo: '/images/partners/fcalumni.png',
+    impact: 'Cross-generational advocacy and policy engagement'
   },
   {
-    name: 'Freedom Youth Foundation',
-    description: 'Empowers foster youth through mentorship, leadership development, and advocacy opportunities.',
-    logo: '/images/partners/freedomyouthfoundation.png',
-    impact: 'Leadership and advocacy programs'
+    name: 'Lotus Grove Counseling & Consulting Services',
+    description: 'Since September 2025, Lotus Grove offers skilled, trauma-informed, lived experience-led parenting support groups for individuals who spent time in foster care and are now parenting. This unique partnership recognizes that former foster youth may lack parenting role models, providing support to build stronger networks for becoming strong, healthy parents.',
+    logo: '/images/partners/lotus-grove.png',
+    impact: 'Trauma-informed parenting support groups'
   },
   {
-    name: 'National Network for Sibling Connections',
-    description: 'Works to preserve and strengthen sibling relationships for children and youth in foster care.',
-    logo: '/images/partners/national-network-sibling.png',
-    impact: 'Sibling connection and reunification support'
+    name: 'A Home Within',
+    description: 'This partnership brings free, long-term, private practice therapy services to individuals impacted by foster care across over 20 states. A Home Within is expanding to all 50 states and partners with Foster Greatness to expand awareness. We feature them in our Resource Finder Tool and as a preferred partner through our Resource Support Services.',
+    logo: '/images/partners/a-home-within.png',
+    impact: 'Free long-term therapy in 20+ states'
+  },
+  {
+    name: 'Youth Voices Rising',
+    description: 'This partnership brings media training and skill development to former foster youth nationwide. Youth Voices Rising hosts op-ed media trainings in our Community to help those with lived experience understand journalism and share their stories powerfully. We\'re partnering on a series of media articles about the Executive Order: Fostering the Future for American Children and Families, plus a January 2026 webinar.',
+    logo: '/images/partners/youth-voices-rising.png',
+    impact: 'Media training and lived experience amplification'
+  },
+  {
+    name: 'Cetera',
+    description: 'This partnership expands our capacity, network, and knowledge base throughout Florida. Cetera helps populate and maintain our Foster Greatness Resource Finder with local programs and services for former foster youth in Florida. We co-market our services and share social media content to spread awareness about the Community app. Future expansion includes a Florida-based resource specialist liaison.',
+    logo: '/images/partners/cetera.png',
+    impact: 'Florida resource expansion and co-marketing'
+  },
+  {
+    name: 'Str8Up Employment Services',
+    description: 'Partnering with a lived experience founder and employment services expert, we\'re rebuilding live digital content to create Foster Greatness\' first ever Employment Readiness Program. This cohort-based program teaches former foster youth employment basics and prepares our community for the next steps in their career journey.',
+    logo: '/images/partners/str8up.png',
+    impact: 'Cohort-based Employment Readiness Program'
+  },
+  {
+    name: 'National Foster Youth Institute',
+    description: 'Our partnership with the National Foster Youth Institute connects our community with leadership development and advocacy opportunities at the national level.',
+    logo: '/images/partners/nfyi.png',
+    impact: 'National leadership and advocacy opportunities'
+  },
+  {
+    name: 'For Others',
+    description: 'For Others featured the Foster Greatness Community as a powerful, leading app for those directly impacted by foster care in their blog, helping amplify awareness of our platform.',
+    logo: '/images/partners/for-others.png',
+    impact: 'Featured partnership and awareness'
   },
   {
     name: 'Doing Good Works',
@@ -243,8 +255,8 @@ export default function PartnershipsPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentPartners.map((partner, i) => {
-              const hasDetailPage = partner.name === 'StaffMark Group' || partner.name === 'One Simple Wish';
-              const detailUrl = partner.name === 'StaffMark Group' ? '/partnerships/staffmark' : '/partnerships/one-simple-wish';
+              const hasDetailPage = partner.name === 'Staffmark' || partner.name === 'One Simple Wish';
+              const detailUrl = partner.name === 'Staffmark' ? '/partnerships/staffmark' : '/partnerships/one-simple-wish';
 
               const PartnerCard = (
                 <motion.div
