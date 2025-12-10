@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Play, Heart, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import YouTubePlaylist from '@/components/YouTubePlaylist';
 
 export default function ThriverStoriesPage() {
@@ -37,9 +38,42 @@ export default function ThriverStoriesPage() {
               Real stories of resilience, strength, and transformation from our community.
             </p>
 
-            <p className="text-lg text-gray-500 max-w-xl mx-auto">
+            <p className="text-lg text-gray-500 max-w-xl mx-auto mb-8">
               Host Isabel Stasa interviews Foster Greatness community members, sharing their journeys and insights. New episodes weekly.
             </p>
+
+            <div className="flex items-center justify-center gap-6">
+              <a
+                href="https://www.youtube.com/@_FosterGreatness/playlists"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-sm hover:shadow-md transition-shadow"
+              >
+                <Image
+                  src="/images/youtube-logo.webp"
+                  alt="YouTube"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+                <span className="text-sm font-semibold text-fg-navy">Watch on YouTube</span>
+              </a>
+              <a
+                href="https://open.spotify.com/show/0jAd3WahLfVMkjb2Fb1ODs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-sm hover:shadow-md transition-shadow"
+              >
+                <Image
+                  src="/images/spotify-logo.webp"
+                  alt="Spotify"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+                <span className="text-sm font-semibold text-fg-navy">Listen on Spotify</span>
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>
