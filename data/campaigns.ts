@@ -151,7 +151,7 @@ export const campaigns: Campaign[] = [
 
     showInNav: false,
     showOnHomepage: false,
-    showOnDonatePage: false,
+    showOnDonatePage: true,
     featured: false,
 
     hasCustomPage: false,

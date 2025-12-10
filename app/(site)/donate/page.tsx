@@ -59,43 +59,87 @@ export default function DonatePage() {
             </div>
 
             <div className={`grid ${campaigns.length === 1 ? 'max-w-lg' : 'md:grid-cols-2 max-w-4xl'} gap-8 mx-auto`}>
-              {campaigns.map((campaign) => (
-                <Link
-                  key={campaign.id}
-                  href={`/${campaign.slug}`}
-                  className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={campaign.image}
-                      alt={campaign.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-fg-navy to-fg-blue opacity-20" />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="p-2 rounded-lg bg-gradient-to-br from-fg-navy to-fg-blue">
-                        <Gift className="w-5 h-5 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold text-fg-navy group-hover:text-fg-blue transition-colors">
-                        {campaign.title}
-                      </h3>
+              {campaigns.map((campaign) => {
+                // Use Stripe link if available, otherwise fall back to campaign page
+                const donateUrl = campaign.stripeLink || `/${campaign.slug}`;
+                const isExternal = !!campaign.stripeLink;
+
+                return isExternal ? (
+                  <a
+                    key={campaign.id}
+                    href={donateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={campaign.image}
+                        alt={campaign.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-fg-navy to-fg-blue opacity-20" />
                     </div>
-                    <p className="text-gray-600 mb-4">{campaign.description}</p>
-                    {campaign.donationAmount && (
-                      <p className="text-lg font-bold text-fg-blue mb-4">
-                        ${campaign.donationAmount} {campaign.donationLabel?.toLowerCase().replace('fund ', 'per ').replace('give ', '')}
-                      </p>
-                    )}
-                    <span className="inline-flex items-center gap-2 text-fg-blue font-semibold group-hover:gap-3 transition-all">
-                      {campaign.donationLabel || 'Support This Campaign'}
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-fg-navy to-fg-blue">
+                          <Gift className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-fg-navy group-hover:text-fg-blue transition-colors">
+                          {campaign.title}
+                        </h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">{campaign.description}</p>
+                      {campaign.donationAmount && (
+                        <p className="text-lg font-bold text-fg-blue mb-4">
+                          ${campaign.donationAmount} {campaign.donationLabel?.toLowerCase().replace('fund ', 'per ').replace('give ', '')}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center gap-2 text-fg-blue font-semibold group-hover:gap-3 transition-all">
+                        {campaign.donationLabel || 'Support This Campaign'}
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <Link
+                    key={campaign.id}
+                    href={donateUrl}
+                    className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={campaign.image}
+                        alt={campaign.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-fg-navy to-fg-blue opacity-20" />
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-fg-navy to-fg-blue">
+                          <Gift className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-fg-navy group-hover:text-fg-blue transition-colors">
+                          {campaign.title}
+                        </h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">{campaign.description}</p>
+                      {campaign.donationAmount && (
+                        <p className="text-lg font-bold text-fg-blue mb-4">
+                          ${campaign.donationAmount} {campaign.donationLabel?.toLowerCase().replace('fund ', 'per ').replace('give ', '')}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center gap-2 text-fg-blue font-semibold group-hover:gap-3 transition-all">
+                        {campaign.donationLabel || 'Support This Campaign'}
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

@@ -93,26 +93,19 @@ export default function ContactSection({
                 {description}
               </p>
 
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href={`mailto:${email}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
-                >
-                  <Mail className="w-4 h-4" />
-                  Email Us
-                </a>
-                {showCommunityButton && (
+              {showCommunityButton && (
+                <div className="flex flex-wrap gap-4">
                   <a
                     href="https://community.fostergreatness.co"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-white font-semibold rounded-full border-2 border-white/30 hover:bg-white/10 transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
                   >
                     Join Community
                     <ArrowRight className="w-4 h-4" />
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </motion.div>
 
             {/* Typeform */}

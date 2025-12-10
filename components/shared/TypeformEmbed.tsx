@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface TypeformEmbedProps {
   /**
@@ -41,29 +41,44 @@ export default function TypeformEmbed({
   className = '',
 }: TypeformEmbedProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scriptLoadedRef = useRef(false);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
-    // Only load script once
-    if (scriptLoadedRef.current) return;
+    // Load Typeform script
+    const loadScript = () => {
+      const existingScript = document.querySelector(
+        'script[src="//embed.typeform.com/next/embed.js"]'
+      );
 
-    // Check if script already exists
-    const existingScript = document.querySelector(
-      'script[src="//embed.typeform.com/next/embed.js"]'
-    );
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = '//embed.typeform.com/next/embed.js';
+        script.async = true;
+        document.body.appendChild(script);
+      } else {
+        // Script already exists, trigger re-initialization by remounting
+        setKey(prev => prev + 1);
+      }
+    };
 
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = '//embed.typeform.com/next/embed.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
+    loadScript();
 
-    scriptLoadedRef.current = true;
-  }, []);
+    // Re-initialize Typeform when the window's Typeform object is available
+    const checkAndInit = () => {
+      if (typeof window !== 'undefined' && (window as any).tf) {
+        (window as any).tf.load();
+      }
+    };
+
+    // Check after a short delay to allow script to load
+    const timer = setTimeout(checkAndInit, 500);
+
+    return () => clearTimeout(timer);
+  }, [formId]);
 
   return (
     <div
+      key={key}
       ref={containerRef}
       data-tf-live={formId}
       className={`w-full ${className}`}

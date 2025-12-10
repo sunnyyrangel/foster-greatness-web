@@ -19,19 +19,21 @@ export default function Footer() {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={`mailto:${siteConfig.donation.contactEmail}`}
+              <Link
+                href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                {siteConfig.donation.contactEmail}
-              </a>
-              <Link
-                href="/contact"
+                Get in Touch
+              </Link>
+              <a
+                href={siteConfig.links.community}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-colors"
               >
-                Contact Form
-              </Link>
+                Join the Community
+              </a>
             </div>
           </div>
         </div>

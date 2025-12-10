@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { getNavCampaigns } from '@/data';
 
 export default function Header() {
@@ -11,9 +12,16 @@ export default function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pathname = usePathname();
 
   // Get campaigns from config
   const navCampaigns = getNavCampaigns();
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setActiveMenu(null);
+  }, [pathname]);
 
   // Clear any pending close timeout
   const clearCloseTimeout = useCallback(() => {
@@ -104,6 +112,18 @@ export default function Header() {
                 <button className="px-5 py-4 text-gray-700 hover:text-navy font-semibold transition-all duration-200 hover:scale-105 relative">
                   Community
                   <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-navy to-blue transition-transform duration-300 origin-left ${activeMenu === 'community' ? 'scale-x-100' : 'scale-x-0'}`}></span>
+                </button>
+              </div>
+
+              {/* Resources Menu */}
+              <div
+                className="relative"
+                onMouseEnter={() => handleMenuEnter('resources')}
+                onMouseLeave={handleMenuLeave}
+              >
+                <button className="px-5 py-4 text-gray-700 hover:text-navy font-semibold transition-all duration-200 hover:scale-105 relative">
+                  Resources
+                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-navy to-blue transition-transform duration-300 origin-left ${activeMenu === 'resources' ? 'scale-x-100' : 'scale-x-0'}`}></span>
                 </button>
               </div>
 
@@ -315,6 +335,57 @@ export default function Header() {
                 </div>
               )}
 
+              {/* Resources Mega Menu */}
+              {activeMenu === 'resources' && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 space-y-6">
+                    <h3 className="text-3xl font-bold text-navy mb-8 animate-fadeIn">Get Support</h3>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      {[
+                        { icon: '🤝', title: 'Resource Support', desc: 'Connect with a specialist for personalized 1:1 support with housing, food, benefits, and more', href: '/resources', delay: '0ms' },
+                        { icon: '💰', title: 'Benefits Screener', desc: 'Discover financial and social benefits you may qualify for in just 10-15 minutes', href: '/resources#benefits-screener', delay: '100ms' },
+                        { icon: '💼', title: 'Career Support', desc: 'Resume building, mock interviews, career advising, and job board access', href: '/resources#career', delay: '200ms' },
+                        { icon: '🆘', title: 'Crisis Fund', desc: 'Emergency assistance when you need it most', href: '/resources#crisis-fund', delay: '300ms' }
+                      ].map((item, i) => (
+                        <Link
+                          key={i}
+                          href={item.href}
+                          className="group relative p-6 rounded-2xl bg-gradient-to-br from-white to-light-blue/30 hover:from-light-blue hover:to-blue/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 animate-fadeIn"
+                          style={{ animationDelay: item.delay }}
+                        >
+                          <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
+                          <h4 className="text-xl font-bold text-navy group-hover:text-blue mb-2 transition-colors">{item.title}</h4>
+                          <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
+                          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-blue">
+                              <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="relative overflow-hidden bg-gradient-to-br from-navy via-navy to-blue rounded-2xl p-8 text-white shadow-2xl animate-fadeIn" style={{ animationDelay: '100ms' }}>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+                    <div className="relative z-10">
+                      <div className="text-6xl mb-6">🌟</div>
+                      <h4 className="text-2xl font-bold mb-4">Age In, Never Age Out</h4>
+                      <p className="text-sm mb-8 opacity-90 leading-relaxed">Get the support you deserve—personalized resources to help you thrive at any stage of life.</p>
+                      <Link
+                        href="/resources"
+                        className="inline-flex items-center gap-2 bg-white text-navy px-6 py-3 rounded-full font-bold hover:bg-yellow hover:text-navy transition-all duration-300 hover:scale-105 shadow-lg"
+                      >
+                        Access Resources
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                          <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Campaigns Mega Menu - Dynamically generated from data/campaigns.ts */}
               {activeMenu === 'campaigns' && (
                 <div className={`grid grid-cols-1 ${navCampaigns.length > 1 ? 'lg:grid-cols-2' : ''} gap-8`}>
@@ -362,6 +433,7 @@ export default function Header() {
             <div className="flex flex-col space-y-2 px-4">
               <Link href="/about" className="text-gray-700 hover:text-navy hover:bg-white transition-all px-4 py-3 rounded-lg font-semibold">About</Link>
               <a href="https://community.fostergreatness.co" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-navy hover:bg-white transition-all px-4 py-3 rounded-lg font-semibold">Community</a>
+              <Link href="/resources" className="text-gray-700 hover:text-navy hover:bg-white transition-all px-4 py-3 rounded-lg font-semibold">Resources</Link>
               <div className="px-4 py-3">
                 <div className="font-bold text-navy mb-3">Campaigns</div>
                 <div className="ml-4 space-y-2">
