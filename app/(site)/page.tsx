@@ -672,21 +672,18 @@ function TestimonialSection() {
   }
 
   return (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      variants={containerVariants}
-      className="mt-10 md:mt-12"
+    <motion.div
+      variants={itemVariants}
+      className="mt-8 pt-8 border-t border-fg-navy/10"
     >
-      <motion.div variants={itemVariants} className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-fg-navy mb-3">
+      <div className="text-center mb-6">
+        <h3 className="text-xl md:text-2xl font-bold text-fg-navy mb-2">
           What Our Community Says
-        </h2>
-        <p className="text-fg-navy/60 max-w-2xl mx-auto">
+        </h3>
+        <p className="text-fg-navy/60 max-w-2xl mx-auto text-sm">
           Real stories from people who've found connection, support, and hope.
         </p>
-      </motion.div>
+      </div>
 
       <div className="relative">
         {/* Carousel container */}
@@ -698,15 +695,14 @@ function TestimonialSection() {
             }}
           >
             {testimonials.map((t) => (
-              <motion.div
+              <div
                 key={t.name}
-                variants={itemVariants}
                 className="flex-shrink-0 px-2"
                 style={{ width: `${100 / cardsToShow}%` }}
               >
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 h-full flex flex-col">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 relative flex-shrink-0">
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-fg-navy/5 h-full flex flex-col">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 relative flex-shrink-0">
                       {t.avatar ? (
                         <Image
                           src={t.avatar}
@@ -716,17 +712,17 @@ function TestimonialSection() {
                         />
                       ) : (
                         <div className={`w-full h-full rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center ring-2 ring-fg-blue/20`}>
-                          <span className="text-white font-bold text-lg">{t.initials}</span>
+                          <span className="text-white font-bold">{t.initials}</span>
                         </div>
                       )}
                     </div>
-                    <p className="font-bold text-fg-navy text-lg">{t.name}</p>
+                    <p className="font-bold text-fg-navy">{t.name}</p>
                   </div>
-                  <blockquote className="text-fg-navy/80 leading-relaxed flex-1">
+                  <blockquote className="text-fg-navy/80 leading-relaxed flex-1 text-sm">
                     "{t.quote}"
                   </blockquote>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -735,23 +731,23 @@ function TestimonialSection() {
         <button
           onClick={goToPrevious}
           disabled={currentIndex === 0}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md border border-fg-navy/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-fg-navy/5 transition-colors"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white rounded-full p-2 shadow-md border border-fg-navy/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-fg-navy/5 transition-colors z-10"
           aria-label="Previous testimonials"
         >
-          <ChevronLeft className="w-5 h-5 text-fg-navy" />
+          <ChevronLeft className="w-4 h-4 text-fg-navy" />
         </button>
         <button
           onClick={goToNext}
           disabled={currentIndex >= maxIndex}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md border border-fg-navy/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-fg-navy/5 transition-colors"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white rounded-full p-2 shadow-md border border-fg-navy/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-fg-navy/5 transition-colors z-10"
           aria-label="Next testimonials"
         >
-          <ChevronRight className="w-5 h-5 text-fg-navy" />
+          <ChevronRight className="w-4 h-4 text-fg-navy" />
         </button>
       </div>
 
       {/* Dot indicators */}
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="flex justify-center gap-2 mt-4">
         {Array.from({ length: maxIndex + 1 }).map((_, index) => (
           <button
             key={index}
@@ -763,7 +759,7 @@ function TestimonialSection() {
           />
         ))}
       </div>
-    </motion.section>
+    </motion.div>
   )
 }
 
@@ -1269,12 +1265,15 @@ export default function Home() {
           </motion.div>
 
           {/* Featured card + Testimonial quote side by side (2:1 ratio) */}
-          <div className="grid md:grid-cols-3 gap-6 items-stretch">
+          <div className="grid md:grid-cols-3 gap-6 items-stretch mb-8">
             <div className="md:col-span-2">
               {featuredUpdate && <FeaturedCard update={featuredUpdate} />}
             </div>
             <TestimonialQuote />
           </div>
+
+          {/* Testimonials Carousel - inside What's Happening */}
+          <TestimonialSection />
         </motion.section>
 
         {/* Updates as news feed with images */}
@@ -1354,9 +1353,6 @@ export default function Home() {
 
         {/* What You'll Get Access To - Value prop first */}
         <WhatYoullGetSection />
-
-        {/* Testimonials - Social proof */}
-        <TestimonialSection />
 
         {/* Community Section */}
         <CommunitySection />
