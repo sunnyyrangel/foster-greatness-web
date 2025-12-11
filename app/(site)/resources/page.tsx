@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Home, Utensils, Briefcase, DollarSign, Users, ArrowRight, CheckCircle2, Clock, MessageCircle, Smartphone } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -45,16 +46,19 @@ const steps = [
     number: '01',
     title: 'Create an Account',
     description: 'Sign up for free at our community platform to access all resource support services.',
+    image: '/images/web images/create-an-account.PNG',
   },
   {
     number: '02',
     title: 'Submit Request Form',
     description: 'Complete the "Access Resource Support" form in the Resource Support section.',
+    image: '/images/web images/submit-request-form.PNG',
   },
   {
     number: '03',
     title: 'Connect with a Specialist',
     description: 'A resource specialist will reach out within 24-48 hours (Mon-Fri, 9AM-5PM PST).',
+    image: '/images/web images/connect-with-a-specialist.PNG',
   },
 ];
 
@@ -115,18 +119,22 @@ export default function ResourcesPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
               <div key={step.number} className="flex flex-col">
-                {/* Phone Mockup Placeholder */}
+                {/* Phone Mockup with Screenshot */}
                 <div className="mb-6 flex justify-center">
-                  <div className="relative w-28 h-48 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 rounded-[1.5rem] border-4 border-fg-navy/10 shadow-lg flex items-center justify-center">
+                  <div className="relative w-32 h-56 bg-fg-navy rounded-[1.75rem] border-4 border-fg-navy shadow-lg overflow-hidden">
                     {/* Phone notch */}
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-3 bg-fg-navy/10 rounded-full" />
-                    {/* Screen content placeholder */}
-                    <div className="text-center px-2">
-                      <Smartphone className="w-6 h-6 text-fg-blue/40 mx-auto mb-1" />
-                      <span className="text-[9px] text-fg-navy/40 font-medium leading-tight block">Screenshot Coming Soon</span>
+                    <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-12 h-4 bg-black rounded-full z-10" />
+                    {/* Screen content */}
+                    <div className="absolute inset-1 rounded-[1.25rem] overflow-hidden bg-white">
+                      <Image
+                        src={step.image}
+                        alt={step.title}
+                        fill
+                        className="object-cover object-top"
+                      />
                     </div>
                     {/* Home indicator */}
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-fg-navy/20 rounded-full" />
+                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-10 h-1 bg-white/50 rounded-full z-10" />
                   </div>
                 </div>
 

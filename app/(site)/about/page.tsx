@@ -202,23 +202,23 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {[
-                  { placeholder: 'panel-discussions', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
-                  { placeholder: 'learning-workshops', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
-                  { placeholder: 'community-events', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
-                  { placeholder: 'resource-support', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
+                  { image: '/images/web images/panel-discussion.webp', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
+                  { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
+                  { image: '/images/web images/community-events.webp', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
+                  { image: '/images/web images/resource-support.jpg', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
                 ].map((item, i) => (
                   <motion.div
                     key={i}
                     variants={itemVariants}
                     className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
                   >
-                    {/* Image Placeholder */}
-                    <div className="h-40 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
-                      <div className="absolute inset-0 bg-fg-navy/5" />
-                      <div className="relative text-center">
-                        <ImageIcon className="w-10 h-10 text-fg-blue/40 mx-auto mb-2" />
-                        <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
-                      </div>
+                    <div className="h-40 relative">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-fg-navy mb-3">{item.title}</h3>
@@ -233,25 +233,25 @@ export default function AboutPage() {
                 <h3 className="text-2xl md:text-3xl font-bold text-fg-navy mb-8 text-center">Our Community in Action</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
-                    { placeholder: 'advocacy', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
-                    { placeholder: 'events', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
-                    { placeholder: 'support', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
-                    { placeholder: 'workshops', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
-                    { placeholder: 'panels', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
-                    { placeholder: 'storytelling', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
+                    { image: '/images/web images/panel-discussion.webp', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
+                    { image: '/images/web images/community-events.webp', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
+                    { image: '/images/web images/community-events.webp', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
+                    { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
+                    { image: '/images/web images/panel-discussion.webp', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
+                    { image: '/images/web images/workshops.webp', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
                       variants={itemVariants}
                       className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300"
                     >
-                      {/* Image Placeholder */}
-                      <div className="h-32 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
-                        <div className="absolute inset-0 bg-fg-navy/5" />
-                        <div className="relative text-center">
-                          <ImageIcon className="w-8 h-8 text-fg-blue/40 mx-auto mb-1" />
-                          <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
-                        </div>
+                      <div className="h-32 relative">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
                       </div>
                       <div className="p-5">
                         <h4 className="text-lg font-bold text-fg-navy mb-2">{item.title}</h4>
@@ -282,18 +282,18 @@ export default function AboutPage() {
               <div className="grid md:grid-cols-3 gap-6">
                 {[
                   {
-                    placeholder: 'resource-finder',
+                    image: '/images/web images/local-resource-finder.webp',
                     title: 'Local Resource Finder',
                     desc: 'Get connected to the support you deserve! Our Resource Hub is a free, one-stop tool for current and former foster youth to instantly find benefits and resources.',
                     tags: 'Housing • Food Security • Scholarships • Job Opportunities • Wish Granting • Basic Needs'
                   },
                   {
-                    placeholder: 'custom-support',
+                    image: '/images/web images/one-on-one custom support.webp',
                     title: 'One-on-One Custom Support',
                     desc: 'Our Resource Specialists collaborate with you to understand your unique situation and identify tailored solutions, whether you are seeking scholarships, rent assistance, food aid, or other resources.'
                   },
                   {
-                    placeholder: 'osw-partnership',
+                    image: '/images/web images/onesimplewish partnership.jpg',
                     title: 'One Simple Wish Partnership',
                     desc: 'Foster Greatness proudly partners with One Simple Wish. Connect with our Resource Specialists to determine your eligibility to submit a wish.'
                   }
@@ -303,13 +303,13 @@ export default function AboutPage() {
                     variants={itemVariants}
                     className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300"
                   >
-                    {/* Image Placeholder */}
-                    <div className="h-44 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
-                      <div className="absolute inset-0 bg-fg-navy/5" />
-                      <div className="relative text-center">
-                        <ImageIcon className="w-12 h-12 text-fg-blue/40 mx-auto mb-2" />
-                        <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
-                      </div>
+                    <div className="h-44 relative">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <div className="p-8">
                       <h3 className="text-2xl font-bold text-fg-navy mb-4">{item.title}</h3>
