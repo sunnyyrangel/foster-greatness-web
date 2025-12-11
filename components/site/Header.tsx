@@ -33,12 +33,18 @@ export default function Header() {
     setActiveMenu(null);
   }, []);
 
-  // Navigation structure
+  // About dropdown - split into two columns
+  const aboutCta = {
+    title: 'Our Story',
+    description: 'Learn how Foster Greatness is creating lifelong community and belonging',
+    href: '/about',
+    cta: 'Read Our Story',
+  };
+
   const aboutLinks = [
-    { label: 'Our Story', href: '/about' },
-    { label: 'Meet the Team', href: '/about#team' },
-    { label: 'Impact Report', href: '/impact' },
-    { label: 'Partnerships', href: '/partnerships' },
+    { label: 'Meet the Team', href: '/about#team', description: 'The people behind FG' },
+    { label: 'Impact Report', href: '/impact', description: 'See our community impact' },
+    { label: 'Partnerships', href: '/partnerships', description: 'Organizations we work with' },
   ];
 
   // Community dropdown - split into two columns
@@ -128,21 +134,50 @@ export default function Header() {
                     </svg>
                   </button>
 
-                  {/* About Dropdown */}
+                  {/* About Dropdown - Two Column Spread */}
                   {activeMenu === 'about' && (
                     <div className="absolute top-full left-0 pt-3 z-50">
-                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[220px] animate-menuIn">
-                        <div className="p-2">
-                          {aboutLinks.map((link) => (
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden animate-menuIn">
+                        <div className="flex">
+                          {/* Left Column - Our Story CTA */}
+                          <div className="w-64 bg-gradient-to-br from-fg-navy to-fg-blue p-6 flex flex-col justify-between">
+                            <div>
+                              <h3 className="text-white font-bold text-lg mb-2">{aboutCta.title}</h3>
+                              <p className="text-white/80 text-sm leading-relaxed">{aboutCta.description}</p>
+                            </div>
                             <Link
-                              key={link.href}
-                              href={link.href}
+                              href={aboutCta.href}
                               onClick={closeMenus}
-                              className="block px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
+                              className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors text-sm"
                             >
-                              {link.label}
+                              {aboutCta.cta}
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
                             </Link>
-                          ))}
+                          </div>
+
+                          {/* Right Column - Learn More */}
+                          <div className="w-64 p-4">
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+                              Learn More
+                            </div>
+                            {aboutLinks.map((link) => (
+                              <Link
+                                key={link.href}
+                                href={link.href}
+                                onClick={closeMenus}
+                                className="block px-3 py-2.5 rounded-xl hover:bg-fg-light-blue/50 transition-colors group"
+                              >
+                                <div className="text-[15px] text-fg-navy font-medium group-hover:text-fg-blue transition-colors">
+                                  {link.label}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-0.5">
+                                  {link.description}
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -386,9 +421,26 @@ export default function Header() {
           }`}
         >
           <div className="p-5 space-y-5">
-            {/* About */}
+            {/* About - Two sections */}
             <div>
               <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">About</div>
+
+              {/* Our Story CTA - Prominent */}
+              <Link
+                href={aboutCta.href}
+                className="block mb-3 p-4 bg-gradient-to-r from-fg-navy to-fg-blue rounded-xl text-white"
+              >
+                <div className="font-bold text-base mb-1">{aboutCta.title}</div>
+                <div className="text-white/80 text-xs mb-3">{aboutCta.description}</div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-fg-navy font-semibold rounded-full text-sm">
+                  {aboutCta.cta}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </div>
+              </Link>
+
+              {/* Learn More Links */}
               <div className="grid grid-cols-2 gap-2">
                 {aboutLinks.map((link) => (
                   <Link
