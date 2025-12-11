@@ -66,33 +66,122 @@ export default function EventsPage() {
         }}
       />
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-fg-light-blue to-white py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm mb-6">
-              <Calendar className="w-4 h-4 text-fg-blue" />
-              <span className="text-sm font-semibold text-fg-navy">Community Events</span>
-            </div>
+      {/* Hero Section with Past Events Gallery */}
+      <section className="relative bg-gradient-to-b from-fg-navy via-fg-blue to-fg-light-blue py-20 px-4 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-fg-yellow/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-fg-navy mb-6">
-              Upcoming Events
-            </h1>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center lg:text-left"
+            >
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+                <Calendar className="w-4 h-4 text-white" />
+                <span className="text-sm font-semibold text-white">Community Events</span>
+              </div>
 
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Connect with fellow foster youth at workshops, panels, and social gatherings. All events are free for community members.
-            </p>
-          </motion.div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                Connect & Celebrate Together
+              </h1>
+
+              <p className="text-xl text-white/80 mb-8">
+                Join fellow foster youth at workshops, panels, and social gatherings. All events are free for community members.
+              </p>
+
+              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                <a
+                  href="https://community.fostergreatness.co/c/general-events"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-fg-navy px-6 py-3 rounded-full font-bold hover:bg-fg-yellow transition-colors"
+                >
+                  View All Events
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Past Events Image Gallery */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {/* Large featured image */}
+                <div className="col-span-2 relative h-48 md:h-56 rounded-2xl overflow-hidden shadow-xl">
+                  <Image
+                    src="/images/events-feature.jpg"
+                    alt="Foster Greatness community event"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-fg-navy/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <p className="text-sm font-semibold opacity-80">Community Gatherings</p>
+                    <p className="text-lg font-bold">Building Connections</p>
+                  </div>
+                </div>
+
+                {/* Smaller gallery images */}
+                <div className="relative h-32 md:h-40 rounded-2xl overflow-hidden shadow-lg">
+                  <Image
+                    src="/images/event-screenshot-3.png"
+                    alt="Virtual panel discussion"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-fg-navy/40 to-transparent" />
+                </div>
+
+                <div className="relative h-32 md:h-40 rounded-2xl overflow-hidden shadow-lg">
+                  <Image
+                    src="/images/event-screenshot-4.png"
+                    alt="Workshop session"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-fg-navy/40 to-transparent" />
+                </div>
+              </div>
+
+              {/* Stats overlay */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl px-6 py-4 flex gap-8">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-fg-navy">500+</div>
+                  <div className="text-xs text-gray-500">Events Hosted</div>
+                </div>
+                <div className="w-px bg-gray-200" />
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-fg-navy">310</div>
+                  <div className="text-xs text-gray-500">Attendees</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
+
+      {/* Spacer for stats card overlap */}
+      <div className="h-8 bg-[#fafbfc]" />
 
       {/* Events Grid */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Upcoming Events</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              RSVP to connect with your community
+            </p>
+          </div>
+
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (

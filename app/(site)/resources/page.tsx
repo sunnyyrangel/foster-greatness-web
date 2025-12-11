@@ -174,54 +174,70 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* Benefits Screener Section */}
-      <section id="benefits-screener" className="py-16 px-4 scroll-mt-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-fg-navy to-fg-blue rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+      {/* Benefits Screener Section - Enhanced Visual Design */}
+      <section id="benefits-screener" className="py-20 px-4 scroll-mt-24 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-fg-blue/10 text-fg-blue px-4 py-2 rounded-full mb-4">
+              <DollarSign className="w-4 h-4" />
+              <span className="text-sm font-semibold">Free Benefits Discovery</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
+              Discover Benefits You Deserve
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              In just 10-15 minutes, uncover financial and social benefits you may qualify for. This isn't about handouts—it's about getting what's already yours.
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-fg-navy via-fg-blue to-fg-navy rounded-3xl p-8 md:p-12 text-white relative overflow-hidden shadow-2xl">
+            {/* Animated background elements */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-fg-yellow/20 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-fg-teal/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full" />
 
             <div className="relative z-10">
-              <div className="inline-flex p-3 rounded-xl bg-white/10 mb-6">
-                <DollarSign className="w-8 h-8 text-white" />
-              </div>
-
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Benefits Screener
-              </h2>
-
-              <p className="text-lg text-white/80 mb-6 max-w-2xl">
-                In just 10-15 minutes, discover financial and social benefits you may qualify for. This isn't about handouts—it's about getting what's already yours.
-              </p>
-
-              <div className="grid sm:grid-cols-2 gap-4 mb-8">
+              {/* Benefit cards grid */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
                 {[
-                  'SNAP & Food Benefits',
-                  'Healthcare Coverage',
-                  'Education Funds',
-                  'Tax Credits',
-                  'Housing Assistance',
-                  'Utility Programs',
-                ].map((benefit) => (
-                  <div key={benefit} className="flex items-center gap-2 text-white/90">
-                    <CheckCircle2 className="w-5 h-5 text-fg-teal flex-shrink-0" />
-                    <span>{benefit}</span>
+                  { icon: '🍽️', label: 'SNAP & Food Benefits' },
+                  { icon: '🏥', label: 'Healthcare Coverage' },
+                  { icon: '🎓', label: 'Education Funds' },
+                  { icon: '💰', label: 'Tax Credits' },
+                  { icon: '🏠', label: 'Housing Assistance' },
+                  { icon: '⚡', label: 'Utility Programs' },
+                ].map((benefit, i) => (
+                  <div
+                    key={benefit.label}
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 flex items-center gap-3 hover:bg-white/20 transition-all hover:scale-105 cursor-default group"
+                  >
+                    <span className="text-2xl group-hover:scale-110 transition-transform">{benefit.icon}</span>
+                    <span className="font-medium text-sm md:text-base">{benefit.label}</span>
                   </div>
                 ))}
               </div>
 
-              <p className="text-sm text-white/60 mb-6">
-                Powered by our partnership with Single Stop
-              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-fg-yellow" />
+                    <span className="text-white/80">10-15 minutes</span>
+                  </div>
+                  <div className="w-px h-6 bg-white/20" />
+                  <span className="text-white/60 text-sm">Powered by Single Stop</span>
+                </div>
 
-              <a
-                href="https://community.fostergreatness.co"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-light-blue transition-colors"
-              >
-                Take the Screener
-                <ArrowRight className="w-5 h-5" />
-              </a>
+                <a
+                  href="https://community.fostergreatness.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-fg-yellow text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-white transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform"
+                >
+                  Take the Free Screener
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
