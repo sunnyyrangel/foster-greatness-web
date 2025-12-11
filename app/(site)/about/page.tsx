@@ -217,7 +217,7 @@ export default function AboutPage() {
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </div>
                     <div className="p-6">
@@ -250,7 +250,7 @@ export default function AboutPage() {
                           src={item.image}
                           alt={item.title}
                           fill
-                          className="object-cover"
+                          className="object-cover object-top"
                         />
                       </div>
                       <div className="p-5">
@@ -308,7 +308,7 @@ export default function AboutPage() {
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </div>
                     <div className="p-8">
