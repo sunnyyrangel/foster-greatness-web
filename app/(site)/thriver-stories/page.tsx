@@ -52,8 +52,8 @@ export default function ThriverStoriesPage() {
                 <Image
                   src="/images/youtube-logo.webp"
                   alt="YouTube"
-                  width={24}
-                  height={17}
+                  width={90}
+                  height={30}
                   className="h-5 w-auto"
                 />
                 <span className="text-sm font-semibold text-fg-navy">Watch on YouTube</span>
@@ -67,8 +67,8 @@ export default function ThriverStoriesPage() {
                 <Image
                   src="/images/spotify-logo.webp"
                   alt="Spotify"
-                  width={24}
-                  height={24}
+                  width={90}
+                  height={25}
                   className="h-5 w-auto"
                 />
                 <span className="text-sm font-semibold text-fg-navy">Listen on Spotify</span>
