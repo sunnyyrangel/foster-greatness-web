@@ -235,10 +235,10 @@ export default function AboutPage() {
                   {[
                     { image: '/images/web images/panel-discussion.webp', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
                     { image: '/images/web images/community-events.webp', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
-                    { image: '/images/web images/community-events.webp', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
+                    { image: '/images/web images/community-events.webp', title: 'Community Support Spaces', desc: 'Supportive environments including our Parent Support Group for foster youth who are parents, connecting families and building strength together.' },
                     { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
                     { image: '/images/web images/panel-discussion.webp', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
-                    { image: '/images/web images/workshops.webp', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
+                    { image: '/images/web images/storyteller-collective.webp', title: 'Empowering Foster Youth Voices', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys and inspire others.' }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
