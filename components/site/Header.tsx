@@ -41,12 +41,19 @@ export default function Header() {
     { label: 'Partnerships', href: '/partnerships' },
   ];
 
+  // Community dropdown - split into two columns
+  const communityJoin = {
+    title: 'Join the Community',
+    description: 'Connect with 2,000+ current and former foster youth nationwide',
+    href: 'https://community.fostergreatness.co',
+    cta: 'Join Now',
+  };
+
   const communityLinks = [
-    { label: 'Join Community', href: 'https://community.fostergreatness.co', external: true, highlight: true },
-    { label: 'Resource Support', href: '/resources' },
-    { label: 'Thriver Stories', href: '/thriver-stories' },
-    { label: 'Storyteller Collective', href: '/storytellers-collective' },
-    { label: 'Events', href: '/events' },
+    { label: 'Resource Support', href: '/resources', description: 'Get the support you need' },
+    { label: 'Thriver Stories', href: '/thriver-stories', description: 'Stories of resilience' },
+    { label: 'Storytellers Collective', href: '/storytellers-collective', description: 'Share your voice' },
+    { label: 'Events', href: '/events', description: 'Upcoming gatherings' },
   ];
 
   return (
@@ -150,41 +157,52 @@ export default function Header() {
                     </svg>
                   </button>
 
-                  {/* Community Dropdown */}
+                  {/* Community Dropdown - Two Column Spread */}
                   {activeMenu === 'community' && (
-                    <div className="absolute top-full left-0 pt-3 z-50">
-                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[240px] animate-menuIn">
-                        <div className="p-2">
-                          {communityLinks.map((link) => (
-                            link.external ? (
-                              <a
-                                key={link.href}
-                                href={link.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={closeMenus}
-                                className={`flex items-center justify-between px-4 py-2.5 text-[15px] rounded-xl transition-all font-medium ${
-                                  link.highlight
-                                    ? 'bg-gradient-to-r from-fg-navy to-fg-blue text-white hover:shadow-md'
-                                    : 'text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50'
-                                }`}
-                              >
-                                {link.label}
-                                <svg className="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </a>
-                            ) : (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50">
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden animate-menuIn">
+                        <div className="flex">
+                          {/* Left Column - Join CTA */}
+                          <div className="w-64 bg-gradient-to-br from-fg-navy to-fg-blue p-6 flex flex-col justify-between">
+                            <div>
+                              <h3 className="text-white font-bold text-lg mb-2">{communityJoin.title}</h3>
+                              <p className="text-white/80 text-sm leading-relaxed">{communityJoin.description}</p>
+                            </div>
+                            <a
+                              href={communityJoin.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={closeMenus}
+                              className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors text-sm"
+                            >
+                              {communityJoin.cta}
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </a>
+                          </div>
+
+                          {/* Right Column - Browse Links */}
+                          <div className="w-64 p-4">
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+                              Explore
+                            </div>
+                            {communityLinks.map((link) => (
                               <Link
                                 key={link.href}
                                 href={link.href}
                                 onClick={closeMenus}
-                                className="block px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
+                                className="block px-3 py-2.5 rounded-xl hover:bg-fg-light-blue/50 transition-colors group"
                               >
-                                {link.label}
+                                <div className="text-[15px] text-fg-navy font-medium group-hover:text-fg-blue transition-colors">
+                                  {link.label}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-0.5">
+                                  {link.description}
+                                </div>
                               </Link>
-                            )
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -357,37 +375,37 @@ export default function Header() {
 
             <div className="h-px bg-gray-100" />
 
-            {/* Community */}
+            {/* Community - Two sections */}
             <div>
               <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">Community</div>
-              <div className="space-y-2">
+
+              {/* Join CTA - Prominent */}
+              <a
+                href={communityJoin.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mb-3 p-4 bg-gradient-to-r from-fg-navy to-fg-blue rounded-xl text-white"
+              >
+                <div className="font-bold text-base mb-1">{communityJoin.title}</div>
+                <div className="text-white/80 text-xs mb-3">{communityJoin.description}</div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-fg-navy font-semibold rounded-full text-sm">
+                  {communityJoin.cta}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </div>
+              </a>
+
+              {/* Explore Links */}
+              <div className="grid grid-cols-2 gap-2">
                 {communityLinks.map((link) => (
-                  link.external ? (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-colors ${
-                        link.highlight
-                          ? 'bg-gradient-to-r from-fg-navy to-fg-blue text-white'
-                          : 'bg-gray-50 text-fg-navy hover:bg-fg-light-blue'
-                      }`}
-                    >
-                      {link.label}
-                      <svg className="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  ) : (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="block px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  )
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
+                  >
+                    {link.label}
+                  </Link>
                 ))}
               </div>
             </div>
