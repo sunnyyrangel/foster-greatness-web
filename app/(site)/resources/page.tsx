@@ -1,12 +1,6 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Home, Utensils, Briefcase, DollarSign, Users, ArrowRight, CheckCircle2, Clock, MessageCircle, Smartphone } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Resource Support | Foster Greatness',
-  description: 'Access personalized 1:1 resource support for housing, food, benefits, career services, and more. Get the help you deserve.',
-};
+import { Heart, Home, Utensils, Briefcase, DollarSign, Users, ArrowRight, CheckCircle2, Clock, MessageCircle, ChevronDown } from 'lucide-react';
 
 const resourceAreas = [
   {
@@ -85,11 +79,11 @@ export default function ResourcesPage() {
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Resource Support
+            Free Resources for Foster Youth
           </h1>
 
           <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-8">
-            Personalized 1:1 support to help you access housing, food, benefits, career services, and more. Our trained specialists are here for you.
+            Personalized 1:1 support for current and former foster youth. Access housing assistance, job training, scholarships, benefits screening, and more—completely free, with no age limit.
           </p>
 
           <a
@@ -101,6 +95,37 @@ export default function ResourcesPage() {
             Access Resource Support
             <ArrowRight className="w-5 h-5" />
           </a>
+
+          {/* Last updated for freshness signal */}
+          <p className="mt-6 text-white/50 text-sm">
+            Last updated: December 2025
+          </p>
+        </div>
+      </section>
+
+      {/* Statistics Section for GEO */}
+      <section className="py-12 px-4 bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-fg-navy">23,000+</div>
+              <p className="text-sm text-gray-600 mt-1">Youth age out of foster care annually in the U.S.</p>
+              <p className="text-xs text-gray-400 mt-1">Source: <a href="https://www.acf.hhs.gov" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-blue">ACF/HHS</a></p>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-fg-navy">20%</div>
+              <p className="text-sm text-gray-600 mt-1">Become homeless immediately after aging out</p>
+              <p className="text-xs text-gray-400 mt-1">Source: <a href="https://nfyi.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-blue">NFYI</a></p>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-fg-navy">$250K+</div>
+              <p className="text-sm text-gray-600 mt-1">In resources connected to our community members</p>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold text-fg-navy">2,000+</div>
+              <p className="text-sm text-gray-600 mt-1">Foster youth in our nationwide community</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -368,6 +393,62 @@ export default function ResourcesPage() {
                 In partnership with Str8Up Employment Services
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-gray-600">
+              Common questions about foster youth resources and support
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                question: "What resources are available for foster youth?",
+                answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Foster Greatness provides free 1:1 support from Resource Specialists to help you navigate and access these resources."
+              },
+              {
+                question: "How do I access foster youth resources through Foster Greatness?",
+                answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. A dedicated Resource Specialist will contact you within 24-48 hours (Monday-Friday) to provide personalized assistance."
+              },
+              {
+                question: "Are Foster Greatness resources free?",
+                answer: "Yes, all Foster Greatness resources and support services are completely free. This includes 1:1 Resource Specialist support, benefits screening, career services, and community access."
+              },
+              {
+                question: "Do I need to be currently in foster care to access resources?",
+                answer: "No. Foster Greatness serves both current and former foster youth. There is no age limit—we believe you should never age out of support. Whether you're 18 or 48, you can access our resources."
+              },
+              {
+                question: "What is the Crisis Fund?",
+                answer: "The Crisis Fund provides emergency financial assistance to foster youth community members facing unexpected hardships. This can help with urgent needs like rent, utilities, transportation, or other immediate expenses."
+              },
+              {
+                question: "How can I get help with housing as a foster youth?",
+                answer: "Foster Greatness Resource Specialists can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
+              }
+            ].map((faq, index) => (
+              <details
+                key={index}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 group"
+              >
+                <summary className="px-6 py-5 cursor-pointer list-none flex justify-between items-center hover:bg-gray-50 rounded-2xl transition-colors">
+                  <span className="font-bold text-fg-navy pr-4">{faq.question}</span>
+                  <ChevronDown className="w-5 h-5 text-fg-blue flex-shrink-0 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="px-6 pb-5 text-gray-600 leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>

@@ -6,7 +6,7 @@ export const siteConfig = {
   name: 'Foster Greatness',
   description: 'Lifelong community and belonging for current and former foster youth nationwide. Built by and for people with lived foster care experience.',
   url: siteUrl,
-  ogImage: `${siteUrl}/images/og-image.png`,
+  ogImage: `${siteUrl}/images/platform-preview.webp`,
   email: 'info@fostergreatness.co',
   social: {
     instagram: 'https://www.instagram.com/fostergreatness',
@@ -67,10 +67,10 @@ export const defaultMetadata: Metadata = {
     description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Access peer support, resources, employment help, and lifelong belonging.',
     images: [
       {
-        url: `${siteUrl}/images/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: 'Foster Greatness - Lifelong Community for Foster Youth',
+        url: `${siteUrl}/images/platform-preview.webp`,
+        width: 600,
+        height: 450,
+        alt: 'Foster Greatness community platform showing feed, events, and support options',
       },
     ],
   },
@@ -78,13 +78,19 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: 'Foster Greatness | Lifelong Community for Foster Youth Nationwide',
     description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Access peer support, resources, and lifelong belonging.',
-    images: [`${siteUrl}/images/og-image.png`],
+    images: [`${siteUrl}/images/platform-preview.webp`],
     creator: '@fostergreatness',
   },
   verification: {
-    // Add verification codes when available
+    // Add your Google Search Console verification code here after setting up GSC
+    // Get this from: Google Search Console > Settings > Ownership verification > HTML tag
     // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
+
+    // Bing Webmaster Tools verification (also covers Yahoo, DuckDuckGo)
+    // Get this from: Bing Webmaster Tools > Site > Verify ownership
+    // other: {
+    //   'msvalidate.01': 'your-bing-verification-code',
+    // },
   },
   category: 'nonprofit',
 }
@@ -103,7 +109,7 @@ export const organizationJsonLd = {
     width: 512,
     height: 512,
   },
-  image: `${siteUrl}/images/og-image.png`,
+  image: `${siteUrl}/images/platform-preview.webp`,
   description: 'Foster Greatness is a lived experience-led nonprofit creating lifelong community and belonging for current and former foster youth nationwide.',
   foundingDate: '2020',
   email: 'info@fostergreatness.co',
@@ -170,7 +176,7 @@ export function generatePageMetadata({
   noIndex?: boolean
 }): Metadata {
   const url = `${siteUrl}${path}`
-  const ogImage = image || `${siteUrl}/images/og-image.png`
+  const ogImage = image || `${siteUrl}/images/platform-preview.webp`
 
   return {
     title,
