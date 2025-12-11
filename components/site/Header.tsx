@@ -36,6 +36,7 @@ export default function Header() {
   // Navigation structure
   const aboutLinks = [
     { label: 'Our Story', href: '/about', desc: 'How lived experience drives our mission' },
+    { label: 'Meet the Team', href: '/about#team', desc: 'The people behind our mission' },
     { label: 'Impact Report', href: '/impact', desc: 'The difference we make together' },
     { label: 'Partnerships', href: '/partnerships', desc: 'Organizations building community' },
   ];

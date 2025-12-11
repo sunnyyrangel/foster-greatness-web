@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ChevronDown, ImageIcon } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -47,7 +47,7 @@ export default function AboutPage() {
     },
     {
       question: "Is this limited to a certain state or age?",
-      answer: "No. Foster Greatness serves current and former foster youth nationwide, regardless of which state you are in. We are an 18+ community with no upper age limit—support that lasts a lifetime."
+      answer: "We are an 18+ community with no upper age limit—support that lasts a lifetime."
     },
     {
       question: "Does it cost anything to join?",
@@ -202,19 +202,28 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {[
-                  { icon: '💬', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
-                  { icon: '📚', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
-                  { icon: '🎉', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
-                  { icon: '🤝', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
+                  { placeholder: 'panel-discussions', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
+                  { placeholder: 'learning-workshops', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
+                  { placeholder: 'community-events', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
+                  { placeholder: 'resource-support', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
                 ].map((item, i) => (
                   <motion.div
                     key={i}
                     variants={itemVariants}
-                    className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
+                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
                   >
-                    <div className="text-5xl mb-4">{item.icon}</div>
-                    <h3 className="text-xl font-bold text-fg-navy mb-3">{item.title}</h3>
-                    <p className="text-fg-navy/60 leading-relaxed text-sm">{item.desc}</p>
+                    {/* Image Placeholder */}
+                    <div className="h-40 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
+                      <div className="absolute inset-0 bg-fg-navy/5" />
+                      <div className="relative text-center">
+                        <ImageIcon className="w-10 h-10 text-fg-blue/40 mx-auto mb-2" />
+                        <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-fg-navy mb-3">{item.title}</h3>
+                      <p className="text-fg-navy/60 leading-relaxed text-sm">{item.desc}</p>
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -224,21 +233,30 @@ export default function AboutPage() {
                 <h3 className="text-2xl md:text-3xl font-bold text-fg-navy mb-8 text-center">Our Community in Action</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
-                    { icon: '📢', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
-                    { icon: '🍳', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
-                    { icon: '💙', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
-                    { icon: '🎓', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
-                    { icon: '🎤', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
-                    { icon: '⭐', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
+                    { placeholder: 'advocacy', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
+                    { placeholder: 'events', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
+                    { placeholder: 'support', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
+                    { placeholder: 'workshops', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
+                    { placeholder: 'panels', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
+                    { placeholder: 'storytelling', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
                       variants={itemVariants}
-                      className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300"
+                      className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300"
                     >
-                      <div className="text-4xl mb-3">{item.icon}</div>
-                      <h4 className="text-lg font-bold text-fg-navy mb-2">{item.title}</h4>
-                      <p className="text-sm text-fg-navy/60 leading-relaxed">{item.desc}</p>
+                      {/* Image Placeholder */}
+                      <div className="h-32 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
+                        <div className="absolute inset-0 bg-fg-navy/5" />
+                        <div className="relative text-center">
+                          <ImageIcon className="w-8 h-8 text-fg-blue/40 mx-auto mb-1" />
+                          <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
+                        </div>
+                      </div>
+                      <div className="p-5">
+                        <h4 className="text-lg font-bold text-fg-navy mb-2">{item.title}</h4>
+                        <p className="text-sm text-fg-navy/60 leading-relaxed">{item.desc}</p>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -264,18 +282,18 @@ export default function AboutPage() {
               <div className="grid md:grid-cols-3 gap-6">
                 {[
                   {
-                    icon: '🔍',
+                    placeholder: 'resource-finder',
                     title: 'Local Resource Finder',
                     desc: 'Get connected to the support you deserve! Our Resource Hub is a free, one-stop tool for current and former foster youth to instantly find benefits and resources.',
                     tags: 'Housing • Food Security • Scholarships • Job Opportunities • Wish Granting • Basic Needs'
                   },
                   {
-                    icon: '💝',
+                    placeholder: 'custom-support',
                     title: 'One-on-One Custom Support',
                     desc: 'Our Resource Specialists collaborate with you to understand your unique situation and identify tailored solutions, whether you are seeking scholarships, rent assistance, food aid, or other resources.'
                   },
                   {
-                    icon: '🎁',
+                    placeholder: 'osw-partnership',
                     title: 'One Simple Wish Partnership',
                     desc: 'Foster Greatness proudly partners with One Simple Wish. Connect with our Resource Specialists to determine your eligibility to submit a wish.'
                   }
@@ -283,14 +301,23 @@ export default function AboutPage() {
                   <motion.div
                     key={i}
                     variants={itemVariants}
-                    className="bg-white rounded-2xl p-8 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300"
+                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300"
                   >
-                    <div className="text-5xl mb-6">{item.icon}</div>
-                    <h3 className="text-2xl font-bold text-fg-navy mb-4">{item.title}</h3>
-                    <p className="text-fg-navy/70 mb-4 leading-relaxed">{item.desc}</p>
-                    {item.tags && (
-                      <p className="text-sm text-fg-blue font-semibold">{item.tags}</p>
-                    )}
+                    {/* Image Placeholder */}
+                    <div className="h-44 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 flex items-center justify-center relative">
+                      <div className="absolute inset-0 bg-fg-navy/5" />
+                      <div className="relative text-center">
+                        <ImageIcon className="w-12 h-12 text-fg-blue/40 mx-auto mb-2" />
+                        <span className="text-xs text-fg-navy/40 font-medium">Image Coming Soon</span>
+                      </div>
+                    </div>
+                    <div className="p-8">
+                      <h3 className="text-2xl font-bold text-fg-navy mb-4">{item.title}</h3>
+                      <p className="text-fg-navy/70 mb-4 leading-relaxed">{item.desc}</p>
+                      {item.tags && (
+                        <p className="text-sm text-fg-blue font-semibold">{item.tags}</p>
+                      )}
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -327,12 +354,15 @@ export default function AboutPage() {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-6xl mx-auto">
-              <motion.h3
-                variants={itemVariants}
-                className="text-center text-lg font-semibold text-white/70 uppercase tracking-wider mb-10"
-              >
-                Our Growing Impact
-              </motion.h3>
+              <Link href="/impact" className="block group">
+                <motion.h3
+                  variants={itemVariants}
+                  className="text-center text-lg font-semibold text-white/70 uppercase tracking-wider mb-10 group-hover:text-white transition-colors"
+                >
+                  Our Growing Impact
+                  <ArrowRight className="inline-block w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.h3>
+              </Link>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
                   { number: '2,000+', label: 'Community Members', icon: '👥' },
@@ -365,57 +395,76 @@ export default function AboutPage() {
                   </motion.div>
                 ))}
               </div>
+              <motion.div variants={itemVariants} className="text-center mt-10">
+                <Link
+                  href="/impact"
+                  className="inline-flex items-center gap-2 text-white/80 hover:text-white font-semibold transition-colors"
+                >
+                  View Full Impact Report
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
             </div>
           </div>
         </motion.section>
 
-        {/* Partners */}
+        {/* Partners - Auto-scrolling Carousel */}
         <motion.section
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="py-16 md:py-20"
+          className="py-16 md:py-20 overflow-hidden"
         >
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <motion.div variants={itemVariants}>
-                <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-10 text-center">Our Partners</h2>
+              <motion.div variants={itemVariants} className="text-center mb-10">
+                <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Our Partners</h2>
+                <p className="text-lg text-fg-navy/60">Organizations making our mission possible</p>
               </motion.div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { name: 'One Simple Wish', desc: 'Direct connection to a wish-granting platform where foster youth can request gifts sponsored by donors.', logo: '/images/partners/osw.png', link: 'https://www.onesimplewish.org' },
-                  { name: 'Cetera Financial Group', desc: 'Providing financial literacy workshops and guidance to help our community build strong financial futures.', logo: '/images/partners/cetera.png', link: 'https://www.cetera.com' },
-                  { name: 'EatWell', desc: 'Healthy meal kits for community cooking sessions, bringing people together through shared meals.', logo: '/images/partners/eatwell.png', link: 'https://www.eatwell101.com' },
-                  { name: 'StaffMark', desc: 'Equips foster youth with tools and resources for sustainable employment.', logo: '/images/partners/smg.png', link: 'https://www.staffmark.com' }
-                ].map((partner, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemVariants}
-                    className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1 group"
-                  >
-                    <div className="aspect-square mb-4 flex items-center justify-center p-4">
-                      <Image
-                        src={partner.logo}
-                        alt={`${partner.name} logo`}
-                        width={180}
-                        height={180}
-                        className="object-contain w-full h-full"
-                      />
+              {/* Infinite Scrolling Carousel */}
+              <div className="relative">
+                {/* Gradient overlays */}
+                <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#fafbfc] to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#fafbfc] to-transparent z-10 pointer-events-none" />
+
+                <motion.div
+                  className="flex gap-8"
+                  animate={{ x: [0, -1800] }}
+                  transition={{
+                    x: {
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      duration: 30,
+                      ease: "linear",
+                    },
+                  }}
+                >
+                  {/* Double the logos for seamless loop */}
+                  {[...Array(2)].map((_, setIndex) => (
+                    <div key={setIndex} className="flex gap-8 flex-shrink-0">
+                      {Array.from({ length: 9 }, (_, i) => ({
+                        id: i + 1,
+                        image: `/images/partners/${i + 1}.png`,
+                        alt: `Partner ${i + 1}`
+                      })).map((partner) => (
+                        <div
+                          key={`${setIndex}-${partner.id}`}
+                          className="w-40 h-40 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-fg-navy/5 flex items-center justify-center p-4 hover:shadow-md transition-shadow"
+                        >
+                          <Image
+                            src={partner.image}
+                            alt={partner.alt}
+                            width={120}
+                            height={120}
+                            className="object-contain w-full h-full grayscale hover:grayscale-0 transition-all duration-300"
+                          />
+                        </div>
+                      ))}
                     </div>
-                    <h3 className="text-lg font-bold text-fg-navy mb-3">{partner.name}</h3>
-                    <p className="text-sm text-fg-navy/60 leading-relaxed mb-4">{partner.desc}</p>
-                    <a
-                      href={partner.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-fg-blue hover:text-fg-navy transition-colors inline-flex items-center gap-1"
-                    >
-                      Learn More <ArrowRight className="w-3 h-3" />
-                    </a>
-                  </motion.div>
-                ))}
+                  ))}
+                </motion.div>
               </div>
 
               <motion.div variants={itemVariants} className="text-center mt-10">

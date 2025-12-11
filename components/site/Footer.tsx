@@ -8,33 +8,22 @@ export default function Footer() {
       {/* Contact Banner */}
       <div className="bg-gradient-to-r from-fg-navy to-fg-blue">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-white/10 rounded-full">
-                <Mail className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">Get in Touch</h3>
-                <p className="text-white/80 text-sm">We'd love to hear from you</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                Get in Touch
-              </Link>
-              <a
-                href={siteConfig.links.community}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-colors"
-              >
-                Join the Community
-              </a>
-            </div>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              Contact Us
+            </Link>
+            <a
+              href={siteConfig.links.community}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-colors"
+            >
+              Join the Community
+            </a>
           </div>
         </div>
       </div>
