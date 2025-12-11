@@ -227,6 +227,46 @@ export default function ResourcesPage() {
         </div>
       </section>
 
+      {/* Crisis Fund Section - Moved before Career Support for emphasis */}
+      <section id="crisis-fund" className="py-16 px-4 scroll-mt-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-gray-100 text-center">
+            <div className="inline-flex p-4 rounded-2xl bg-red-50 mb-6">
+              <Heart className="w-10 h-10 text-red-500" />
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
+              Crisis Fund
+            </h2>
+
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+              Sometimes life throws unexpected challenges your way. Our Crisis Fund provides emergency assistance when you need it most—because you deserve support in your hardest moments.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="https://donate.stripe.com/bJe3cvb2Y50k7G96xJco003"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-fg-navy to-fg-blue text-white px-8 py-4 rounded-full font-bold hover:shadow-lg transition-all"
+              >
+                <Heart className="w-5 h-5" />
+                Support the Crisis Fund
+              </a>
+              <a
+                href="https://community.fostergreatness.co"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border-2 border-fg-navy text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-navy hover:text-white transition-colors"
+              >
+                Request Assistance
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Career Support Section */}
       <section id="career" className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white scroll-mt-24">
         <div className="max-w-6xl mx-auto">
@@ -286,46 +326,6 @@ export default function ResourcesPage() {
               <div className="text-center text-sm text-gray-500">
                 In partnership with Str8Up Employment Services
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Crisis Fund Section */}
-      <section id="crisis-fund" className="py-16 px-4 scroll-mt-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-gray-100 text-center">
-            <div className="inline-flex p-4 rounded-2xl bg-red-50 mb-6">
-              <Heart className="w-10 h-10 text-red-500" />
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
-              Crisis Fund
-            </h2>
-
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              Sometimes life throws unexpected challenges your way. Our Crisis Fund provides emergency assistance when you need it most—because you deserve support in your hardest moments.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="https://donate.stripe.com/bJe3cvb2Y50k7G96xJco003"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-fg-navy to-fg-blue text-white px-8 py-4 rounded-full font-bold hover:shadow-lg transition-all"
-              >
-                <Heart className="w-5 h-5" />
-                Support the Crisis Fund
-              </a>
-              <a
-                href="https://community.fostergreatness.co"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border-2 border-fg-navy text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-navy hover:text-white transition-colors"
-              >
-                Request Assistance
-                <ArrowRight className="w-5 h-5" />
-              </a>
             </div>
           </div>
         </div>

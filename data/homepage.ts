@@ -71,13 +71,13 @@ export const homepageConfig: HomepageConfig = {
   communitySection: {
     enabled: true,
     title: 'More than a platform—a family',
-    subtitle: 'Join 1,100+ current and former foster youth finding belonging',
+    subtitle: 'Join 2,000+ current and former foster youth finding belonging',
   },
 
   impactSection: {
     enabled: true,
     stats: [
-      { value: '1,100+', label: 'Community Members' },
+      { value: '2,000+', label: 'Community Members' },
       { value: '310', label: 'Event Attendees' },
       { value: '77', label: 'Wishes Granted' },
     ],

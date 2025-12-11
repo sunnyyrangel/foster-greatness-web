@@ -450,7 +450,7 @@ export default function PartnershipsPage() {
                 "Through our partnership with StaffMark Group, we've connected over 100 community members with sustainable employment opportunities. Their commitment to providing personalized support—from resume help to interview coaching—has transformed how our members navigate the job market."
               </p>
               <p className="text-sm text-white/70 font-semibold">
-                Isabel Stasa, Head of Community Engagement
+                Isabel Stasa, Director of Community Affairs and Social Impact
               </p>
             </div>
           </motion.div>

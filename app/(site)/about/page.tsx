@@ -39,7 +39,7 @@ export default function AboutPage() {
     },
     {
       question: "Do I have to be in foster care right now to join?",
-      answer: "No. Our community welcomes current foster youth as well as those who have aged out of the system. We serve individuals at any stage of their foster care journey."
+      answer: "No. Our community welcomes current and former foster youth. We are an 18+ community serving individuals at any stage of their journey—with no age cap. Once you're part of our community, you're part of it for life."
     },
     {
       question: "Do I need to prove my foster youth status to qualify or join?",
@@ -47,7 +47,7 @@ export default function AboutPage() {
     },
     {
       question: "Is this limited to a certain state or age?",
-      answer: "No. Foster Greatness serves foster youth and alumni nationwide, regardless of which state you are in or your age."
+      answer: "No. Foster Greatness serves current and former foster youth nationwide, regardless of which state you are in. We are an 18+ community with no upper age limit—support that lasts a lifetime."
     },
     {
       question: "Does it cost anything to join?",
@@ -261,7 +261,7 @@ export default function AboutPage() {
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
-                  { number: '1,100+', label: 'Community Members' },
+                  { number: '2,000+', label: 'Community Members' },
                   { number: '500+', label: 'Events Hosted' },
                   { number: '50+', label: 'Workshops' },
                   { number: '$250K+', label: 'In Resources Connected' }
@@ -346,7 +346,7 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { name: 'Isabel Stasa', role: 'Head of Community Engagement & Public Affairs', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp' },
+                  { name: 'Isabel Stasa', role: 'Director of Community Affairs and Social Impact', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp' },
                   { name: 'Lillee Taylor', role: 'Resource Specialist', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp' },
                   { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp' },
                   { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp' },
@@ -441,7 +441,7 @@ export default function AboutPage() {
                 Ready to Join Our Community?
               </h2>
               <p className="text-xl mb-10 opacity-90 leading-relaxed">
-                Connect with 1,100+ current and former foster youth nationwide.
+                Connect with 2,000+ current and former foster youth nationwide.
                 Find belonging, support, and lifelong community.
               </p>
               <a

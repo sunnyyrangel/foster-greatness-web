@@ -41,9 +41,10 @@ export default function Header() {
   ];
 
   const communityLinks = [
-    { label: 'Join Community', href: 'https://community.fostergreatness.co', external: true, desc: 'Connect with 1,100+ members', highlight: true },
+    { label: 'Join Community', href: 'https://community.fostergreatness.co', external: true, desc: 'Connect with 2,000+ members', highlight: true },
     { label: 'Resource Support', href: '/resources', desc: 'Get personalized help' },
     { label: 'Thriver Stories', href: '/thriver-stories', desc: 'Voices of resilience' },
+    { label: 'Storyteller Collective', href: '/storytellers-collective', desc: 'Share your story' },
     { label: 'Events', href: '/events', desc: 'Gatherings & celebrations' },
   ];
 
