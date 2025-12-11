@@ -86,24 +86,50 @@ export default function AboutPage() {
 
           <div className="container mx-auto px-4 relative z-10">
             <motion.div variants={itemVariants} className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                About Foster Greatness
+              {/* Mission Statement - Front and Center */}
+              <div className="inline-block mb-8 px-6 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                <span className="text-sm font-semibold tracking-wide uppercase text-white/90">Our Mission</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight">
+                To co-create a space with people impacted by the foster system where{' '}
+                <span className="text-fg-yellow">empowerment, healing, and community</span>{' '}
+                are front and center.
               </h1>
-              <p className="text-xl md:text-2xl opacity-90 leading-relaxed mb-6">
-                Our platform was originally designed for those who have aged out of foster care.
-                We noticed that far too many young adults are placed in a position with no support
-                or resource access once they have aged out of the foster system.
+
+              <div className="w-16 h-1 bg-fg-yellow mx-auto mb-8 rounded-full" />
+
+              <p className="text-lg md:text-xl opacity-90 leading-relaxed mb-6">
+                Foster Greatness is a lived experience-led organization creating lifelong community and belonging for current and former foster youth nationwide.
               </p>
-              <p className="text-xl md:text-2xl opacity-90 leading-relaxed">
-                We are fighting this process by creating a community where{' '}
-                <span className="font-bold text-fg-yellow">no one ages out</span> and individuals
-                have continued support to find resources they deserve to succeed.
+              <p className="text-lg md:text-xl opacity-90 leading-relaxed">
+                We believe{' '}
+                <span className="font-bold text-fg-yellow">no one should age out</span> of support.
+                Our community ensures individuals have continued access to resources, connection, and the belonging they deserve.
               </p>
+
+              <div className="flex flex-wrap justify-center gap-4 mt-10">
+                <a
+                  href="https://community.fostergreatness.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-yellow transition-colors shadow-lg"
+                >
+                  Join Our Community
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+                <Link
+                  href="#team"
+                  className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors"
+                >
+                  Meet the Team
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
             </motion.div>
           </div>
         </motion.section>
 
-        {/* Mission & Vision */}
+        {/* Vision & Core Values */}
         <motion.section
           initial="hidden"
           whileInView="visible"
@@ -112,25 +138,48 @@ export default function AboutPage() {
           className="py-16 md:py-20"
         >
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              <motion.div variants={itemVariants} className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300">
-                <div className="text-6xl mb-6">🎯</div>
-                <h2 className="text-3xl font-bold text-fg-navy mb-6">Our Mission</h2>
-                <p className="text-lg text-fg-navy/70 leading-relaxed">
-                  To co-create a space with people impacted by the foster system where
-                  <span className="font-semibold text-fg-navy"> empowerment, healing, and community</span>{' '}
-                  are front and center.
-                </p>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300">
-                <div className="text-6xl mb-6">👁️</div>
-                <h2 className="text-3xl font-bold text-fg-navy mb-6">Our Vision</h2>
-                <p className="text-lg text-fg-navy/70 leading-relaxed">
+            <div className="max-w-6xl mx-auto">
+              {/* Vision */}
+              <motion.div variants={itemVariants} className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Our Vision</h2>
+                <p className="text-xl text-fg-navy/70 leading-relaxed max-w-3xl mx-auto">
                   A world where every person who has lived through the foster system feels
                   <span className="font-semibold text-fg-blue"> seen, supported, and unstoppable</span>.
                 </p>
               </motion.div>
+
+              {/* Core Values */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <motion.div variants={itemVariants} className="bg-white rounded-2xl p-8 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 text-center">
+                  <div className="w-16 h-16 bg-fg-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span className="text-3xl">💪</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-fg-navy mb-3">Lived Experience-Led</h3>
+                  <p className="text-fg-navy/60 leading-relaxed">
+                    Our programs and community are designed and led by those who have lived through foster care.
+                  </p>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="bg-white rounded-2xl p-8 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 text-center">
+                  <div className="w-16 h-16 bg-fg-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span className="text-3xl">🤝</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-fg-navy mb-3">Lifelong Belonging</h3>
+                  <p className="text-fg-navy/60 leading-relaxed">
+                    Age in, never age out. Our community is a family that lasts a lifetime.
+                  </p>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="bg-white rounded-2xl p-8 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 text-center">
+                  <div className="w-16 h-16 bg-fg-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span className="text-3xl">✨</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-fg-navy mb-3">Dignity & Empowerment</h3>
+                  <p className="text-fg-navy/60 leading-relaxed">
+                    We celebrate strengths, not deficits. Every member is a Thriver with unlimited potential.
+                  </p>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.section>
@@ -153,9 +202,9 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                 {[
-                  { icon: '💬', title: 'Monthly Panel Discussions', desc: 'Hear from foster youth and advocates working toward direct policy and systemic change.' },
+                  { icon: '💬', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
                   { icon: '📚', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
-                  { icon: '🎉', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, healing circles and more.' },
+                  { icon: '🎉', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
                   { icon: '🤝', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
                 ].map((item, i) => (
                   <motion.div
@@ -175,12 +224,12 @@ export default function AboutPage() {
                 <h3 className="text-2xl md:text-3xl font-bold text-fg-navy mb-8 text-center">Our Community in Action</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
-                    { icon: '📢', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with Foster Care Alumni of America to discuss foster care policies.' },
+                    { icon: '📢', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
                     { icon: '🍳', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
-                    { icon: '💙', title: 'Healing Circles', desc: 'Supportive spaces for foster care alumni to connect and share. Find strength in community.' },
+                    { icon: '💙', title: 'Community Support Spaces', desc: 'Supportive environments for foster care alumni to connect, share, and find strength in community.' },
                     { icon: '🎓', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
-                    { icon: '🎤', title: 'Panel Discussions', desc: 'Key leaders and advocates with lived experience tackle important community issues.' },
-                    { icon: '⭐', title: 'Storytelling', desc: 'Our "Thriver Stories" series provides the stage for foster care alumni to share their journeys.' }
+                    { icon: '🎤', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
+                    { icon: '⭐', title: 'Storyteller Collective', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys.' }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -249,26 +298,70 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
-        {/* Impact Stats */}
+        {/* Impact Stats - Interactive */}
         <motion.section
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="py-16 bg-gradient-to-br from-fg-navy via-fg-blue to-fg-navy text-white"
+          className="py-20 bg-gradient-to-br from-fg-navy via-fg-blue to-fg-navy text-white relative overflow-hidden"
         >
-          <div className="container mx-auto px-4">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 opacity-20">
+            <motion.div
+              className="absolute top-10 left-[10%] w-32 h-32 bg-fg-yellow rounded-full blur-3xl"
+              animate={{ y: [0, 20, 0], scale: [1, 1.1, 1] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute bottom-10 right-[15%] w-48 h-48 bg-fg-teal rounded-full blur-3xl"
+              animate={{ y: [0, -30, 0], scale: [1, 1.2, 1] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute top-1/2 left-1/2 w-64 h-64 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+              animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-6xl mx-auto">
+              <motion.h3
+                variants={itemVariants}
+                className="text-center text-lg font-semibold text-white/70 uppercase tracking-wider mb-10"
+              >
+                Our Growing Impact
+              </motion.h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
-                  { number: '2,000+', label: 'Community Members' },
-                  { number: '500+', label: 'Events Hosted' },
-                  { number: '50+', label: 'Workshops' },
-                  { number: '$250K+', label: 'In Resources Connected' }
+                  { number: '2,000+', label: 'Community Members', icon: '👥' },
+                  { number: '500+', label: 'Events Hosted', icon: '🎉' },
+                  { number: '50+', label: 'Workshops', icon: '📚' },
+                  { number: '$250K+', label: 'In Resources Connected', icon: '💝' }
                 ].map((stat, i) => (
-                  <motion.div key={i} variants={itemVariants}>
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-fg-yellow">{stat.number}</div>
-                    <div className="text-sm md:text-lg opacity-90">{stat.label}</div>
+                  <motion.div
+                    key={i}
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="relative group cursor-default"
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                    <div className="relative p-4">
+                      <div className="text-3xl mb-2">{stat.icon}</div>
+                      <motion.div
+                        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 text-fg-yellow"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: i * 0.1 }}
+                      >
+                        {stat.number}
+                      </motion.div>
+                      <div className="text-sm md:text-base opacity-90 font-medium">{stat.label}</div>
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -292,15 +385,15 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { name: 'One Simple Wish', desc: 'Direct connection to a wish-granting platform where foster youth can request gifts sponsored by donors.', logo: '/images/partners/osw.png' },
-                  { name: 'Foster Care Alumni of America', desc: 'Collaborative monthly events with advocates and alumni focused on policy change.', logo: '/images/partners/fcalumni.png' },
-                  { name: 'EatWell', desc: 'Healthy meal kits for community cooking sessions, bringing people together through shared meals.', logo: '/images/partners/eatwell.png' },
-                  { name: 'StaffMark', desc: 'Equips foster youth with tools and resources for sustainable employment.', logo: '/images/partners/smg.png' }
+                  { name: 'One Simple Wish', desc: 'Direct connection to a wish-granting platform where foster youth can request gifts sponsored by donors.', logo: '/images/partners/osw.png', link: 'https://www.onesimplewish.org' },
+                  { name: 'Cetera Financial Group', desc: 'Providing financial literacy workshops and guidance to help our community build strong financial futures.', logo: '/images/partners/cetera.png', link: 'https://www.cetera.com' },
+                  { name: 'EatWell', desc: 'Healthy meal kits for community cooking sessions, bringing people together through shared meals.', logo: '/images/partners/eatwell.png', link: 'https://www.eatwell101.com' },
+                  { name: 'StaffMark', desc: 'Equips foster youth with tools and resources for sustainable employment.', logo: '/images/partners/smg.png', link: 'https://www.staffmark.com' }
                 ].map((partner, i) => (
                   <motion.div
                     key={i}
                     variants={itemVariants}
-                    className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
+                    className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1 group"
                   >
                     <div className="aspect-square mb-4 flex items-center justify-center p-4">
                       <Image
@@ -312,7 +405,15 @@ export default function AboutPage() {
                       />
                     </div>
                     <h3 className="text-lg font-bold text-fg-navy mb-3">{partner.name}</h3>
-                    <p className="text-sm text-fg-navy/60 leading-relaxed">{partner.desc}</p>
+                    <p className="text-sm text-fg-navy/60 leading-relaxed mb-4">{partner.desc}</p>
+                    <a
+                      href={partner.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-semibold text-fg-blue hover:text-fg-navy transition-colors inline-flex items-center gap-1"
+                    >
+                      Learn More <ArrowRight className="w-3 h-3" />
+                    </a>
                   </motion.div>
                 ))}
               </div>
@@ -332,11 +433,12 @@ export default function AboutPage() {
 
         {/* Team Section */}
         <motion.section
+          id="team"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="py-16 md:py-20 bg-fg-navy/[0.02]"
+          className="py-16 md:py-20 bg-fg-navy/[0.02] scroll-mt-24"
         >
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
