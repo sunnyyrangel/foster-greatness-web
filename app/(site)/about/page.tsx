@@ -233,9 +233,9 @@ export default function AboutPage() {
                 <h3 className="text-2xl md:text-3xl font-bold text-fg-navy mb-8 text-center">Our Community in Action</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
-                    { image: '/images/web images/panel-discussion.webp', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
+                    { image: '/images/web images/advocacy-policy-work.png', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
                     { image: '/images/web images/community-events.webp', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
-                    { image: '/images/web images/community-events.webp', title: 'Community Support Spaces', desc: 'Supportive environments including our Parent Support Group for foster youth who are parents, connecting families and building strength together.' },
+                    { image: '/images/web images/community-support-spaces.png', title: 'Community Support Spaces', desc: 'Supportive environments including our Parent Support Group for foster youth who are parents, connecting families and building strength together.' },
                     { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
                     { image: '/images/web images/panel-discussion.webp', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
                     { image: '/images/web images/storyteller-collective.webp', title: 'Empowering Foster Youth Voices', desc: 'Our Storyteller Collective and "Thriver Stories" series provide platforms for foster care alumni to share their journeys and inspire others.' }
