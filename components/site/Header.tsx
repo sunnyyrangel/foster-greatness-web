@@ -35,294 +35,278 @@ export default function Header() {
 
   // Navigation structure
   const aboutLinks = [
-    { label: 'Our Story', href: '/about', desc: 'How lived experience drives our mission' },
-    { label: 'Meet the Team', href: '/about#team', desc: 'The people behind our mission' },
-    { label: 'Impact Report', href: '/impact', desc: 'The difference we make together' },
-    { label: 'Partnerships', href: '/partnerships', desc: 'Organizations building community' },
+    { label: 'Our Story', href: '/about' },
+    { label: 'Meet the Team', href: '/about#team' },
+    { label: 'Impact Report', href: '/impact' },
+    { label: 'Partnerships', href: '/partnerships' },
   ];
 
   const communityLinks = [
-    { label: 'Join Community', href: 'https://community.fostergreatness.co', external: true, desc: 'Connect with 2,000+ members', highlight: true },
-    { label: 'Resource Support', href: '/resources', desc: 'Get personalized help' },
-    { label: 'Thriver Stories', href: '/thriver-stories', desc: 'Voices of resilience' },
-    { label: 'Storyteller Collective', href: '/storytellers-collective', desc: 'Share your story' },
-    { label: 'Events', href: '/events', desc: 'Gatherings & celebrations' },
+    { label: 'Join Community', href: 'https://community.fostergreatness.co', external: true, highlight: true },
+    { label: 'Resource Support', href: '/resources' },
+    { label: 'Thriver Stories', href: '/thriver-stories' },
+    { label: 'Storyteller Collective', href: '/storytellers-collective' },
+    { label: 'Events', href: '/events' },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-[0_4px_30px_rgba(26,41,73,0.08)]'
+            ? 'bg-white/98 backdrop-blur-xl shadow-[0_8px_40px_-12px_rgba(26,41,73,0.15)]'
             : 'bg-white'
         }`}
       >
-        {/* Decorative top accent line */}
-        <div className="h-1 bg-gradient-to-r from-fg-orange via-fg-teal to-fg-blue" />
+        {/* Signature gradient bar - thicker, more presence */}
+        <div className="h-1.5 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-fg-orange via-fg-teal via-50% to-fg-blue" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-18 lg:h-20">
-            {/* Logo with hover glow */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
+            {/* Logo */}
             <Link
               href="/"
-              className="relative group flex-shrink-0"
+              className="relative flex-shrink-0 group"
               onClick={closeMenus}
             >
-              <div className="absolute -inset-3 bg-gradient-to-r from-fg-orange/20 via-fg-teal/20 to-fg-blue/20 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
-              <div className="relative h-10 w-36 sm:h-11 sm:w-40 lg:h-12 lg:w-48">
+              <div className="relative h-9 w-32 sm:h-10 sm:w-36 lg:h-11 lg:w-44">
                 <Image
                   src="/images/foster-greatness-horizontal.svg"
                   alt="Foster Greatness"
                   fill
-                  className="object-contain"
+                  className="object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                   priority
                 />
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {/* About */}
-              <div className="relative">
-                <button
-                  onClick={() => handleMenuClick('about')}
-                  className={`group relative px-5 py-3 font-medium text-[15px] transition-colors duration-300 ${
-                    activeMenu === 'about' ? 'text-fg-navy' : 'text-gray-600 hover:text-fg-navy'
-                  }`}
-                >
-                  <span className="relative z-10">About</span>
-                  <svg
-                    className={`inline-block ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'about' ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <nav className="hidden lg:flex items-center">
+              {/* Nav Items Container with subtle background */}
+              <div className="flex items-center bg-gray-50/80 rounded-full px-2 py-1.5 border border-gray-100">
+                {/* About */}
+                <div className="relative">
+                  <button
+                    onClick={() => handleMenuClick('about')}
+                    className={`relative px-4 py-2 text-[15px] font-medium rounded-full transition-all duration-300 ${
+                      activeMenu === 'about'
+                        ? 'bg-white text-fg-navy shadow-sm'
+                        : 'text-gray-600 hover:text-fg-navy hover:bg-white/60'
+                    }`}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                  </svg>
-                  {/* Hover pill background */}
-                  <span className="absolute inset-0 rounded-full bg-fg-light-blue scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300" />
-                </button>
+                    About
+                    <svg
+                      className={`inline-block ml-1 w-3 h-3 transition-transform duration-300 ${activeMenu === 'about' ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
 
-                {/* About Dropdown */}
-                {activeMenu === 'about' && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 animate-dropIn">
-                    <div className="relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(26,41,73,0.15)] border border-gray-100/80 p-2 min-w-[280px]">
-                      {/* Dropdown arrow */}
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100/80" />
-
-                      <div className="relative">
-                        {aboutLinks.map((link, i) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            onClick={closeMenus}
-                            className="group flex flex-col px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-fg-light-blue hover:to-white transition-all duration-300"
-                            style={{ animationDelay: `${i * 50}ms` }}
-                          >
-                            <span className="font-semibold text-fg-navy group-hover:text-fg-blue transition-colors">
-                              {link.label}
-                            </span>
-                            <span className="text-sm text-gray-500 mt-0.5">{link.desc}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Community */}
-              <div className="relative">
-                <button
-                  onClick={() => handleMenuClick('community')}
-                  className={`group relative px-5 py-3 font-medium text-[15px] transition-colors duration-300 ${
-                    activeMenu === 'community' ? 'text-fg-navy' : 'text-gray-600 hover:text-fg-navy'
-                  }`}
-                >
-                  <span className="relative z-10">Community</span>
-                  <svg
-                    className={`inline-block ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'community' ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                  </svg>
-                  <span className="absolute inset-0 rounded-full bg-fg-light-blue scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300" />
-                </button>
-
-                {/* Community Dropdown */}
-                {activeMenu === 'community' && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 animate-dropIn">
-                    <div className="relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(26,41,73,0.15)] border border-gray-100/80 p-2 min-w-[300px]">
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100/80" />
-
-                      <div className="relative">
-                        {communityLinks.map((link, i) => (
-                          link.external ? (
-                            <a
-                              key={link.href}
-                              href={link.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={closeMenus}
-                              className={`group flex items-start justify-between px-4 py-3 rounded-xl transition-all duration-300 ${
-                                link.highlight
-                                  ? 'bg-gradient-to-r from-fg-navy to-fg-blue text-white mb-2'
-                                  : 'hover:bg-gradient-to-r hover:from-fg-light-blue hover:to-white'
-                              }`}
-                              style={{ animationDelay: `${i * 50}ms` }}
-                            >
-                              <div className="flex flex-col">
-                                <span className={`font-semibold ${link.highlight ? 'text-white' : 'text-fg-navy group-hover:text-fg-blue'} transition-colors`}>
-                                  {link.label}
-                                </span>
-                                <span className={`text-sm mt-0.5 ${link.highlight ? 'text-white/80' : 'text-gray-500'}`}>
-                                  {link.desc}
-                                </span>
-                              </div>
-                              <svg className={`w-4 h-4 mt-1 flex-shrink-0 ${link.highlight ? 'text-white/70' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                              </svg>
-                            </a>
-                          ) : (
+                  {/* About Dropdown */}
+                  {activeMenu === 'about' && (
+                    <div className="absolute top-full left-0 pt-3 z-50">
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[220px] animate-menuIn">
+                        <div className="p-2">
+                          {aboutLinks.map((link) => (
                             <Link
                               key={link.href}
                               href={link.href}
                               onClick={closeMenus}
-                              className="group flex flex-col px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-fg-light-blue hover:to-white transition-all duration-300"
-                              style={{ animationDelay: `${i * 50}ms` }}
+                              className="block px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
                             >
-                              <span className="font-semibold text-fg-navy group-hover:text-fg-blue transition-colors">
-                                {link.label}
-                              </span>
-                              <span className="text-sm text-gray-500 mt-0.5">{link.desc}</span>
+                              {link.label}
                             </Link>
-                          )
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Campaigns */}
-              <div className="relative">
-                <button
-                  onClick={() => handleMenuClick('campaigns')}
-                  className={`group relative px-5 py-3 font-medium text-[15px] transition-colors duration-300 ${
-                    activeMenu === 'campaigns' ? 'text-fg-navy' : 'text-gray-600 hover:text-fg-navy'
-                  }`}
-                >
-                  <span className="relative z-10">Give</span>
-                  <svg
-                    className={`inline-block ml-1.5 w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'campaigns' ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                  </svg>
-                  <span className="absolute inset-0 rounded-full bg-fg-light-blue scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300" />
-                </button>
-
-                {/* Campaigns Dropdown */}
-                {activeMenu === 'campaigns' && (
-                  <div className="absolute top-full right-0 pt-3 animate-dropIn">
-                    <div className="relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(26,41,73,0.15)] border border-gray-100/80 p-2 min-w-[320px]">
-                      <div className="absolute -top-2 right-8 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100/80" />
-
-                      <div className="relative">
-                        {/* Active Campaigns */}
-                        <div className="px-3 py-2">
-                          <span className="text-xs font-bold text-fg-orange uppercase tracking-wider">Active Campaigns</span>
+                          ))}
                         </div>
-                        {navCampaigns.map((campaign, i) => (
-                          <Link
-                            key={campaign.id}
-                            href={`/${campaign.slug}`}
-                            onClick={closeMenus}
-                            className="group flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-fg-light-blue hover:to-white transition-all duration-300"
-                            style={{ animationDelay: `${i * 50}ms` }}
-                          >
-                            <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{campaign.icon}</span>
-                            <div className="flex flex-col">
-                              <span className="font-semibold text-fg-navy group-hover:text-fg-blue transition-colors">
-                                {campaign.shortTitle}
-                              </span>
-                              <span className="text-sm text-gray-500 line-clamp-1">{campaign.description}</span>
-                            </div>
-                          </Link>
-                        ))}
-
-                        {/* Divider */}
-                        <div className="my-2 mx-3 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-
-                        {/* General Donation */}
-                        <Link
-                          href="/donate"
-                          onClick={closeMenus}
-                          className="group flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-fg-light-blue hover:to-white transition-all duration-300"
-                        >
-                          <span className="text-2xl">💝</span>
-                          <div className="flex flex-col">
-                            <span className="font-semibold text-fg-blue">Make a Donation</span>
-                            <span className="text-sm text-gray-500">Support our mission</span>
-                          </div>
-                        </Link>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
+
+                {/* Community */}
+                <div className="relative">
+                  <button
+                    onClick={() => handleMenuClick('community')}
+                    className={`relative px-4 py-2 text-[15px] font-medium rounded-full transition-all duration-300 ${
+                      activeMenu === 'community'
+                        ? 'bg-white text-fg-navy shadow-sm'
+                        : 'text-gray-600 hover:text-fg-navy hover:bg-white/60'
+                    }`}
+                  >
+                    Community
+                    <svg
+                      className={`inline-block ml-1 w-3 h-3 transition-transform duration-300 ${activeMenu === 'community' ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Community Dropdown */}
+                  {activeMenu === 'community' && (
+                    <div className="absolute top-full left-0 pt-3 z-50">
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[240px] animate-menuIn">
+                        <div className="p-2">
+                          {communityLinks.map((link) => (
+                            link.external ? (
+                              <a
+                                key={link.href}
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={closeMenus}
+                                className={`flex items-center justify-between px-4 py-2.5 text-[15px] rounded-xl transition-all font-medium ${
+                                  link.highlight
+                                    ? 'bg-gradient-to-r from-fg-navy to-fg-blue text-white hover:shadow-md'
+                                    : 'text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50'
+                                }`}
+                              >
+                                {link.label}
+                                <svg className="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </a>
+                            ) : (
+                              <Link
+                                key={link.href}
+                                href={link.href}
+                                onClick={closeMenus}
+                                className="block px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
+                              >
+                                {link.label}
+                              </Link>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Give */}
+                <div className="relative">
+                  <button
+                    onClick={() => handleMenuClick('give')}
+                    className={`relative px-4 py-2 text-[15px] font-medium rounded-full transition-all duration-300 ${
+                      activeMenu === 'give'
+                        ? 'bg-white text-fg-navy shadow-sm'
+                        : 'text-gray-600 hover:text-fg-navy hover:bg-white/60'
+                    }`}
+                  >
+                    Give
+                    <svg
+                      className={`inline-block ml-1 w-3 h-3 transition-transform duration-300 ${activeMenu === 'give' ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Give Dropdown */}
+                  {activeMenu === 'give' && (
+                    <div className="absolute top-full right-0 pt-3 z-50">
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[280px] animate-menuIn">
+                        <div className="p-2">
+                          {/* Active campaigns */}
+                          <div className="px-4 py-2 text-xs font-bold text-fg-orange uppercase tracking-wider">
+                            Active Campaigns
+                          </div>
+                          {navCampaigns.map((campaign) => (
+                            <Link
+                              key={campaign.id}
+                              href={`/${campaign.slug}`}
+                              onClick={closeMenus}
+                              className="flex items-center gap-3 px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
+                            >
+                              <span className="text-xl">{campaign.icon}</span>
+                              {campaign.shortTitle}
+                            </Link>
+                          ))}
+
+                          <div className="my-2 mx-4 h-px bg-gray-100" />
+
+                          <Link
+                            href="/donate"
+                            onClick={closeMenus}
+                            className="flex items-center gap-3 px-4 py-2.5 text-[15px] text-fg-blue hover:bg-fg-light-blue/50 rounded-xl transition-colors font-semibold"
+                          >
+                            <span className="text-xl">💝</span>
+                            Make a Donation
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Contact - Direct link */}
+                <Link
+                  href="/contact"
+                  onClick={closeMenus}
+                  className="px-4 py-2 text-[15px] font-medium text-gray-600 hover:text-fg-navy hover:bg-white/60 rounded-full transition-all duration-300"
+                >
+                  Contact
+                </Link>
               </div>
 
-              {/* Contact - Direct link */}
-              <Link
-                href="/contact"
-                onClick={closeMenus}
-                className="group relative px-5 py-3 font-medium text-[15px] text-gray-600 hover:text-fg-navy transition-colors duration-300"
-              >
-                <span className="relative z-10">Contact</span>
-                <span className="absolute inset-0 rounded-full bg-fg-light-blue scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300" />
-              </Link>
-            </nav>
-
-            {/* Right side */}
-            <div className="flex items-center gap-3">
-              {/* CTA Button with animated gradient */}
+              {/* Donate Button - Outside the pill, stands out */}
               <Link
                 href="/donate"
                 onClick={closeMenus}
-                className="group relative px-6 py-2.5 lg:px-7 lg:py-3 rounded-full font-semibold text-sm lg:text-[15px] text-white overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,103,162,0.4)] hover:scale-[1.02]"
+                className="group relative ml-4 px-6 py-2.5 rounded-full font-semibold text-[15px] text-white overflow-hidden transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_12px_35px_-10px_rgba(250,133,38,0.5)]"
               >
-                {/* Animated gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-fg-navy via-fg-blue to-fg-navy bg-[length:200%_100%] animate-shimmer" />
+                {/* Warm gradient - feels inviting, not corporate */}
+                <div className="absolute inset-0 bg-gradient-to-r from-fg-orange via-[#f97316] to-fg-orange bg-[length:200%_100%] group-hover:animate-gradientFlow" />
+
+                {/* Subtle glow ring on hover */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-fg-orange/40 to-fg-yellow/40 rounded-full opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
+
                 <span className="relative z-10 flex items-center gap-2">
                   Donate
-                  <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </span>
               </Link>
+            </nav>
 
-              {/* Mobile Menu Button */}
+            {/* Right side - Mobile */}
+            <div className="flex items-center gap-3 lg:hidden">
+              {/* Mobile Donate */}
+              <Link
+                href="/donate"
+                className="px-4 py-2 bg-gradient-to-r from-fg-orange to-[#f97316] text-white text-sm font-semibold rounded-full shadow-sm"
+              >
+                Donate
+              </Link>
+
+              {/* Hamburger */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-fg-light-blue/50 hover:bg-fg-light-blue text-fg-navy transition-colors"
+                className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors"
                 aria-label="Toggle menu"
               >
                 <div className="w-5 h-4 flex flex-col justify-between">
-                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
-                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-0' : ''}`} />
-                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+                  <span className={`block h-0.5 bg-fg-navy rounded-full transition-all duration-300 origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+                  <span className={`block h-0.5 bg-fg-navy rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-0' : ''}`} />
+                  <span className={`block h-0.5 bg-fg-navy rounded-full transition-all duration-300 origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
                 </div>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Click outside to close */}
+        {/* Click outside to close dropdowns */}
         {activeMenu && (
           <div
             className="fixed inset-0 z-[-1]"
@@ -331,8 +315,8 @@ export default function Header() {
         )}
       </header>
 
-      {/* Spacer for fixed header */}
-      <div className="h-[calc(4px+4.5rem)] lg:h-[calc(4px+5rem)]" />
+      {/* Spacer */}
+      <div className="h-[calc(6px+4rem)] sm:h-[calc(6px+4.5rem)] lg:h-[calc(6px+5rem)]" />
 
       {/* Mobile Menu */}
       <div
@@ -340,30 +324,30 @@ export default function Header() {
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        {/* Backdrop */}
+        {/* Backdrop with blur */}
         <div
-          className={`absolute inset-0 bg-fg-navy/20 backdrop-blur-sm transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-fg-navy/30 backdrop-blur-md transition-opacity duration-500 ${
             isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Menu Panel */}
+        {/* Sliding Panel */}
         <div
-          className={`absolute top-[calc(4px+4rem)] left-0 right-0 max-h-[calc(100vh-5rem)] overflow-y-auto bg-white shadow-2xl transition-all duration-500 ${
-            isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
+          className={`absolute top-[calc(6px+4rem)] sm:top-[calc(6px+4.5rem)] left-0 right-0 max-h-[calc(100vh-5rem)] overflow-y-auto bg-white border-t border-gray-100 transition-all duration-500 ease-out ${
+            isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'
           }`}
         >
-          <div className="p-6 space-y-6">
-            {/* About Section */}
+          <div className="p-5 space-y-5">
+            {/* About */}
             <div>
-              <h3 className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-3">About</h3>
-              <div className="space-y-1">
+              <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">About</div>
+              <div className="grid grid-cols-2 gap-2">
                 {aboutLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block px-4 py-3 rounded-xl text-fg-navy font-medium hover:bg-fg-light-blue transition-colors"
+                    className="px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -371,12 +355,12 @@ export default function Header() {
               </div>
             </div>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+            <div className="h-px bg-gray-100" />
 
-            {/* Community Section */}
+            {/* Community */}
             <div>
-              <h3 className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-3">Community</h3>
-              <div className="space-y-1">
+              <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">Community</div>
+              <div className="space-y-2">
                 {communityLinks.map((link) => (
                   link.external ? (
                     <a
@@ -384,10 +368,10 @@ export default function Header() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors ${
+                      className={`flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-colors ${
                         link.highlight
                           ? 'bg-gradient-to-r from-fg-navy to-fg-blue text-white'
-                          : 'text-fg-navy hover:bg-fg-light-blue'
+                          : 'bg-gray-50 text-fg-navy hover:bg-fg-light-blue'
                       }`}
                     >
                       {link.label}
@@ -399,7 +383,7 @@ export default function Header() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="block px-4 py-3 rounded-xl text-fg-navy font-medium hover:bg-fg-light-blue transition-colors"
+                      className="block px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -408,68 +392,78 @@ export default function Header() {
               </div>
             </div>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+            <div className="h-px bg-gray-100" />
 
-            {/* Campaigns Section */}
+            {/* Give */}
             <div>
-              <h3 className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-3">Give</h3>
-              <div className="space-y-1">
+              <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">Give</div>
+              <div className="space-y-2">
                 {navCampaigns.map((campaign) => (
                   <Link
                     key={campaign.id}
                     href={`/${campaign.slug}`}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-fg-navy font-medium hover:bg-fg-light-blue transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
                   >
-                    <span className="text-xl">{campaign.icon}</span>
+                    <span className="text-lg">{campaign.icon}</span>
                     {campaign.shortTitle}
                   </Link>
                 ))}
                 <Link
                   href="/donate"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-fg-blue font-semibold hover:bg-fg-light-blue transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 bg-fg-light-blue rounded-xl text-fg-blue font-semibold text-sm hover:bg-fg-blue/20 transition-colors"
                 >
-                  <span className="text-xl">💝</span>
+                  <span className="text-lg">💝</span>
                   Make a Donation
                 </Link>
               </div>
             </div>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+            <div className="h-px bg-gray-100" />
 
             {/* Contact */}
             <Link
               href="/contact"
-              className="block px-4 py-3 rounded-xl text-fg-navy font-medium hover:bg-fg-light-blue transition-colors"
+              className="block px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
             >
-              Contact
+              Contact Us
             </Link>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes dropIn {
+        @keyframes menuIn {
           from {
             opacity: 0;
-            transform: translateY(-8px) translateX(-50%);
+            transform: translateY(-10px) scale(0.95);
           }
           to {
             opacity: 1;
-            transform: translateY(0) translateX(-50%);
+            transform: translateY(0) scale(1);
           }
         }
 
-        @keyframes shimmer {
-          0% { background-position: 100% 0; }
-          100% { background-position: -100% 0; }
+        @keyframes shine {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(100%); }
         }
 
-        .animate-dropIn {
-          animation: dropIn 0.25s ease-out forwards;
+        @keyframes gradientFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
-        .animate-shimmer {
-          animation: shimmer 3s ease-in-out infinite;
+        .animate-menuIn {
+          animation: menuIn 0.2s ease-out forwards;
+        }
+
+        .animate-shine {
+          animation: shine 3s ease-in-out infinite;
+        }
+
+        .group:hover .group-hover\\:animate-gradientFlow {
+          animation: gradientFlow 2s ease infinite;
         }
 
         .h-18 {
