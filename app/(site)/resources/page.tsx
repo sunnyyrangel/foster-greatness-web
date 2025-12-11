@@ -114,32 +114,34 @@ export default function ResourcesPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
-              <div key={step.number} className="relative">
+              <div key={step.number} className="flex flex-col">
                 {/* Phone Mockup Placeholder */}
                 <div className="mb-6 flex justify-center">
-                  <div className="relative w-32 h-56 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 rounded-[2rem] border-4 border-fg-navy/10 shadow-lg flex items-center justify-center">
+                  <div className="relative w-28 h-48 bg-gradient-to-br from-fg-light-blue to-fg-blue/20 rounded-[1.5rem] border-4 border-fg-navy/10 shadow-lg flex items-center justify-center">
                     {/* Phone notch */}
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-fg-navy/10 rounded-full" />
+                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-3 bg-fg-navy/10 rounded-full" />
                     {/* Screen content placeholder */}
-                    <div className="text-center px-3">
-                      <Smartphone className="w-8 h-8 text-fg-blue/40 mx-auto mb-2" />
-                      <span className="text-[10px] text-fg-navy/40 font-medium leading-tight block">Screenshot Coming Soon</span>
+                    <div className="text-center px-2">
+                      <Smartphone className="w-6 h-6 text-fg-blue/40 mx-auto mb-1" />
+                      <span className="text-[9px] text-fg-navy/40 font-medium leading-tight block">Screenshot Coming Soon</span>
                     </div>
                     {/* Home indicator */}
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-fg-navy/20 rounded-full" />
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-fg-navy/20 rounded-full" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex-1 relative">
                   <div className="text-5xl font-black text-fg-blue/20 mb-4">{step.number}</div>
                   <h3 className="text-xl font-bold text-fg-navy mb-3">{step.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{step.description}</p>
+
+                  {/* Arrow between cards */}
+                  {i < steps.length - 1 && (
+                    <div className="hidden md:flex absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
+                      <ArrowRight className="w-8 h-8 text-fg-blue/30" />
+                    </div>
+                  )}
                 </div>
-                {i < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                    <ArrowRight className="w-8 h-8 text-fg-blue/30" />
-                  </div>
-                )}
               </div>
             ))}
           </div>
