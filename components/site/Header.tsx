@@ -56,6 +56,19 @@ export default function Header() {
     { label: 'Events', href: '/events', description: 'Upcoming gatherings' },
   ];
 
+  // Give dropdown - split into two columns
+  const giveDonate = {
+    title: 'Make a Donation',
+    description: 'Support our community with a one-time or recurring gift',
+    href: '/donate',
+    cta: 'Donate Now',
+  };
+
+  const giveLinks = [
+    { label: 'Crisis Fund', href: '/donate', description: 'Emergency support for members', icon: '🆘' },
+    ...navCampaigns.map(c => ({ label: c.shortTitle, href: `/${c.slug}`, description: c.tagline || 'Support this campaign', icon: c.icon })),
+  ];
+
   return (
     <>
       <header
@@ -230,37 +243,53 @@ export default function Header() {
                     </svg>
                   </button>
 
-                  {/* Give Dropdown */}
+                  {/* Give Dropdown - Two Column Spread */}
                   {activeMenu === 'give' && (
                     <div className="absolute top-full right-0 pt-3 z-50">
-                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden min-w-[280px] animate-menuIn">
-                        <div className="p-2">
-                          {/* Active campaigns */}
-                          <div className="px-4 py-2 text-xs font-bold text-fg-orange uppercase tracking-wider">
-                            Active Campaigns
-                          </div>
-                          {navCampaigns.map((campaign) => (
+                      <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden animate-menuIn">
+                        <div className="flex">
+                          {/* Left Column - Donate CTA */}
+                          <div className="w-64 bg-gradient-to-br from-fg-orange to-[#f97316] p-6 flex flex-col justify-between">
+                            <div>
+                              <h3 className="text-white font-bold text-lg mb-2">{giveDonate.title}</h3>
+                              <p className="text-white/80 text-sm leading-relaxed">{giveDonate.description}</p>
+                            </div>
                             <Link
-                              key={campaign.id}
-                              href={`/${campaign.slug}`}
+                              href={giveDonate.href}
                               onClick={closeMenus}
-                              className="flex items-center gap-3 px-4 py-2.5 text-[15px] text-gray-700 hover:text-fg-navy hover:bg-fg-light-blue/50 rounded-xl transition-colors font-medium"
+                              className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fg-orange font-semibold rounded-full hover:bg-fg-light-blue transition-colors text-sm"
                             >
-                              <span className="text-xl">{campaign.icon}</span>
-                              {campaign.shortTitle}
+                              {giveDonate.cta}
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                              </svg>
                             </Link>
-                          ))}
+                          </div>
 
-                          <div className="my-2 mx-4 h-px bg-gray-100" />
-
-                          <Link
-                            href="/donate"
-                            onClick={closeMenus}
-                            className="flex items-center gap-3 px-4 py-2.5 text-[15px] text-fg-blue hover:bg-fg-light-blue/50 rounded-xl transition-colors font-semibold"
-                          >
-                            <span className="text-xl">💝</span>
-                            Make a Donation
-                          </Link>
+                          {/* Right Column - Campaigns */}
+                          <div className="w-64 p-4">
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+                              Ways to Give
+                            </div>
+                            {giveLinks.map((link) => (
+                              <Link
+                                key={link.href + link.label}
+                                href={link.href}
+                                onClick={closeMenus}
+                                className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-fg-light-blue/50 transition-colors group"
+                              >
+                                <span className="text-lg mt-0.5">{link.icon}</span>
+                                <div>
+                                  <div className="text-[15px] text-fg-navy font-medium group-hover:text-fg-blue transition-colors">
+                                    {link.label}
+                                  </div>
+                                  <div className="text-xs text-gray-500 mt-0.5">
+                                    {link.description}
+                                  </div>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -412,27 +441,37 @@ export default function Header() {
 
             <div className="h-px bg-gray-100" />
 
-            {/* Give */}
+            {/* Give - Two sections */}
             <div>
               <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">Give</div>
+
+              {/* Donate CTA - Prominent */}
+              <Link
+                href={giveDonate.href}
+                className="block mb-3 p-4 bg-gradient-to-r from-fg-orange to-[#f97316] rounded-xl text-white"
+              >
+                <div className="font-bold text-base mb-1">{giveDonate.title}</div>
+                <div className="text-white/80 text-xs mb-3">{giveDonate.description}</div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-fg-orange font-semibold rounded-full text-sm">
+                  {giveDonate.cta}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+              </Link>
+
+              {/* Ways to Give Links */}
               <div className="space-y-2">
-                {navCampaigns.map((campaign) => (
+                {giveLinks.map((link) => (
                   <Link
-                    key={campaign.id}
-                    href={`/${campaign.slug}`}
+                    key={link.href + link.label}
+                    href={link.href}
                     className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl text-fg-navy font-medium text-sm hover:bg-fg-light-blue transition-colors"
                   >
-                    <span className="text-lg">{campaign.icon}</span>
-                    {campaign.shortTitle}
+                    <span className="text-lg">{link.icon}</span>
+                    {link.label}
                   </Link>
                 ))}
-                <Link
-                  href="/donate"
-                  className="flex items-center gap-3 px-4 py-3 bg-fg-light-blue rounded-xl text-fg-blue font-semibold text-sm hover:bg-fg-blue/20 transition-colors"
-                >
-                  <span className="text-lg">💝</span>
-                  Make a Donation
-                </Link>
               </div>
             </div>
 
