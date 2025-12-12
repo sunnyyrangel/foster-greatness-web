@@ -365,10 +365,10 @@ export default function AboutPage() {
               </Link>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
-                  { number: '2,000+', label: 'Community Members', icon: '👥' },
-                  { number: '500+', label: 'Events Hosted', icon: '🎉' },
-                  { number: '50+', label: 'Workshops', icon: '📚' },
-                  { number: '$250K+', label: 'In Resources Connected', icon: '💝' }
+                  { number: '310', label: 'Event Attendees', icon: '👥' },
+                  { number: '16', label: 'Panels & Workshops', icon: '🎉' },
+                  { number: '77', label: 'Wishes Granted', icon: '🎁' },
+                  { number: '100+', label: 'Community Members', icon: '💝' }
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
