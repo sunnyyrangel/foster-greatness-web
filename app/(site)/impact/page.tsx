@@ -12,7 +12,7 @@ const impactStats = [
   { number: '8', label: 'Panels Hosted', icon: Calendar },
   { number: '8', label: 'Workshops Delivered', icon: TrendingUp },
   { number: '77', label: 'Wishes Granted', icon: Gift },
-  { number: '100+', label: 'Community Members', icon: Heart },
+  { number: '2,000+', label: 'Community Members', icon: Heart },
   { number: '73', label: 'SDOH Event Participants', icon: Users },
 ];
 

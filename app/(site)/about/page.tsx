@@ -368,7 +368,7 @@ export default function AboutPage() {
                   { number: '310', label: 'Event Attendees', icon: '👥' },
                   { number: '16', label: 'Panels & Workshops', icon: '🎉' },
                   { number: '77', label: 'Wishes Granted', icon: '🎁' },
-                  { number: '100+', label: 'Community Members', icon: '💝' }
+                  { number: '2,000+', label: 'Community Members', icon: '💝' }
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
