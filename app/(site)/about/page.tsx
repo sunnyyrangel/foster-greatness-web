@@ -204,7 +204,7 @@ export default function AboutPage() {
                 {[
                   { image: '/images/web images/panel-discussion.webp', title: 'Monthly Panel Discussions', desc: 'Lived experience leaders and advocates discuss policy and systemic change affecting our community.' },
                   { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Experts with lived experience lead workshops on financial literacy, storytelling, trauma recovery, and more.' },
-                  { image: '/images/web images/community-events.webp', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
+                  { image: '/images/web images/community-events.jpg', title: 'Community Events', desc: 'Connect and have fun with others through cooking events, holiday contests, support spaces and more.' },
                   { image: '/images/web images/resource-support.jpg', title: 'Resource Support', desc: 'Get connected to local resources or personalized support you deserve.' }
                 ].map((item, i) => (
                   <motion.div
@@ -234,7 +234,7 @@ export default function AboutPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {[
                     { image: '/images/web images/advocacy-policy-work.png', title: 'Advocacy & Policy Work', desc: 'Monthly conversations with National Network for Sibling Connections to discuss foster care policies and sibling advocacy.' },
-                    { image: '/images/web images/community-events.webp', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
+                    { image: '/images/web images/community-events.jpg', title: 'Community Building Events', desc: "Quarterly events focused on connection through meals, open-mic nights, paint nights and more." },
                     { image: '/images/web images/community-support-spaces.png', title: 'Community Support Spaces', desc: 'Supportive environments including our Parent Support Group for foster youth who are parents, connecting families and building strength together.' },
                     { image: '/images/web images/workshops.webp', title: 'Learning Workshops', desc: 'Expert-led workshops covering financial literacy to career development.' },
                     { image: '/images/web images/panel-discussion.webp', title: 'Panel Discussions', desc: 'Lived experience leaders and advocates tackle important community issues.' },
