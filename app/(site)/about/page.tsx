@@ -245,7 +245,7 @@ export default function AboutPage() {
                       variants={itemVariants}
                       className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md transition-all duration-300"
                     >
-                      <div className="h-32 relative">
+                      <div className="aspect-[3/2] relative">
                         <Image
                           src={item.image}
                           alt={item.title}
