@@ -1,16 +1,6 @@
 {
-  "featured": "gingerbread-contest-2025",
+  "featured": "holiday-gift-drive-2025",
   "updates": [
-    {
-      "id": "gingerbread-contest-2025",
-      "type": "donate",
-      "title": "Donate Gingerbread Kits for our Community",
-      "description": "Sponsor a community member's holiday experience! $60 provides a complete gingerbread kit with icing, candies, decorations, shipping, plus a gift card and access to our live virtual building session with prizes. Help create belonging and connection for foster youth this holiday season.",
-      "date": "2025-11-18",
-      "link": "/gingerbread-contest",
-      "linkText": "Sponsor a Member",
-      "image": "/images/giving-tuesday-banner.png"
-    },
     {
       "id": "holiday-gift-drive-2025",
       "type": "donate",
@@ -40,16 +30,6 @@
       "link": "/storytellers-collective",
       "linkText": "Read the Storyteller Guide",
       "image": "/images/storyteller-guide.webp"
-    },
-    {
-      "id": "gingerbread-kits",
-      "type": "donate",
-      "title": "Gingerbread Kits for Our Community",
-      "description": "Help foster youth experience holiday joy through gingerbread kit sponsorships. Each $60 kit includes supplies, a gift card, and access to our live virtual building event.",
-      "date": "2025-11-18",
-      "link": "/gingerbread",
-      "linkText": "Sponsor a Kit",
-      "image": "/images/giving-tuesday-banner.png"
     }
   ]
 }
