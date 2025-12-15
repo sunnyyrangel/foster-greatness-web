@@ -251,17 +251,17 @@ function TestimonialQuote() {
       <div className="flex flex-col items-center text-center">
         <div className="relative w-36 h-36 rounded-2xl overflow-hidden flex-shrink-0 ring-4 ring-fg-blue/20 mb-4">
           <Image
-            src="/images/rimy-morris-2.png"
-            alt="Rimy Morris"
+            src="/images/taylor-rockhold.jpg"
+            alt="Taylor Rockhold"
             fill
             className="object-cover"
           />
         </div>
         <blockquote className="text-fg-navy/80 text-lg leading-relaxed italic mb-3">
-          "I had so much fun and truly needed all of the holiday spirit and community in this event! Felt like one big happy family"
+          "Taylor and her miracle baby will be spending their first Christmas together. This LEGO kit is something special they can build and bond over during the holiday season."
         </blockquote>
         <p className="text-sm text-fg-navy/50">
-          <span className="font-semibold text-fg-navy text-base">Rimy Morris</span> · 2024 Gingerbread Participant
+          <span className="font-semibold text-fg-navy text-base">Taylor Rockhold</span> · Holiday Gift Drive Recipient
         </p>
       </div>
     </motion.div>

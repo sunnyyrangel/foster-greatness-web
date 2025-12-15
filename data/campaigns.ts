@@ -104,9 +104,9 @@ export const campaigns: Campaign[] = [
     donationAmount: 60,
     donationLabel: 'Fund 1 Member',
 
-    showInNav: true,
-    showOnHomepage: true,
-    showOnDonatePage: true,
+    showInNav: false,
+    showOnHomepage: false,
+    showOnDonatePage: false,
     featured: false,
 
     hasCustomPage: true,
