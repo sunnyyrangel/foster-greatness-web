@@ -40,19 +40,19 @@ const steps = [
     number: '01',
     title: 'Create an Account',
     description: 'Sign up for free at our community platform to access all resource support services.',
-    image: '/images/web images/create-an-account.PNG',
+    image: '/images/web images/create-an-account.jpg',
   },
   {
     number: '02',
     title: 'Submit Request Form',
     description: 'Complete the "Access Resource Support" form in the Resource Support section.',
-    image: '/images/web images/submit-request-form.PNG',
+    image: '/images/web images/submit-request-form.jpg',
   },
   {
     number: '03',
     title: 'Connect with a Specialist',
     description: 'A resource specialist will reach out within 24-48 hours (Mon-Fri, 9AM-5PM PST).',
-    image: '/images/web images/connect-with-a-specialist.PNG',
+    image: '/images/web images/connect-with-a-specialist.jpg',
   },
 ];
 
