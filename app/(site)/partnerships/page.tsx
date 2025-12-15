@@ -254,53 +254,34 @@ export default function PartnershipsPage() {
           </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentPartners.map((partner, i) => {
-              const hasDetailPage = partner.name === 'Staffmark' || partner.name === 'One Simple Wish';
-              const detailUrl = partner.name === 'Staffmark' ? '/partnerships/staffmark' : '/partnerships/one-simple-wish';
-
-              const PartnerCard = (
-                <motion.div
-                  key={partner.name}
-                  variants={itemVariants}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all group h-full flex flex-col"
-                >
-                  <div className="aspect-square bg-white flex items-center justify-center p-6 border-b border-gray-100">
-                    <Image
-                      src={partner.logo}
-                      alt={`${partner.name} logo`}
-                      width={200}
-                      height={200}
-                      className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h3 className="text-lg font-bold text-fg-navy mb-2 group-hover:text-fg-blue transition-colors">
-                      {partner.name}
-                    </h3>
-                    <p className="text-sm text-fg-navy/70 leading-relaxed mb-3 flex-1">
-                      {partner.description}
-                    </p>
-                    <p className="text-xs text-fg-navy/50 font-semibold mb-3">
-                      {partner.impact}
-                    </p>
-                    {hasDetailPage && (
-                      <span className="inline-flex items-center gap-1 text-fg-blue font-semibold text-sm group-hover:gap-2 transition-all">
-                        View Case Study
-                        <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                      </span>
-                    )}
-                  </div>
-                </motion.div>
-              );
-
-              return hasDetailPage ? (
-                <Link key={partner.name} href={detailUrl}>
-                  {PartnerCard}
-                </Link>
-              ) : (
-                PartnerCard
-              );
-            })}
+            {currentPartners.map((partner) => (
+              <motion.div
+                key={partner.name}
+                variants={itemVariants}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all group h-full flex flex-col"
+              >
+                <div className="aspect-square bg-white flex items-center justify-center p-6 border-b border-gray-100">
+                  <Image
+                    src={partner.logo}
+                    alt={`${partner.name} logo`}
+                    width={200}
+                    height={200}
+                    className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className="text-lg font-bold text-fg-navy mb-2 group-hover:text-fg-blue transition-colors">
+                    {partner.name}
+                  </h3>
+                  <p className="text-sm text-fg-navy/70 leading-relaxed mb-3 flex-1">
+                    {partner.description}
+                  </p>
+                  <p className="text-xs text-fg-navy/50 font-semibold">
+                    {partner.impact}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.section>
 
