@@ -36,7 +36,7 @@ export const siteConfig: SiteConfig = {
   tagline: 'Creating lifelong community and belonging for current and former foster youth',
 
   donation: {
-    generalStripeLink: 'https://donate.stripe.com/8wM3fO2Xn5Ht1tm3cc',
+    generalStripeLink: 'https://buy.stripe.com/14k5o8gnU1srcdG6op',
     processingFeeRate: 0.03,
     contactEmail: 'info@fostergreatness.co',
   },
