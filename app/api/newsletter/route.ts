@@ -10,7 +10,7 @@ export async function GET() {
     }
 
     const response = await fetch(
-      'https://api.beehiiv.com/v2/publications/pub_e597ede6-38aa-4b38-a981-ae7c8f63a77e/posts?status=confirmed&limit=3&order_by=publish_date&direction=desc',
+      'https://api.beehiiv.com/v2/publications/pub_e597ede6-38aa-4b38-a981-ae7c8f63a77e/posts?status=confirmed&platform=both&limit=3&order_by=publish_date&direction=desc',
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,
