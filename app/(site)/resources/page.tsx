@@ -118,10 +118,6 @@ export default function ResourcesPage() {
               <p className="text-xs text-gray-400 mt-1">Source: <a href="https://nfyi.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-blue">NFYI</a></p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-fg-navy">$250K+</div>
-              <p className="text-sm text-gray-600 mt-1">In resources connected to our community members</p>
-            </div>
-            <div>
               <div className="text-3xl md:text-4xl font-bold text-fg-navy">2,000+</div>
               <p className="text-sm text-gray-600 mt-1">Foster youth in our nationwide community</p>
             </div>

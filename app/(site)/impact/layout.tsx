@@ -3,7 +3,7 @@ import { generatePageMetadata, generateBreadcrumbJsonLd, siteConfig } from '@/li
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Our Impact | Foster Greatness Community Results & Statistics',
-  description: 'See the impact of Foster Greatness: 2,000+ community members, 500+ events hosted, $250K+ in resources connected. Real outcomes for foster youth nationwide.',
+  description: 'See the impact of Foster Greatness: 2,000+ community members, 500+ events hosted, 77 holiday wishes fulfilled. Real outcomes for foster youth nationwide.',
   path: '/impact',
 });
 
