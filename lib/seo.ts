@@ -12,7 +12,7 @@ export const siteConfig = {
     instagram: 'https://www.instagram.com/fostergreatness',
     facebook: 'https://www.facebook.com/fostergreatness1/',
     linkedin: 'https://www.linkedin.com/company/fostergreatness',
-    youtube: 'https://www.youtube.com/@fostergreatness',
+    youtube: 'https://www.youtube.com/@_FosterGreatness',
   },
   keywords: [
     'foster youth community',

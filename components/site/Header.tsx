@@ -471,7 +471,7 @@ export default function Header() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.youtube.com/@fostergreatness"
+                  href="https://www.youtube.com/@_FosterGreatness"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 text-gray-400 hover:text-fg-navy transition-colors"
