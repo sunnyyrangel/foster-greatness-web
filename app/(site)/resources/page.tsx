@@ -279,7 +279,7 @@ export default function ResourcesPage() {
                 </div>
 
                 <a
-                  href="https://community.fostergreatness.co"
+                  href="https://app.singlestop.org/fostergreatness/main"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-fg-yellow text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-white transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform"
