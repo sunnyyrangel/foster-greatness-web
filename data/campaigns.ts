@@ -35,7 +35,6 @@ export interface Campaign {
   // Donation
   stripeLink?: string;
   stripeBuyButtonId?: string;
-  stripePublishableKey?: string;
   donationAmount?: number;
   donationLabel?: string;
 
@@ -100,7 +99,7 @@ export const campaigns: Campaign[] = [
     eventDate: '2025-12-19',
 
     stripeBuyButtonId: 'buy_btn_1SQC6QF61ARMru0WlQcx7Fyb',
-    stripePublishableKey: 'pk_live_51Mz3wTF61ARMru0WN9TAU1BYRJ6f6FUlM1jFnHqnyPBOx0ZmdhGqB4cG8ehRv5KNgtgElhjXRtkEhtW9U7rIbA3f00CUAZUEo6',
+    // stripePublishableKey now comes from environment variable via stripeConfig
     donationAmount: 60,
     donationLabel: 'Fund 1 Member',
 

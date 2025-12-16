@@ -52,7 +52,8 @@ export default function DonateSection({
   // Determine donation details
   const hasBuyButton = campaign?.stripeBuyButtonId;
   const stripeLink = campaign?.stripeLink || siteConfig.donation.generalStripeLink;
-  const publishableKey = campaign?.stripePublishableKey || stripeConfig.publishableKey;
+  // Stripe publishable key comes from environment variable via stripeConfig
+  const publishableKey = stripeConfig.publishableKey;
   const donationLabel = campaign?.donationLabel || 'Make a Donation';
   const amount = campaign?.donationAmount;
 

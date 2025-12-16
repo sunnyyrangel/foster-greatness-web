@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, AlertTriangle, Heart, Home, GraduationCap, Briefcase, Users, ChevronDown, Calendar, Shield } from 'lucide-react';
+import { generatePageMetadata, generateFaqJsonLd, generateBreadcrumbJsonLd } from '@/lib/seo';
+
+export const metadata = generatePageMetadata({
+  title: 'Aging Out of Foster Care: Complete Guide & Resources (2025)',
+  description: 'Learn what happens when you age out of foster care, available resources, and how to get free lifelong support. Guide covers housing, education, healthcare, and employment help for former foster youth.',
+  path: '/aging-out',
+});
 
 const challenges = [
   {
@@ -96,9 +103,28 @@ const faqs = [
   }
 ];
 
+const siteUrl = 'https://www.fostergreatness.co';
+
+const faqJsonLd = generateFaqJsonLd(faqs);
+
+const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+  { name: 'Home', url: siteUrl },
+  { name: 'Resources', url: `${siteUrl}/resources` },
+  { name: 'Aging Out Guide', url: `${siteUrl}/aging-out` },
+]);
+
 export default function AgingOutPage() {
   return (
     <main className="relative min-h-screen bg-[#fafbfc]">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Subtle texture */}
       <div
         className="absolute inset-0 opacity-[0.015] pointer-events-none"

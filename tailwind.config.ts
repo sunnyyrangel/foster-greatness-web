@@ -17,15 +17,14 @@ const config: Config = {
         yellow: "#faca2c",
         "light-blue": "#ddf3ff",
 
-        // FG-prefixed colors (for updates page)
-        'fg-navy': '#1a2949',
-        'fg-blue': '#0067a2',
-        'fg-teal': '#0067a2',  // Secondary blue color that supplements navy
+        // FG-prefixed brand colors
+        'fg-navy': '#1a2949',      // Primary brand color
+        'fg-blue': '#0067a2',      // Secondary brand color
+        'fg-teal': '#00c8b7',      // Accent teal (use sparingly)
         'fg-light-blue': '#ddf3ff',
         'fg-orange': '#fa8526',
         'fg-yellow': '#faca2c',
-        'fg-accent-teal': '#00c8b7',  // Actual teal, used as accent only
-        'fg-coral': '#ff6f61',
+        'fg-coral': '#ff6f61',     // Accent coral
 
         // Neutrals
         background: "var(--background)",
