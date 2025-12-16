@@ -235,6 +235,7 @@ Use Tailwind classes: `text-fg-navy`, `bg-fg-blue`, etc.
 - **Database**: Supabase (gift-drive features)
 - **Payments**: Stripe
 - **Animation**: Framer Motion
+- **Analytics**: Vercel Web Analytics
 
 ## Development
 
@@ -269,3 +270,34 @@ npm start       # Production server
 
 ### Design Documentation
 - `docs/plans/2025-12-03-site-config-system-design.md` - Configuration system design
+
+---
+
+## Analytics
+
+### Vercel Web Analytics
+- **Package**: `@vercel/analytics`
+- **Location**: `app/layout.tsx` (root layout)
+- **Tracking**: Automatic page view tracking for all routes
+- **Dashboard**: Vercel project dashboard → Analytics tab
+- **Privacy**: GDPR-compliant, no cookies, no PII collection
+
+### Tracked Pages
+- All full-site pages (`(site)` route group)
+- All widget embeds (`widgets` route group)
+- Custom campaign pages
+
+### Enabling Analytics
+1. Install package: `npm install @vercel/analytics`
+2. Import in root layout: `import { Analytics } from '@vercel/analytics/react';`
+3. Add component to body: `<Analytics />`
+4. Enable in Vercel dashboard (Analytics tab)
+5. Deploy to production
+
+### Custom Event Tracking (Future)
+To track custom events (e.g., donation button clicks):
+```typescript
+import { track } from '@vercel/analytics';
+
+track('Donation Clicked', { campaign: 'holiday-gift-drive-2025' });
+```
