@@ -10,7 +10,7 @@ export const siteConfig = {
   email: 'info@fostergreatness.co',
   social: {
     instagram: 'https://www.instagram.com/fostergreatness',
-    facebook: 'https://www.facebook.com/fostergreatness',
+    facebook: 'https://www.facebook.com/fostergreatness1/',
     linkedin: 'https://www.linkedin.com/company/fostergreatness',
     youtube: 'https://www.youtube.com/@fostergreatness',
   },
