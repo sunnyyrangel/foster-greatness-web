@@ -113,8 +113,8 @@ Sentry.init({
     return breadcrumb;
   },
 
-  // Enable debug mode in development
-  debug: process.env.NODE_ENV === 'development',
+  // Enable debug mode temporarily to diagnose integration
+  debug: true,
 
   // Release tracking (set by build process)
   // release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
