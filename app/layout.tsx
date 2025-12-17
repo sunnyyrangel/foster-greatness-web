@@ -4,9 +4,6 @@ import "./globals.css";
 import { defaultMetadata, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { Analytics } from "@vercel/analytics/react";
 
-// Import Sentry for client-side error tracking
-import "@/sentry.client.config";
-
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800'],
   subsets: ["latin"],
