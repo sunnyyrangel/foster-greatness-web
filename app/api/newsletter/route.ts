@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const apiKey = process.env.BEEHIIV_API_KEY;
 
@@ -9,8 +9,13 @@ export async function GET() {
       return NextResponse.json({ error: 'API configuration error' }, { status: 500 });
     }
 
+    // Get limit from query params, default to 3, max 50
+    const searchParams = request.nextUrl.searchParams;
+    const limitParam = searchParams.get('limit');
+    const limit = Math.min(Math.max(parseInt(limitParam || '3', 10) || 3, 1), 50);
+
     const response = await fetch(
-      'https://api.beehiiv.com/v2/publications/pub_e597ede6-38aa-4b38-a981-ae7c8f63a77e/posts?status=confirmed&platform=both&limit=3&order_by=publish_date&direction=desc',
+      `https://api.beehiiv.com/v2/publications/pub_e597ede6-38aa-4b38-a981-ae7c8f63a77e/posts?status=confirmed&platform=both&limit=${limit}&order_by=publish_date&direction=desc`,
       {
         headers: {
           'Authorization': `Bearer ${apiKey}`,

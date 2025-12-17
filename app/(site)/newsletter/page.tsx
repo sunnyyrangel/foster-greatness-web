@@ -1,20 +1,49 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, CheckCircle, ArrowRight, Heart, Calendar, Gift } from 'lucide-react';
+import { Mail, CheckCircle, ArrowRight, Heart, Calendar, Gift, Newspaper } from 'lucide-react';
+import Image from 'next/image';
+
+interface Newsletter {
+  id: string;
+  title: string;
+  subtitle?: string;
+  thumbnail_url?: string;
+  web_url: string;
+  publish_date?: number;
+}
 
 export default function NewsletterPage() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+  const [newslettersLoading, setNewslettersLoading] = useState(true);
+
+  // Fetch all newsletters
+  useEffect(() => {
+    async function fetchNewsletters() {
+      try {
+        const response = await fetch('/api/newsletter?limit=50');
+        if (!response.ok) throw new Error('Failed to fetch');
+        const data = await response.json();
+        setNewsletters(data);
+      } catch (err) {
+        console.error('Failed to fetch newsletters:', err);
+      } finally {
+        setNewslettersLoading(false);
+      }
+    }
+    fetchNewsletters();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
 
     try {
-      const response = await fetch('/api/newsletter', {
+      const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -162,6 +191,104 @@ export default function NewsletterPage() {
               </p>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Past Newsletters */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-fg-light-blue px-4 py-2 rounded-full mb-4">
+              <Newspaper className="w-4 h-4 text-fg-blue" />
+              <span className="text-sm font-semibold text-fg-navy">Archive</span>
+            </div>
+            <h2 className="text-3xl font-bold text-fg-navy mb-4">
+              Past Newsletters
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Catch up on what you might have missed. Read our past newsletters to stay informed about Foster Greatness.
+            </p>
+          </div>
+
+          {newslettersLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-gray-50 rounded-2xl overflow-hidden animate-pulse">
+                  <div className="h-48 bg-gray-200" />
+                  <div className="p-5 space-y-3">
+                    <div className="h-5 bg-gray-200 rounded w-3/4" />
+                    <div className="h-4 bg-gray-200 rounded w-full" />
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : newsletters.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {newsletters.map((newsletter, index) => (
+                <motion.a
+                  key={newsletter.id}
+                  href={newsletter.web_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:border-fg-blue/30 transition-all"
+                >
+                  {newsletter.thumbnail_url ? (
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={newsletter.thumbnail_url}
+                        alt={newsletter.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-48 bg-gradient-to-br from-fg-navy to-fg-blue flex items-center justify-center">
+                      <Newspaper className="w-16 h-16 text-white/30" />
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <h3 className="font-bold text-lg text-fg-navy group-hover:text-fg-blue transition-colors line-clamp-2 mb-2">
+                      {newsletter.title}
+                    </h3>
+                    {newsletter.subtitle && (
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                        {newsletter.subtitle}
+                      </p>
+                    )}
+                    <span className="inline-flex items-center gap-1 text-fg-blue font-semibold text-sm group-hover:gap-2 transition-all">
+                      Read Newsletter
+                      <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Newspaper className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">No newsletters available yet. Check back soon!</p>
+            </div>
+          )}
+
+          {/* Link to Beehiiv archive */}
+          {newsletters.length > 0 && (
+            <div className="text-center mt-12">
+              <a
+                href="https://fostergreatness.beehiiv.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-fg-navy text-white font-semibold rounded-full hover:bg-fg-blue transition-colors"
+              >
+                View All on Beehiiv
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          )}
         </div>
       </section>
 
