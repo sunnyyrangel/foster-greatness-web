@@ -58,9 +58,5 @@ export const siteConfig: SiteConfig = {
 // =============================================================================
 
 export const stripeConfig = {
-  /**
-   * Stripe publishable key - loaded from environment variable
-   * Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY in .env.local
-   */
-  publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
+  publishableKey: 'pk_live_51Mz3wTF61ARMru0WN9TAU1BYRJ6f6FUlM1jFnHqnyPBOx0ZmdhGqB4cG8ehRv5KNgtgElhjXRtkEhtW9U7rIbA3f00CUAZUEo6',
 };
