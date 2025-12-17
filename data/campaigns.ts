@@ -56,7 +56,7 @@ export const campaigns: Campaign[] = [
   {
     id: 'holiday-gift-drive-2025',
     slug: 'holiday-gift-drive-2025',
-    status: 'active',
+    status: 'past',
     type: 'donation',
 
     title: 'Holiday Gift Drive 2025',
@@ -73,10 +73,10 @@ export const campaigns: Campaign[] = [
     stripeLink: 'https://donate.stripe.com/8wM3fO2Xn5Ht1tm3cc',
     donationLabel: 'Give a Gift',
 
-    showInNav: true,
-    showOnHomepage: true,
-    showOnDonatePage: true,
-    featured: true,
+    showInNav: false,
+    showOnHomepage: false,
+    showOnDonatePage: false,
+    featured: false,
 
     hasCustomPage: true,
   },

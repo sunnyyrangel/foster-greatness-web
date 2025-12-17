@@ -57,7 +57,6 @@ export default function Footer() {
             <h3 className="font-bold text-lg mb-4">Get Involved</h3>
             <ul className="space-y-2">
               <li><Link href="/donate" className="text-gray-300 hover:text-white transition">Donate</Link></li>
-              <li><Link href="/holiday-gift-drive-2025" className="text-gray-300 hover:text-white transition">Holiday Gift Drive</Link></li>
               <li><Link href="/gingerbread" className="text-gray-300 hover:text-white transition">Gingerbread Contest</Link></li>
               <li><Link href="/partnerships" className="text-gray-300 hover:text-white transition">Partnerships</Link></li>
             </ul>

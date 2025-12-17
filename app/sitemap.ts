@@ -110,12 +110,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Campaign pages (seasonal/active)
   const campaignPages: MetadataRoute.Sitemap = [
     {
-      url: `${siteUrl}/holiday-gift-drive-2025`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
       url: `${siteUrl}/gingerbread`,
       lastModified: now,
       changeFrequency: 'weekly',
