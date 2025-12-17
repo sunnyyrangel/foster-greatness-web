@@ -23,18 +23,6 @@ export interface GiftRecipient {
 
 export const giftRecipients: GiftRecipient[] = [
   {
-    id: '1',
-    name: 'Rimy',
-    story: 'Rimy wants to honor her emotional support hero Papa who passed earlier this year. This meaningful gift will help her keep his memory close during the holiday season.',
-    giftTitle: 'Pet Memorial Frame',
-    giftDescription: 'Dog memorial frame with collar holder - a beautiful way to honor and remember Papa',
-    giftPrice: 29,
-    amazonWishlistUrl: 'https://a.co/d/2oPvhRE',
-    ornamentColor: 'red',
-    purchased: false,
-    position: { top: '22%', left: '46%' }
-  },
-  {
     id: '2',
     name: 'Chyenne',
     story: 'Chyenne loves music and has a record player. This gift will help her build her vinyl collection and enjoy great music during the holidays.',
