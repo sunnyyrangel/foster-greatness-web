@@ -9,9 +9,9 @@ export default function SentryDebugPage() {
   useEffect(() => {
     const info = {
       sentryLoaded: typeof Sentry !== 'undefined',
-      sentryInitialized: !!Sentry.getCurrentHub,
-      hasClient: !!Sentry.getCurrentHub?.()?.getClient?.(),
-      clientOptions: Sentry.getCurrentHub?.()?.getClient?.()?.getOptions?.() || null,
+      sentryAvailable: typeof Sentry.captureException === 'function',
+      hasCaptureException: !!Sentry.captureException,
+      hasCaptureMessage: !!Sentry.captureMessage,
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || 'NOT SET',
       nodeEnv: process.env.NODE_ENV,
     };
