@@ -301,3 +301,113 @@ import { track } from '@vercel/analytics';
 
 track('Donation Clicked', { campaign: 'holiday-gift-drive-2025' });
 ```
+
+---
+
+## Error Tracking & Monitoring
+
+### Sentry Integration
+- **Package**: `@sentry/nextjs` + `@supabase/sentry-js-integration`
+- **Configuration**: Client (`sentry.client.config.ts`), Server (`sentry.server.config.ts`), Edge (`sentry.edge.config.ts`)
+- **Dashboard**: [Sentry Dashboard](https://sentry.io/organizations/doing-good-works/projects/foster-greatness-main/)
+- **Sample Rate**: 10% in production, 100% in development
+- **Privacy**: PII automatically filtered, respects Foster Greatness privacy policies
+
+### What's Tracked
+- **Errors**: JavaScript errors (client), server errors, API errors
+- **Performance**: Page loads, API calls, database queries (10% sample)
+- **Context**: Campaign context, page context, user type (anonymized)
+- **Supabase**: Database errors and performance (integrated to prevent duplicates)
+
+### Error Filtering
+Automatically ignores common noise:
+- Browser extension errors
+- Network errors and cancelled requests
+- Third-party script errors (Google Analytics, etc.)
+- Expected Next.js redirects (`NEXT_NOT_FOUND`, `NEXT_REDIRECT`)
+
+### Using Sentry Utilities
+
+**Capture Custom Errors:**
+```typescript
+import { captureException, captureMessage } from '@/lib/sentry-utils';
+
+try {
+  // Your code
+} catch (error) {
+  captureException(error, {
+    campaign: 'holiday-gift-drive-2025',
+    action: 'gift-purchase',
+  });
+}
+```
+
+**Add User Context (Anonymized):**
+```typescript
+import { setSentryUser } from '@/lib/sentry-utils';
+
+// Only use anonymized/non-PII data
+setSentryUser(userId, 'member'); // 'member' | 'visitor' | 'donor'
+```
+
+**Add Campaign Context:**
+```typescript
+import { setCampaignContext } from '@/lib/sentry-utils';
+
+setCampaignContext('holiday-gift-drive-2025', 'Holiday Gift Drive 2025');
+```
+
+**Add Breadcrumbs:**
+```typescript
+import { addSentryBreadcrumb } from '@/lib/sentry-utils';
+
+addSentryBreadcrumb('User clicked donate button', 'user-action', 'info', {
+  campaign: 'holiday-gift-drive-2025',
+  amount: 60,
+});
+```
+
+### Error Boundary
+All components are wrapped in `ErrorBoundary` which automatically reports to Sentry:
+
+```tsx
+import ErrorBoundary from '@/components/shared/ErrorBoundary';
+
+<ErrorBoundary>
+  <YourComponent />
+</ErrorBoundary>
+```
+
+### Testing Sentry
+**Test API route (development only):**
+```bash
+# Test error capture
+curl http://localhost:3000/api/sentry-test
+
+# Test message capture
+curl http://localhost:3000/api/sentry-test?type=message
+```
+
+**Important:** Remove or comment out `/api/sentry-test` before production deployment.
+
+### Privacy & PII
+Sentry configuration automatically:
+- Removes cookies and authorization headers
+- Anonymizes user IDs
+- Filters sensitive query parameters (token, key, secret, password)
+- Never captures email addresses, names, or phone numbers
+
+### Sentry Best Practices
+- **DO**: Add campaign context to errors for better debugging
+- **DO**: Use breadcrumbs to track user flow before errors
+- **DO**: Capture exceptions with relevant context
+- **DON'T**: Capture PII (personally identifiable information)
+- **DON'T**: Log sensitive data in error messages
+- **DON'T**: Ignore all errors - let Sentry capture them
+
+### Configuration Files
+- `sentry.client.config.ts` - Client-side Sentry (browser)
+- `sentry.server.config.ts` - Server-side Sentry (API routes, server components)
+- `sentry.edge.config.ts` - Edge runtime (middleware)
+- `instrumentation.ts` - Next.js instrumentation hook
+- `lib/sentry-utils.ts` - Helper functions for error tracking

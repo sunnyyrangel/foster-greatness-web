@@ -16,14 +16,15 @@ This project merges 7 separate Foster Greatness initiatives into a single Next.j
 
 ## Tech Stack
 
-- **Next.js 16.0.3** with App Router and Turbopack
-- **React 19.2.0** with Server Components
-- **TypeScript 5.9.3**
-- **Tailwind CSS 3.7.8**
+- **Next.js 16.0.7** with App Router and Turbopack
+- **React 19.2.1** with Server Components
+- **TypeScript 5.9**
+- **Tailwind CSS 3.4.18**
 - **Framer Motion 12.23.24** for animations
 - **Radix UI** for accessible components
 - **Supabase** for Gift Drive database
 - **Stripe** for donation processing
+- **Vercel Web Analytics** for website tracking
 - **Beehiiv API** for newsletter content
 - **Circle.so API** for community events
 
@@ -69,6 +70,10 @@ This project merges 7 separate Foster Greatness initiatives into a single Next.j
 
    # Stripe (for donations)
    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+
+   # Sentry (for error tracking - optional for local dev)
+   NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn_url
+   SENTRY_AUTH_TOKEN=your_sentry_auth_token
    ```
 
 4. **Run the development server:**
@@ -210,6 +215,37 @@ const eventsResponse = await fetch(
 **Buy Button IDs:**
 - Gingerbread Contest: `buy_btn_1QP9i3FhDZPFQacGHVYEjWXJ`
 
+### Sentry Error Tracking
+
+**Purpose:** Error tracking, performance monitoring, and debugging
+
+**Configuration:**
+- DSN: `NEXT_PUBLIC_SENTRY_DSN` (client & server)
+- Auth Token: `SENTRY_AUTH_TOKEN` (for source map uploads)
+- Organization: `doing-good-works`
+- Project: `foster-greatness-main`
+
+**Features:**
+- Automatic error capture (client & server)
+- Performance monitoring (10% sample rate in production)
+- Supabase integration (prevents duplicate error reporting)
+- PII filtering (respects privacy policies)
+- Source maps for readable stack traces
+
+**Testing:**
+```bash
+# Test error tracking (development only)
+curl http://localhost:3000/api/sentry-test
+```
+
+**Configuration Files:**
+- `sentry.client.config.ts` - Client-side configuration
+- `sentry.server.config.ts` - Server-side configuration
+- `sentry.edge.config.ts` - Edge runtime configuration
+- `lib/sentry-utils.ts` - Helper functions
+
+See `CLAUDE.md` for detailed usage guidelines.
+
 ## Brand Guidelines
 
 ### Colors
@@ -284,6 +320,27 @@ Ensure all environment variables are set in your deployment platform:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_SENTRY_DSN` (for error tracking)
+- `SENTRY_DSN` (for server-side error tracking)
+- `SENTRY_AUTH_TOKEN` (for source map uploads)
+- `SENTRY_ORG=doing-good-works`
+- `SENTRY_PROJECT=foster-greatness-main`
+
+### Vercel Analytics
+
+**Enable Web Analytics in Vercel Dashboard:**
+1. Go to your Vercel project dashboard
+2. Navigate to Analytics tab
+3. Click "Enable Web Analytics"
+4. Analytics will activate after deployment
+
+**What's tracked:**
+- Page views across all routes (including campaigns and widgets)
+- Referrer sources
+- Device and browser information
+- Geographic location (approximate)
+
+**Privacy:** GDPR-compliant, no cookies, no PII collection
 
 ## Troubleshooting
 
