@@ -23,6 +23,18 @@ export interface GiftRecipient {
 
 export const giftRecipients: GiftRecipient[] = [
   {
+    id: '5',
+    name: 'Taylor',
+    story: 'Taylor and her miracle baby will be spending their first Christmas together. This LEGO kit is something special they can build and bond over during the holiday season.',
+    giftTitle: 'LEGO Kit',
+    giftDescription: 'A special LEGO kit for Taylor and her baby to build and bond over together',
+    giftPrice: 60,
+    amazonWishlistUrl: '',
+    ornamentColor: 'red',
+    purchased: false,
+    position: { top: '22%', left: '46%' }
+  },
+  {
     id: '2',
     name: 'Chyenne',
     story: 'Chyenne loves music and has a record player. This gift will help her build her vinyl collection and enjoy great music during the holidays.',
