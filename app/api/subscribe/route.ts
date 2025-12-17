@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name } = await request.json();
+    const { email, name, source } = await request.json();
 
-    console.log('Subscription request:', { email, name: name || 'not provided' });
+    console.log('Subscription request:', { email, name: name || 'not provided', source: source || 'newsletter' });
 
     if (!email) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
@@ -16,13 +16,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'API configuration error' }, { status: 500 });
     }
 
+    // Set UTM parameters based on source
+    const utmParams = source === 'storytelling_guide'
+      ? {
+          referring_site: 'https://storytellers-collective.com',
+          utm_source: 'website',
+          utm_medium: 'pdf_download',
+          utm_campaign: 'storytelling_guide'
+        }
+      : {
+          referring_site: 'https://www.fostergreatness.co',
+          utm_source: 'website',
+          utm_medium: 'newsletter_signup',
+          utm_campaign: 'newsletter_page'
+        };
+
     const requestBody = {
       email: email,
       reactivate_existing: true,
-      referring_site: 'https://storytellers-collective.com',
-      utm_source: 'website',
-      utm_medium: 'pdf_download',
-      utm_campaign: 'storytelling_guide'
+      ...utmParams
     };
 
     console.log('Beehiiv API request body:', requestBody);
