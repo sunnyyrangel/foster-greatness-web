@@ -76,7 +76,7 @@ export default function SentryDebugPage() {
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-sm text-yellow-800">
-            <strong>Note:</strong> This is a temporary debug page. Delete it before deploying to production.
+            <strong>Note:</strong> This is a temporary debug page. Remove before production deployment.
           </p>
         </div>
       </div>
