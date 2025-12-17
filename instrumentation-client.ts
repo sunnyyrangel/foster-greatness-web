@@ -119,3 +119,6 @@ Sentry.init({
   // Release tracking (set by build process)
   // release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
 });
+
+// Export router instrumentation for Next.js App Router
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
