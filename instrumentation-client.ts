@@ -5,6 +5,10 @@ import { SupabaseClient } from '@supabase/supabase-js';
 // Import utilities for error filtering
 import { shouldIgnoreError, beforeSendFilter } from './lib/sentry-utils';
 
+// Log DSN for debugging (remove after confirming it works)
+console.log('[Sentry] Initializing with DSN:', process.env.NEXT_PUBLIC_SENTRY_DSN ? 'DSN is set' : 'DSN is MISSING');
+console.log('[Sentry] Environment:', process.env.NODE_ENV);
+
 // Initialize Sentry for client-side
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -50,13 +54,22 @@ Sentry.init({
 
   // Filter errors before sending
   beforeSend(event, hint) {
+    console.log('[Sentry] beforeSend called with event:', event.exception?.values?.[0]?.value || event.message);
+
     // Apply error filtering
     if (shouldIgnoreError(event, hint)) {
+      console.log('[Sentry] Event ignored by shouldIgnoreError');
       return null;
     }
 
     // Apply additional filtering and PII removal
-    return beforeSendFilter(event, hint);
+    const filtered = beforeSendFilter(event, hint);
+    if (!filtered) {
+      console.log('[Sentry] Event filtered out by beforeSendFilter');
+    } else {
+      console.log('[Sentry] Event will be sent to Sentry');
+    }
+    return filtered;
   },
 
   // Ignore certain errors by message
@@ -115,6 +128,12 @@ Sentry.init({
 
   // Enable debug mode temporarily to diagnose integration
   debug: true,
+
+  // Add beforeSendTransaction to log when events are being sent
+  beforeSendTransaction(transaction) {
+    console.log('[Sentry] Sending transaction:', transaction.transaction);
+    return transaction;
+  },
 
   // Release tracking (set by build process)
   // release: process.env.NEXT_PUBLIC_SENTRY_RELEASE,
