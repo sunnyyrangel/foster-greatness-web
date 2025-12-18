@@ -1,16 +1,6 @@
 {
-  "featured": "crisis-fund",
+  "featured": "storyteller-collective",
   "updates": [
-    {
-      "id": "crisis-fund",
-      "type": "donate",
-      "title": "Donate to FG's Crisis Fund",
-      "description": "Your donation provides emergency assistance to those impacted by foster care in our community when they need it most—quickly and directly.",
-      "date": "2025-11-18",
-      "link": "https://donate.stripe.com/bJe3cvb2Y50k7G96xJco003",
-      "linkText": "Support the Crisis Fund",
-      "image": "/images/crisis-fund.jpeg"
-    },
     {
       "id": "storyteller-collective",
       "type": "page",
@@ -20,6 +10,16 @@
       "link": "/storytellers-collective",
       "linkText": "Read the Storyteller Guide",
       "image": "/images/storyteller-guide.webp"
+    },
+    {
+      "id": "crisis-fund",
+      "type": "donate",
+      "title": "Donate to FG's Crisis Fund",
+      "description": "Your donation provides emergency assistance to those impacted by foster care in our community when they need it most—quickly and directly.",
+      "date": "2025-11-18",
+      "link": "https://donate.stripe.com/bJe3cvb2Y50k7G96xJco003",
+      "linkText": "Support the Crisis Fund",
+      "image": "/images/crisis-fund.jpeg"
     }
   ]
 }
