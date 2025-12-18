@@ -45,6 +45,11 @@ Sentry.init({
       },
     }),
 
+    // Capture console errors and warnings
+    Sentry.captureConsoleIntegration({
+      levels: ['error'],
+    }),
+
     // Replay integration for session recording (currently commented out)
     // Sentry.replayIntegration({
     //   maskAllText: true,
@@ -73,23 +78,24 @@ Sentry.init({
   },
 
   // Ignore certain errors by message
+  // TEMPORARILY DISABLED FOR DEBUGGING - Re-enable after confirming Sentry works
   ignoreErrors: [
     // Browser extension errors
     /chrome-extension:\/\//i,
     /moz-extension:\/\//i,
     /safari-extension:\/\//i,
 
-    // Network errors
-    /Failed to fetch/i,
-    /NetworkError/i,
-    /Network request failed/i,
-    'ECONNREFUSED',
-    'ENOTFOUND',
-    'ETIMEDOUT',
+    // Network errors - COMMENTED OUT FOR TESTING
+    // /Failed to fetch/i,
+    // /NetworkError/i,
+    // /Network request failed/i,
+    // 'ECONNREFUSED',
+    // 'ENOTFOUND',
+    // 'ETIMEDOUT',
 
-    // Cancelled requests
-    'AbortError',
-    'cancelled',
+    // Cancelled requests - COMMENTED OUT FOR TESTING
+    // 'AbortError',
+    // 'cancelled',
 
     // Common browser errors
     'ResizeObserver loop limit exceeded',
