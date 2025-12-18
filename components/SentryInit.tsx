@@ -9,12 +9,11 @@ import { useEffect } from 'react';
 export default function SentryInit() {
   useEffect(() => {
     // Dynamic import to ensure it only runs client-side
-    import('@/instrumentation-client').then((module) => {
-      // Expose Sentry globally for testing
-      if (typeof window !== 'undefined') {
+    import('@/instrumentation-client').then(() => {
+      // Expose Sentry globally for testing in development
+      if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
         import('@sentry/nextjs').then((Sentry) => {
           (window as any).Sentry = Sentry;
-          console.log('[SentryInit] Sentry available globally');
         });
       }
     });
