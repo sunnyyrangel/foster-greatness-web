@@ -304,6 +304,96 @@ track('Donation Clicked', { campaign: 'holiday-gift-drive-2025' });
 
 ---
 
+## API Security
+
+### Rate Limiting
+- **Package**: Custom implementation in `lib/rate-limit.ts` (zero dependencies)
+- **Strategy**: IP-based sliding window with in-memory storage
+- **Limits**:
+  - `/api/subscribe`: 5 requests/minute (prevents spam subscriptions)
+  - `/api/newsletter`: 20 requests/minute (higher for read-only)
+- **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
+
+### CORS Protection
+- **Package**: Custom implementation in `lib/cors.ts`
+- **Allowed Origins**:
+  - `https://www.fostergreatness.co`
+  - `https://fostergreatness.co`
+  - `https://storytellers-collective.com`
+  - `https://www.storytellers-collective.com`
+  - `http://localhost:3000` (development only)
+- **Behavior**: Blocks unauthorized domains with 403 Forbidden
+
+### Adding Security to New API Routes
+When creating new API routes, always add rate limiting and CORS:
+
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
+import { validateCors, getCorsHeaders } from '@/lib/cors';
+
+// Handle OPTIONS preflight
+export async function OPTIONS(request: NextRequest) {
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  return new Response(null, {
+    status: 204,
+    headers: getCorsHeaders(request.headers.get('origin')),
+  });
+}
+
+export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin');
+
+  // Validate CORS
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  // Apply rate limiting
+  const rateLimitResult = rateLimit(request, undefined, {
+    limit: 5,      // Adjust based on endpoint needs
+    windowMs: 60000 // 1 minute
+  });
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      {
+        status: 429,
+        headers: {
+          ...rateLimitHeaders(rateLimitResult),
+          ...getCorsHeaders(origin),
+        }
+      }
+    );
+  }
+
+  // Your API logic here
+
+  return NextResponse.json(
+    { success: true },
+    {
+      headers: {
+        ...rateLimitHeaders(rateLimitResult),
+        ...getCorsHeaders(origin),
+      }
+    }
+  );
+}
+```
+
+### Security Headers
+All routes protected by headers in `next.config.ts`:
+- **X-Frame-Options**: Prevents clickjacking
+- **X-Content-Type-Options**: Prevents MIME sniffing
+- **Strict-Transport-Security**: Forces HTTPS
+- **Referrer-Policy**: Controls referrer leakage
+- **Permissions-Policy**: Restricts browser features
+- **X-XSS-Protection**: Legacy XSS protection
+
+---
+
 ## Error Tracking & Monitoring
 
 ### Sentry Integration
