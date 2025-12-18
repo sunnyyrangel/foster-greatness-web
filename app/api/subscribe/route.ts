@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
+import { validateCors, getCorsHeaders } from '@/lib/cors';
 
 // Validation schema for subscription requests
 const subscriptionSchema = z.object({
@@ -8,7 +10,43 @@ const subscriptionSchema = z.object({
   source: z.enum(['newsletter', 'storytelling_guide']).optional().default('newsletter'),
 });
 
+// Handle OPTIONS preflight requests
+export async function OPTIONS(request: NextRequest) {
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  return new Response(null, {
+    status: 204,
+    headers: getCorsHeaders(request.headers.get('origin')),
+  });
+}
+
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin');
+
+  // Validate CORS
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  // Apply rate limiting: 5 requests per minute per IP
+  const rateLimitResult = rateLimit(request, undefined, {
+    limit: 5,
+    windowMs: 60000, // 1 minute
+  });
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many subscription requests. Please try again in a minute.' },
+      {
+        status: 429,
+        headers: {
+          ...rateLimitHeaders(rateLimitResult),
+          ...getCorsHeaders(origin),
+        },
+      }
+    );
+  }
+
   try {
     const body = await request.json();
 
@@ -87,10 +125,18 @@ export async function POST(request: NextRequest) {
       }, { status: response.status });
     }
 
-    return NextResponse.json({
-      success: true,
-      subscription: data.data
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        subscription: data.data
+      },
+      {
+        headers: {
+          ...rateLimitHeaders(rateLimitResult),
+          ...getCorsHeaders(origin),
+        },
+      }
+    );
 
   } catch (error) {
     // Log errors in development only, avoid exposing stack traces in production

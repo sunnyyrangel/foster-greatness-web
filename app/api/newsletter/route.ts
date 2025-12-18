@@ -1,11 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
+import { validateCors, getCorsHeaders } from '@/lib/cors';
+
+// Handle OPTIONS preflight requests
+export async function OPTIONS(request: NextRequest) {
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  return new Response(null, {
+    status: 204,
+    headers: getCorsHeaders(request.headers.get('origin')),
+  });
+}
 
 export async function GET(request: NextRequest) {
+  const origin = request.headers.get('origin');
+
+  // Validate CORS
+  const corsError = validateCors(request);
+  if (corsError) return corsError;
+
+  // Apply rate limiting: 20 requests per minute per IP (higher limit for read-only endpoint)
+  const rateLimitResult = rateLimit(request, undefined, {
+    limit: 20,
+    windowMs: 60000, // 1 minute
+  });
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again in a minute.' },
+      {
+        status: 429,
+        headers: {
+          ...rateLimitHeaders(rateLimitResult),
+          ...getCorsHeaders(origin),
+        },
+      }
+    );
+  }
+
   try {
     const apiKey = process.env.BEEHIIV_API_KEY;
 
     if (!apiKey) {
-      console.error('Missing BEEHIIV_API_KEY environment variable');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Missing BEEHIIV_API_KEY environment variable');
+      }
       return NextResponse.json({ error: 'API configuration error' }, { status: 500 });
     }
 
@@ -28,7 +68,9 @@ export async function GET(request: NextRequest) {
     );
 
     if (!response.ok) {
-      console.error('Beehiiv API error:', response.status, response.statusText);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Beehiiv API error:', response.status, response.statusText);
+      }
       return NextResponse.json({ error: 'Failed to fetch newsletters' }, { status: response.status });
     }
 
@@ -43,10 +85,17 @@ export async function GET(request: NextRequest) {
       subtitle: post.subtitle,
     })) || [];
 
-    return NextResponse.json(newsletters);
+    return NextResponse.json(newsletters, {
+      headers: {
+        ...rateLimitHeaders(rateLimitResult),
+        ...getCorsHeaders(origin),
+      },
+    });
 
   } catch (error) {
-    console.error('Newsletter API error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Newsletter API error:', error);
+    }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
