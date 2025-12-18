@@ -1,7 +1,7 @@
 # Tech Stack
 
 ## Core Framework
-- **Next.js 16.0.7** - App Router with Server Components and Turbopack
+- **Next.js 16.0.10** - App Router with Server Components and Turbopack (security updates applied)
 - **React 19.2.1** - Latest React with Server Components
 - **TypeScript 5** - Strict mode enabled
 
@@ -29,6 +29,14 @@
 
 ## Analytics & Monitoring
 - **Vercel Web Analytics** - GDPR-compliant page view tracking
+- **Sentry** - Error tracking and performance monitoring with Supabase integration
+
+## Security
+- **Rate Limiting** - Custom IP-based rate limiting (5 req/min for subscriptions, 20 req/min for newsletter)
+- **CORS Protection** - Whitelist-based origin validation
+- **7 Security Headers** - CSP, X-Frame-Options, HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection
+- **Input Validation** - Zod schema validation for API routes
+- **0 Vulnerabilities** - All dependencies updated and audited
 
 ## Development Tools
 - **ESLint 9** - Linting with Next.js config
