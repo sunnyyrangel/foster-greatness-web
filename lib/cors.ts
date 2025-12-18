@@ -23,9 +23,9 @@ if (process.env.NODE_ENV === 'development') {
  */
 export function isOriginAllowed(origin: string | null): boolean {
   if (!origin) {
-    // No origin header (same-origin requests or direct API calls)
-    // Allow in development, block in production for security
-    return process.env.NODE_ENV === 'development';
+    // No origin header means same-origin request (browser doesn't send Origin for same-origin)
+    // These should always be allowed
+    return true;
   }
 
   return ALLOWED_ORIGINS.includes(origin);
