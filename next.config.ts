@@ -25,10 +25,50 @@ const nextConfig: NextConfig = {
 
   // Security headers for privacy and protection
   async headers() {
+    // Content Security Policy - strict XSS protection
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline'
+        https://js.stripe.com
+        https://embed.typeform.com
+        https://*.vercel-scripts.com
+        https://vercel.live;
+      style-src 'self' 'unsafe-inline'
+        https://js.stripe.com;
+      img-src 'self' blob: data:
+        https://*.vercel.sh
+        https://beehiiv-images-production.s3.amazonaws.com
+        https://assets-v2.circle.so
+        https://placehold.co
+        https://*.typeform.com;
+      font-src 'self' data:;
+      connect-src 'self'
+        https://api.beehiiv.com
+        https://circle-events-widget-23sx.vercel.app
+        https://*.sentry.io
+        https://*.ingest.sentry.io
+        https://vercel.live
+        https://*.vercel-scripts.com;
+      frame-src 'self'
+        https://js.stripe.com
+        https://form.typeform.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self'
+        https://api.beehiiv.com;
+      frame-ancestors 'none';
+      upgrade-insecure-requests;
+    `.replace(/\s{2,}/g, ' ').trim();
+
     return [
       {
         source: '/:path*',
         headers: [
+          // Content Security Policy - XSS protection
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader,
+          },
           // Prevent clickjacking attacks
           {
             key: 'X-Frame-Options',
