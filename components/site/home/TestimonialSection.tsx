@@ -30,13 +30,6 @@ const testimonials: Testimonial[] = [
     color: 'from-fg-navy to-fg-blue'
   },
   {
-    name: 'Taylor Rockhold',
-    quote: "Foster Greatness helped me tap into strengths I didn't even know I had.",
-    avatar: '/images/taylor-rockhold.jpg',
-    initials: 'TR',
-    color: 'from-fg-navy to-fg-blue'
-  },
-  {
     name: 'Eugenia Doreen',
     quote: "Foster Greatness is more than an organization—it's a movement rooted in innovation, transformation, and joy.",
     avatar: '/images/eugenia-wallace.jpg',
