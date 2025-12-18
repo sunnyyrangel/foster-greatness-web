@@ -21,7 +21,6 @@ export { default as WhatYoullGetSection } from './WhatYoullGetSection';
 export {
   CopyLinkButton,
   FeaturedCard,
-  TestimonialQuote,
   UpdateCard,
   UpdateListItem,
   typeConfig,

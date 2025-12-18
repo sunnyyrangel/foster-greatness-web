@@ -107,31 +107,6 @@ export function FeaturedCard({ update }: { update: Update }) {
   );
 }
 
-export function TestimonialQuote() {
-  return (
-    <motion.div
-      variants={itemVariants}
-      className="bg-white rounded-2xl p-6 shadow-sm border border-fg-navy/5 h-full flex flex-col justify-center"
-    >
-      <div className="flex flex-col items-center text-center">
-        <div className="relative w-36 h-36 rounded-2xl overflow-hidden flex-shrink-0 ring-4 ring-fg-blue/20 mb-4">
-          <Image
-            src="/images/taylor-rockhold.jpg"
-            alt="Taylor Rockhold"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <blockquote className="text-fg-navy/80 text-lg leading-relaxed italic mb-3">
-          "Taylor and her miracle baby will be spending their first Christmas together. This LEGO kit is something special they can build and bond over during the holiday season."
-        </blockquote>
-        <p className="text-sm text-fg-navy/50">
-          <span className="font-semibold text-fg-navy text-base">Taylor Rockhold</span> · Holiday Gift Drive Recipient
-        </p>
-      </div>
-    </motion.div>
-  );
-}
 
 export function UpdateCard({ update }: { update: Update }) {
   const config = typeConfig[update.type];

@@ -20,7 +20,6 @@ import {
   VoiceAmplificationSection,
   WhatYoullGetSection,
   FeaturedCard,
-  TestimonialQuote,
   UpdateListItem,
   itemVariants,
 } from '@/components/site/home';
@@ -118,12 +117,9 @@ export default function Home() {
             <p className="text-fg-navy/60 mt-1">Latest news, events, and opportunities from our community</p>
           </motion.div>
 
-          {/* Featured card + Testimonial quote side by side (2:1 ratio) */}
-          <div className="grid md:grid-cols-3 gap-6 items-stretch mb-8">
-            <div className="md:col-span-2">
-              {featuredUpdate && <FeaturedCard update={featuredUpdate} />}
-            </div>
-            <TestimonialQuote />
+          {/* Featured card */}
+          <div className="mb-8">
+            {featuredUpdate && <FeaturedCard update={featuredUpdate} />}
           </div>
 
           {/* Testimonials Carousel - inside What's Happening */}
