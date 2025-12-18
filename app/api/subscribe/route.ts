@@ -1,13 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+// Validation schema for subscription requests
+const subscriptionSchema = z.object({
+  email: z.string().email('Please enter a valid email address').toLowerCase().trim(),
+  name: z.string().optional(),
+  source: z.enum(['newsletter', 'storytelling_guide']).optional().default('newsletter'),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, source } = await request.json();
+    const body = await request.json();
 
-    console.log('Subscription request:', { email, name: name || 'not provided', source: source || 'newsletter' });
+    // Validate request body
+    const validation = subscriptionSchema.safeParse(body);
+    if (!validation.success) {
+      const firstError = validation.error.issues[0];
+      return NextResponse.json({
+        error: firstError.message
+      }, { status: 400 });
+    }
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    const { email, name, source } = validation.data;
+
+    // Log only in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Subscription request:', { source, hasName: !!name });
     }
 
     const apiKey = process.env.BEEHIIV_API_KEY;
@@ -37,7 +55,9 @@ export async function POST(request: NextRequest) {
       ...utmParams
     };
 
-    console.log('Beehiiv API request body:', requestBody);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Beehiiv API request:', { source, reactivate: requestBody.reactivate_existing });
+    }
 
     const response = await fetch('https://api.beehiiv.com/v2/publications/pub_e597ede6-38aa-4b38-a981-ae7c8f63a77e/subscriptions', {
       method: 'POST',
@@ -50,15 +70,18 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
 
-    console.log('Beehiiv API response status:', response.status);
-    console.log('Beehiiv API response data:', data);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Beehiiv API response:', { status: response.status, success: response.ok });
+    }
 
     if (!response.ok) {
-      console.error('Beehiiv API error:', {
-        status: response.status,
-        statusText: response.statusText,
-        data
-      });
+      // Log errors in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Beehiiv API error:', {
+          status: response.status,
+          error: data.errors?.[0]?.detail || data.message
+        });
+      }
       return NextResponse.json({
         error: data.errors?.[0]?.detail || data.message || 'Subscription failed'
       }, { status: response.status });
@@ -70,7 +93,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Subscription error:', error);
+    // Log errors in development only, avoid exposing stack traces in production
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Subscription error:', error);
+    }
     return NextResponse.json({
       error: 'Internal server error'
     }, { status: 500 });
