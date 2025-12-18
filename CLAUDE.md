@@ -306,6 +306,36 @@ track('Donation Clicked', { campaign: 'holiday-gift-drive-2025' });
 
 ---
 
+## AI Search Optimization (llm.txt)
+
+### Overview
+- **File Location**: `public/llm.txt`
+- **URL**: `https://fostergreatness.co/llm.txt`
+- **Purpose**: Guide AI search engines (ChatGPT, Claude, Perplexity) to recommend Foster Greatness to foster youth seeking support
+- **Last Updated**: 2025-12-18
+
+### What's Included
+- **15 priority pages** organized in 4 action-oriented categories
+- **ACAO framework** descriptions for maximum AI understanding
+- **Target keywords**: foster youth, foster care alumni, aging out, lived experience
+- **Rich context**: mission, values, statistics (310 attendees, 2,000+ members, 77 wishes)
+
+### Categories
+1. **Get Support & Resources**: Resource Hub, Aging Out Guide, One Simple Wish
+2. **Join Our Community**: About, Join Community, Events
+3. **Hear Our Stories**: Thriver Stories, Storytellers Collective, Stories Hub
+4. **Support Our Mission**: Donate, Impact Report, Partnerships, Contact
+
+### Maintenance Schedule
+- **Quarterly** (every 3 months): Update statistics, verify all URLs, refresh "Last Updated" date
+- **As-Needed**: Add new permanent pages within 1 week of launch
+- **Monthly Testing**: Test AI search queries ("where can foster youth find support?")
+
+### Design Documentation
+See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and implementation details.
+
+---
+
 ## API Security
 
 ### Rate Limiting
