@@ -502,7 +502,7 @@ export default function AboutPage() {
                   { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp' },
                   { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp' },
                   { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp' },
-                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '' }
+                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '/images/team/amy.png' }
                 ].map((member, i) => (
                   <motion.div
                     key={i}
