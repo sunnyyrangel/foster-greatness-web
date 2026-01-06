@@ -497,12 +497,12 @@ export default function AboutPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { name: 'Isabel Stasa', role: 'Director of Community Affairs and Social Impact', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp' },
-                  { name: 'Lillee Taylor', role: 'Resource Specialist', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp' },
-                  { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp' },
-                  { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp' },
-                  { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp' },
-                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '/images/team/amy.png' }
+                  { name: 'Isabel Stasa', role: 'Director of Community Affairs and Social Impact', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp', position: 'object-top' },
+                  { name: 'Lillee Taylor', role: 'Resource Specialist', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp', position: 'object-center' },
+                  { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp', position: 'object-top' },
+                  { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp', position: 'object-top' },
+                  { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp', position: 'object-top' },
+                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '/images/team/amy.png', position: 'object-center' }
                 ].map((member, i) => (
                   <motion.div
                     key={i}
@@ -515,7 +515,7 @@ export default function AboutPage() {
                           src={member.img}
                           alt={`${member.name}, ${member.role}`}
                           fill
-                          className="object-cover object-top"
+                          className={`object-cover ${member.position || 'object-top'}`}
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
