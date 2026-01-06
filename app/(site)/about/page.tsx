@@ -501,7 +501,8 @@ export default function AboutPage() {
                   { name: 'Lillee Taylor', role: 'Resource Specialist', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp' },
                   { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp' },
                   { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp' },
-                  { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp' }
+                  { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp' },
+                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '' }
                 ].map((member, i) => (
                   <motion.div
                     key={i}
@@ -509,12 +510,20 @@ export default function AboutPage() {
                     className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="relative h-64 bg-gradient-to-br from-fg-navy to-fg-blue overflow-hidden">
-                      <Image
-                        src={member.img}
-                        alt={`${member.name}, ${member.role}`}
-                        fill
-                        className="object-cover object-top"
-                      />
+                      {member.img ? (
+                        <Image
+                          src={member.img}
+                          alt={`${member.name}, ${member.role}`}
+                          fill
+                          className="object-cover object-top"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-6xl font-bold text-white/30">
+                            {member.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-fg-navy mb-2">{member.name}</h3>

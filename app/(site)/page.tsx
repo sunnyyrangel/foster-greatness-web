@@ -105,11 +105,6 @@ export default function Home() {
           <HeroSection />
         </ErrorBoundary>
 
-        {/* Daily Life in the Community */}
-        <ErrorBoundary fallback={<SectionErrorFallback sectionName="daily life" />}>
-          <DailyLifeSection />
-        </ErrorBoundary>
-
         {/* Featured Section */}
         <motion.section
           initial="hidden"
@@ -160,6 +155,11 @@ export default function Home() {
             <NewsletterSection newsletters={newsletters} loading={newsletterLoading} />
           </ErrorBoundary>
         </motion.section>
+
+        {/* Daily Life in the Community */}
+        <ErrorBoundary fallback={<SectionErrorFallback sectionName="daily life" />}>
+          <DailyLifeSection />
+        </ErrorBoundary>
 
         {/* What You'll Get Access To - Value prop first */}
         <ErrorBoundary fallback={<SectionErrorFallback sectionName="features" />}>
