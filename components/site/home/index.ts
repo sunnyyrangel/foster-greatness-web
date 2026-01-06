@@ -12,6 +12,7 @@ export { default as NewsletterSection } from './NewsletterSection';
 export { default as ContactSection } from './ContactSection';
 export { default as AppDownloadSection } from './AppDownloadSection';
 export { default as CommunitySection } from './CommunitySection';
+export { default as DailyLifeSection } from './DailyLifeSection';
 export { default as DGWBrandedSection } from './DGWBrandedSection';
 export { default as PartnersSection } from './PartnersSection';
 export { default as VoiceAmplificationSection } from './VoiceAmplificationSection';

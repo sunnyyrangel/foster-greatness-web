@@ -15,6 +15,7 @@ import {
   ContactSection,
   AppDownloadSection,
   CommunitySection,
+  DailyLifeSection,
   DGWBrandedSection,
   PartnersSection,
   VoiceAmplificationSection,
@@ -102,6 +103,11 @@ export default function Home() {
         {/* Hero Section */}
         <ErrorBoundary fallback={<SectionErrorFallback sectionName="hero" />}>
           <HeroSection />
+        </ErrorBoundary>
+
+        {/* Daily Life in the Community */}
+        <ErrorBoundary fallback={<SectionErrorFallback sectionName="daily life" />}>
+          <DailyLifeSection />
         </ErrorBoundary>
 
         {/* Featured Section */}
