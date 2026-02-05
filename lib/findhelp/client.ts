@@ -180,6 +180,9 @@ const EXCLUDED_POPULATION_KEYWORDS = [
   '65+',
   'older adult',
 
+  // Health conditions not broadly applicable
+  'cancer',
+
   // Agricultural workers
   'farmworker',
   'farm worker',
@@ -238,10 +241,15 @@ function isExcludedPopulation(program: ProgramLite | Program): boolean {
     'seniors only',
     'for seniors',
     'senior services',
+    'for the elderly',
+    'elderly services',
     'must be 65',
     'ages 65',
     'farmworkers only',
     'for farmworkers',
+    'cancer support',
+    'cancer services',
+    'cancer patients',
   ];
 
   for (const pattern of strongExclusionPatterns) {
