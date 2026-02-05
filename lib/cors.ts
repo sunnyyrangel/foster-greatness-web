@@ -33,8 +33,10 @@ export function isOriginAllowed(origin: string | null): boolean {
 
 /**
  * Get CORS headers for API responses
+ * @param origin - The request origin
+ * @param methods - Allowed HTTP methods (default: 'POST, OPTIONS')
  */
-export function getCorsHeaders(origin: string | null): HeadersInit {
+export function getCorsHeaders(origin: string | null, methods: string = 'POST, OPTIONS'): HeadersInit {
   const isAllowed = isOriginAllowed(origin);
 
   if (!isAllowed) {
@@ -44,7 +46,7 @@ export function getCorsHeaders(origin: string | null): HeadersInit {
 
   return {
     'Access-Control-Allow-Origin': origin || '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': methods,
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400', // 24 hours
   };
