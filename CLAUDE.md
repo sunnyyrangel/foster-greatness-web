@@ -103,6 +103,8 @@ Pages with header, footer, navigation:
 - `/about` - About page
 - `/impact` - Impact report
 - `/partnerships` - Partnerships page
+- `/services` - Local services search (Findhelp API)
+- `/resources` - Resource hub
 - `/holiday-gift-drive-2025` - Gift drive campaign
 - `/gingerbread` - Gingerbread campaign
 - `/thriver-stories` - Thriver stories
@@ -344,6 +346,9 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
 - **Limits**:
   - `/api/subscribe`: 5 requests/minute (prevents spam subscriptions)
   - `/api/newsletter`: 20 requests/minute (higher for read-only)
+  - `/api/findhelp/tags`: 30 requests/minute
+  - `/api/findhelp/search`: 10 requests/minute
+  - `/api/findhelp/programs/[id]`: 15 requests/minute
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
@@ -423,6 +428,105 @@ All routes protected by headers in `next.config.ts`:
 - **Referrer-Policy**: Controls referrer leakage
 - **Permissions-Policy**: Restricts browser features
 - **X-XSS-Protection**: Legacy XSS protection
+
+---
+
+## Findhelp API Integration
+
+### Overview
+The `/services` page integrates with the Findhelp (formerly Aunt Bertha) API to help foster youth search for local social service programs by ZIP code. Users can browse programs across 8 SDOH categories, save programs to a resource board, and contact programs directly.
+
+**Page URL**: `/services`
+
+### Environment Variables
+```
+FINDHELP_USERNAME=<from findhelp account>
+FINDHELP_PASSWORD=<from findhelp account>
+FINDHELP_API_KEY=<from findhelp account>
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<from Google Cloud Console>
+```
+
+### File Structure
+```
+lib/findhelp/
+  types.ts           # TypeScript interfaces
+  client.ts          # Server-side API client with token management
+  index.ts           # Re-exports
+
+app/api/findhelp/
+  tags/route.ts      # GET /api/findhelp/tags?zip=XXXXX
+  search/route.ts    # GET /api/findhelp/search?zip=...&serviceTag=...
+  programs/[id]/route.ts  # GET /api/findhelp/programs/[id]?zip=XXXXX
+
+components/findhelp/
+  ProgramSearch.tsx      # Main search orchestrator
+  ProgramCard.tsx        # Program result card
+  ProgramDetailModal.tsx # Full program details modal
+  ProgramMap.tsx         # Google Maps view
+  ServiceTagSelector.tsx # SDOH category picker
+  ZipCodeInput.tsx       # ZIP entry with validation
+  ResourceBoard.tsx      # Saved programs panel
+  ResourceBoardContext.tsx # Context for board state
+  index.ts               # Re-exports
+
+app/(site)/services/
+  page.tsx           # Services search page
+```
+
+### SDOH Categories
+Programs are grouped into 8 Social Determinants of Health categories:
+
+| Category | Keywords Matched |
+|----------|------------------|
+| Food & Nutrition | food, meal, nutrition, snap, wic, pantry, hunger |
+| Housing & Shelter | housing, shelter, rent, homeless, utility, energy |
+| Healthcare | health, medical, dental, vision, mental, substance, disability |
+| Employment & Income | work, job, employment, career, income, financial, tax, benefits |
+| Education | education, school, tutor, ged, college, literacy |
+| Transportation | transport, transit, bus, car, ride, travel |
+| Legal Services | legal, law, immigration, court, custody |
+| Family & Childcare | family, child, parent, baby, youth, teen, senior |
+
+To modify categories, edit `components/findhelp/ServiceTagSelector.tsx`.
+
+### Population Filtering
+Programs are automatically filtered to exclude populations not relevant to foster youth:
+
+**Excluded populations** (configured in `lib/findhelp/client.ts`):
+- Veterans / Military / Active Duty
+- Senior Citizens (65+) / Retirees / Medicare
+- Farmworkers / Agricultural Workers
+- Refugees / Undocumented immigrants
+- Cancer-specific programs
+- Elderly-specific programs
+
+**Kept populations**:
+- Youth / Young Adults
+- Low Income / Homeless
+- Single Parents / Families
+- Students / LGBTQ+
+- Justice-involved / DV survivors
+- Native American / General immigrants
+
+### API Routes
+
+| Route | Rate Limit | Cache |
+|-------|------------|-------|
+| `/api/findhelp/tags` | 30/min | 24 hours (allowed by ToS) |
+| `/api/findhelp/search` | 10/min | None (ToS prohibits) |
+| `/api/findhelp/programs/[id]` | 15/min | None (ToS prohibits) |
+
+### Key Features
+- **Deep linking**: Share specific programs via `?program=ID&zip=XXXXX`
+- **Resource Board**: Save programs to localStorage, export via email/share/print
+- **List/Map toggle**: View results as cards or on Google Maps
+- **Mobile-first**: Large touch targets, numeric keyboard for ZIP
+
+### Important Constraints
+1. **Never cache program data** - Findhelp ToS violation
+2. **Filter administrative offices** - `is_administrative: true` offices are hidden
+3. **At least one filter required** - serviceTag, attributeTag, or terms
+4. **Handle 401** - Client auto-refreshes token and retries
 
 ---
 
