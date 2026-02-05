@@ -8,6 +8,7 @@ import type {
   ServiceTagsResponse,
   ProgramsLiteResponse,
   Program,
+  ProgramLite,
   SearchParams,
   Office,
 } from './types';
@@ -152,6 +153,113 @@ function filterAdministrativeOffices(offices: Office[]): Office[] {
   return offices.filter(office => !office.is_administrative);
 }
 
+/**
+ * Population keywords to exclude from results
+ * These are populations that typically don't apply to foster youth
+ */
+const EXCLUDED_POPULATION_KEYWORDS = [
+  // Veterans & Military
+  'veteran',
+  'military',
+  'armed forces',
+  'active duty',
+  'military spouse',
+  'military family',
+  'va ',
+  'v.a.',
+
+  // Seniors (65+)
+  'senior citizen',
+  'seniors only',
+  'elderly',
+  'retiree',
+  'retired',
+  'medicare',
+  'over 65',
+  '65 and older',
+  '65+',
+  'older adult',
+
+  // Agricultural workers
+  'farmworker',
+  'farm worker',
+  'agricultural worker',
+  'migrant worker',
+  'seasonal worker',
+
+  // Specific immigration statuses
+  'refugee',
+  'undocumented',
+];
+
+/**
+ * Check if a program is targeted at excluded populations
+ * Returns true if the program should be filtered OUT
+ */
+function isExcludedPopulation(program: ProgramLite | Program): boolean {
+  // Check attribute_tags
+  const attributeTags = program.attribute_tags || [];
+  for (const tag of attributeTags) {
+    const lowerTag = tag.toLowerCase();
+    for (const keyword of EXCLUDED_POPULATION_KEYWORDS) {
+      if (lowerTag.includes(keyword)) {
+        return true;
+      }
+    }
+  }
+
+  // Check rule_attributes
+  const ruleAttributes = program.rule_attributes || [];
+  for (const attr of ruleAttributes) {
+    const lowerAttr = attr.toLowerCase();
+    for (const keyword of EXCLUDED_POPULATION_KEYWORDS) {
+      if (lowerAttr.includes(keyword)) {
+        return true;
+      }
+    }
+  }
+
+  // Check age rules - exclude if minimum age is 65+
+  const rules = program.rules || [];
+  for (const rule of rules) {
+    if (rule.min_age && rule.min_age >= 65) {
+      return true;
+    }
+  }
+
+  // Check program name and description for strong indicators
+  const textToCheck = `${program.name} ${program.description}`.toLowerCase();
+
+  // Only exclude if it's clearly targeted (not just mentioning)
+  const strongExclusionPatterns = [
+    'veterans only',
+    'for veterans',
+    'veteran services',
+    'seniors only',
+    'for seniors',
+    'senior services',
+    'must be 65',
+    'ages 65',
+    'farmworkers only',
+    'for farmworkers',
+  ];
+
+  for (const pattern of strongExclusionPatterns) {
+    if (textToCheck.includes(pattern)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Filter programs to remove those targeting excluded populations
+ */
+function filterExcludedPopulations<T extends ProgramLite | Program>(programs: T[]): T[] {
+  return programs.filter(program => !isExcludedPopulation(program));
+}
+
 // ============================================================================
 // Public API Methods
 // ============================================================================
@@ -183,13 +291,18 @@ export async function searchPrograms(params: SearchParams): Promise<ProgramsLite
   const url = `${PROGRAMS_BASE_URL}/zipcodes/${postal}/programsLite?${searchParams.toString()}`;
   const response = await makeAuthenticatedRequest<ProgramsLiteResponse>(url);
 
-  // Filter administrative offices from all programs
-  return {
-    ...response,
-    programs: response.programs.map(program => ({
+  // Filter out excluded populations and administrative offices
+  const filteredPrograms = filterExcludedPopulations(response.programs)
+    .map(program => ({
       ...program,
       offices: filterAdministrativeOffices(program.offices),
-    })),
+    }));
+
+  return {
+    ...response,
+    programs: filteredPrograms,
+    // Update count to reflect filtered results
+    count: filteredPrograms.length,
   };
 }
 
