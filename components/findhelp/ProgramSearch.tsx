@@ -124,12 +124,11 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
   };
 
   // Handle category selection
-  const handleCategorySelect = (tagId: string) => {
-    const tag = tags.find((t) => t.id === tagId);
-    setSelectedTag(tagId);
-    setSelectedTagLabel(tag?.label || tagId);
+  const handleCategorySelect = (tagIds: string, label: string) => {
+    setSelectedTag(tagIds);
+    setSelectedTagLabel(label);
     setCursor(0);
-    fetchPrograms(tagId, 0, false);
+    fetchPrograms(tagIds, 0, false);
   };
 
   // Handle load more
