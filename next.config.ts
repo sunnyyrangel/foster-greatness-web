@@ -65,7 +65,8 @@ const nextConfig: NextConfig = {
         https://*.sentry.io
         https://*.ingest.sentry.io
         https://vercel.live
-        https://*.vercel-scripts.com;
+        https://*.vercel-scripts.com
+        https://*.typeform.com;
       frame-src 'self'
         https://js.stripe.com
         https://form.typeform.com;
