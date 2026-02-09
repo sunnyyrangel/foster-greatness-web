@@ -47,11 +47,12 @@ const nextConfig: NextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline'
         https://js.stripe.com
-        https://embed.typeform.com
+        https://*.typeform.com
         https://*.vercel-scripts.com
         https://vercel.live;
       style-src 'self' 'unsafe-inline'
-        https://js.stripe.com;
+        https://js.stripe.com
+        https://*.typeform.com;
       img-src 'self' blob: data:
         https://*.vercel.sh
         https://beehiiv-images-production.s3.amazonaws.com
