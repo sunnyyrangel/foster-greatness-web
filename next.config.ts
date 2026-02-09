@@ -2,6 +2,23 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
+  // Redirect non-www to www (301 permanent for SEO)
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'fostergreatness.co',
+          },
+        ],
+        destination: 'https://www.fostergreatness.co/:path*',
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
