@@ -2,20 +2,36 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
-  // Redirect non-www to www (301 permanent for SEO)
+  // Redirects for SEO
   async redirects() {
     return [
+      // Non-www to www
       {
         source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'fostergreatness.co',
-          },
-        ],
+        has: [{ type: 'host', value: 'fostergreatness.co' }],
         destination: 'https://www.fostergreatness.co/:path*',
         permanent: true,
       },
+      // Old site URLs → new pages
+      { source: '/about-us', destination: '/about', permanent: true },
+      { source: '/home', destination: '/', permanent: true },
+      { source: '/download', destination: '/join', permanent: true },
+      { source: '/donate-1', destination: '/donate', permanent: true },
+      { source: '/impact-report', destination: '/impact', permanent: true },
+      { source: '/join-our-community', destination: '/join', permanent: true },
+      { source: '/faqs', destination: '/about', permanent: true },
+      { source: '/resources-provided', destination: '/resources', permanent: true },
+      { source: '/donate-meal-kits', destination: '/donate', permanent: true },
+      { source: '/get-involved', destination: '/donate', permanent: true },
+      { source: '/resource-benefit-screener', destination: '/resources', permanent: true },
+      { source: '/resource-support', destination: '/resources', permanent: true },
+      { source: '/storytellers-', destination: '/storytellers-collective', permanent: true },
+      { source: '/our-community', destination: '/about', permanent: true },
+      { source: '/learn-more', destination: '/about', permanent: true },
+      { source: '/privacy-policy', destination: '/about', permanent: true },
+      { source: '/new-page', destination: '/', permanent: true },
+      { source: '/community', destination: '/join', permanent: true },
+      { source: '/join-today', destination: '/join', permanent: true },
     ];
   },
 
