@@ -119,11 +119,11 @@ export default async function ServicesPage({
             </div>
 
             <h2 className="text-2xl md:text-3xl font-bold text-fg-navy mb-4">
-              Need 1:1 Help Finding Resources?
+              Ask Our Resource Navigator Team
             </h2>
 
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              Our Resource Specialists can help you navigate options and connect with programs
+              Our Resource Navigators can help you navigate options and connect with programs
               that fit your specific situation. Join our community to get personalized support.
             </p>
 
@@ -133,7 +133,7 @@ export default async function ServicesPage({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-fg-navy text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-fg-blue transition-all"
             >
-              Connect with a Specialist
+              Connect with a Navigator
               <ArrowRight className="w-5 h-5" />
             </a>
 
