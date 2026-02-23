@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { generatePageMetadata, generateBreadcrumbJsonLd, siteConfig } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata({
-  title: 'Our Impact | Foster Greatness Community Results & Statistics',
-  description: 'See the impact of Foster Greatness: 2,000+ community members, 500+ events hosted, 77 holiday wishes fulfilled. Real outcomes for foster youth nationwide.',
+  title: '2025 Impact Report',
+  description: 'See how Foster Greatness is fighting isolation and building community for foster youth. 2,147 members strong, 62 events hosted, 178 individuals supported — read our 2025 impact report.',
   path: '/impact',
 });
 
