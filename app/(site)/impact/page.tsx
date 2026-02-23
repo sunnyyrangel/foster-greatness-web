@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/data/site';
 import {
@@ -92,6 +93,22 @@ const storyStats = [
   { value: '25', label: 'Thriver Stories Told', icon: Mic },
   { value: '70', label: 'Hours of Storytelling', icon: Heart },
   { value: '11', label: 'Conferences Attended', icon: Calendar },
+];
+
+const partners = [
+  { name: 'Staffmark Group', logo: '/images/partners/smg.png' },
+  { name: 'One Simple Wish', logo: '/images/partners/osw.png' },
+  { name: 'EatWell', logo: '/images/partners/eatwell.png' },
+  { name: 'First Star', logo: '/images/partners/firststar.png' },
+  { name: 'Foster Care Alumni of America', logo: '/images/partners/fcalumni.png' },
+  { name: 'Lotus Grove Counseling', logo: '/images/partners/lotus-grove.png' },
+  { name: 'A Home Within', logo: '/images/partners/a-home-within.png' },
+  { name: 'Youth Voices Rising', logo: '/images/partners/youth-voices-rising.png' },
+  { name: 'Cetera', logo: '/images/partners/cetera.png' },
+  { name: 'Str8Up Employment Services', logo: '/images/partners/str8up.png' },
+  { name: 'National Foster Youth Institute', logo: '/images/partners/nfyi.png' },
+  { name: 'For Others', logo: '/images/partners/for-others.png' },
+  { name: 'Doing Good Works', logo: '/images/partners/dgw-branded.png' },
 ];
 
 const testimonials = {
@@ -415,9 +432,82 @@ export default function ImpactPage() {
       </section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* Section 4: Resources — Meeting Real Needs */}
+      {/* Section: Partners — Stronger Together */}
       {/* ----------------------------------------------------------------- */}
       <section className="py-16 md:py-24 px-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={containerVariants}
+          className="max-w-5xl mx-auto"
+        >
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
+              Stronger Together
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Our {partners.length} partners help us expand what&apos;s possible&nbsp;&mdash;
+              from employment pipelines to therapy access to holiday meals.
+            </p>
+          </motion.div>
+
+          {/* Partner logo grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 md:gap-8 items-center justify-items-center mb-16"
+          >
+            {partners.map((partner) => (
+              <motion.div
+                key={partner.name}
+                variants={itemVariants}
+                className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 w-full flex items-center justify-center h-20 hover:shadow-md transition-shadow"
+              >
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={120}
+                  height={48}
+                  className="object-contain max-h-12"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Staffmark video spotlight */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-fg-blue/10">
+                    <Handshake className="w-5 h-5 text-fg-blue" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-lg font-bold text-fg-navy">Partner Spotlight: Staffmark Group</h3>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  Staffmark Group created a first-of-its-kind employment pipeline for our
+                  community&nbsp;&mdash; connecting foster youth to career advisors, interview
+                  prep, resume building, and real job opportunities.
+                </p>
+              </div>
+              <div className="relative w-full aspect-video">
+                <iframe
+                  src="https://www.youtube.com/embed/lhtbPMxTCCI"
+                  title="Staffmark Group x Foster Greatness Partnership"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Section 4: Resources — Meeting Real Needs */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -478,7 +568,7 @@ export default function ImpactPage() {
       {/* ----------------------------------------------------------------- */}
       {/* Section 5: Stories — Our Stories Matter */}
       {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 md:py-24 px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
