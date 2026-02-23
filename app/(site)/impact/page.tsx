@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { siteConfig } from '@/data/site';
 import {
   Users,
   Heart,
@@ -160,6 +161,8 @@ function useCountUp(end: number, duration: number = 2000) {
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
+      } else {
+        setCount(end);
       }
     };
 
@@ -181,7 +184,7 @@ function HeroCounter({ stat }: { stat: (typeof heroStats)[number] }) {
   return (
     <motion.div variants={itemVariants} ref={ref} className="text-center">
       <div className="inline-flex p-3 rounded-2xl bg-white/10 backdrop-blur-sm mb-3">
-        <Icon className="w-6 h-6 text-white" />
+        <Icon className="w-6 h-6 text-white" aria-hidden="true" />
       </div>
       <div className="text-4xl md:text-5xl font-bold text-white mb-1">
         {count.toLocaleString()}
@@ -206,7 +209,7 @@ function StatCard({
       className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 text-center"
     >
       <div className="inline-flex p-3 rounded-xl bg-fg-blue/10 mb-4">
-        <Icon className="w-6 h-6 text-fg-blue" />
+        <Icon className="w-6 h-6 text-fg-blue" aria-hidden="true" />
       </div>
       <div className="text-3xl md:text-4xl font-bold text-fg-navy mb-1">{value}</div>
       <div className="text-sm text-gray-600">{label}</div>
@@ -228,7 +231,7 @@ function TestimonialCard({
       variants={itemVariants}
       className="relative bg-white rounded-2xl p-8 md:p-10 shadow-md border-l-4 border-fg-teal"
     >
-      <Quote className="w-8 h-8 text-fg-teal/30 mb-4" />
+      <Quote className="w-8 h-8 text-fg-teal/30 mb-4" aria-hidden="true" />
       <p className="text-lg md:text-xl text-gray-700 leading-relaxed italic mb-6">
         &ldquo;{quote}&rdquo;
       </p>
@@ -261,14 +264,21 @@ function NeedsBar({
   return (
     <motion.div variants={itemVariants} className="flex items-center gap-4">
       <div className="hidden sm:flex p-2 rounded-lg bg-fg-blue/10 shrink-0">
-        <Icon className="w-5 h-5 text-fg-blue" />
+        <Icon className="w-5 h-5 text-fg-blue" aria-hidden="true" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-baseline mb-1">
           <span className="text-sm font-medium text-fg-navy">{label}</span>
           <span className="text-sm font-bold text-fg-navy ml-2">{count}</span>
         </div>
-        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div
+          className="h-3 bg-gray-100 rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuenow={count}
+          aria-valuemin={0}
+          aria-valuemax={maxCount}
+          aria-label={`${label}: ${count} requests`}
+        >
           <motion.div
             className="h-full bg-gradient-to-r from-fg-blue to-fg-teal rounded-full"
             initial={{ width: 0 }}
@@ -309,7 +319,7 @@ export default function ImpactPage() {
             variants={itemVariants}
             className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6"
           >
-            <Heart className="w-4 h-4 text-fg-teal" />
+            <Heart className="w-4 h-4 text-fg-teal" aria-hidden="true" />
             <span className="text-sm font-semibold text-white/90">2025 Impact Report</span>
           </motion.div>
 
@@ -529,16 +539,16 @@ export default function ImpactPage() {
                   className="inline-flex items-center justify-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-light-blue transition-all shadow-lg"
                 >
                   Support Our Mission
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5" aria-hidden="true" />
                 </Link>
                 <a
-                  href="https://community.fostergreatness.co"
+                  href={siteConfig.links.community}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all"
                 >
                   Join Our Community
-                  <Users className="w-5 h-5" />
+                  <Users className="w-5 h-5" aria-hidden="true" />
                 </a>
               </div>
             </div>
