@@ -95,6 +95,14 @@ const storyStats = [
   { value: '11', label: 'Conferences Attended', icon: Calendar },
 ];
 
+const storytellersCohort = [
+  { name: 'Emmerald Evans', image: '/assets/images/storytellers/emmerald-evans.jpg' },
+  { name: 'Jennifer Tai', image: '/assets/images/storytellers/jennifer-tai.jpg' },
+  { name: 'Antoinette Gutierrez', image: '/assets/images/storytellers/antoinette-gutierrez.jpg' },
+  { name: 'Chyenne Santini', image: '/assets/images/storytellers/chyenne-santini.jpg' },
+  { name: 'Abril Leonyvelez', image: '/assets/images/storytellers/abril-leonyvelez.jpg' },
+];
+
 const partners = [
   { name: 'Staffmark Group', logo: '/images/partners/smg.png' },
   { name: 'One Simple Wish', logo: '/images/partners/osw.png' },
@@ -593,6 +601,108 @@ export default function ImpactPage() {
           </div>
 
           <TestimonialCard {...testimonials.stories} />
+
+          {/* Storytellers Collective pilot */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={containerVariants}
+            className="mt-16"
+          >
+            <motion.div
+              variants={itemVariants}
+              className="bg-gradient-to-br from-fg-navy via-fg-navy to-fg-blue rounded-2xl p-8 md:p-12 overflow-hidden relative"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-fg-teal/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-fg-orange/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+
+              <div className="relative z-10">
+                <motion.div variants={itemVariants} className="mb-8">
+                  <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white/80 mb-4">
+                    <Sparkles className="w-3 h-3" aria-hidden="true" />
+                    Pilot Program
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                    The Storytellers Collective
+                  </h3>
+                  <p className="text-white/80 max-w-2xl leading-relaxed">
+                    In 2025, we launched a first-of-its-kind program training foster
+                    youth to own their narratives. Professional media training,
+                    premium storyteller kits, and a national platform&nbsp;&mdash;
+                    all designed to turn lived experience into advocacy.
+                  </p>
+                </motion.div>
+
+                {/* Cohort headshots */}
+                <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
+                  <div className="flex -space-x-3">
+                    {storytellersCohort.map((member) => (
+                      <div
+                        key={member.name}
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white overflow-hidden relative"
+                      >
+                        <Image
+                          src={member.image}
+                          alt={member.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center border-2 border-white/20">
+                    <span className="text-white text-sm font-bold">+4</span>
+                  </div>
+                  <span className="text-white/70 text-sm ml-1">9 storytellers in our pilot cohort</span>
+                </motion.div>
+
+                {/* Emmerald's testimonial */}
+                <motion.blockquote
+                  variants={itemVariants}
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8"
+                >
+                  <Quote className="w-6 h-6 text-fg-teal/50 mb-3" aria-hidden="true" />
+                  <p className="text-white/90 leading-relaxed italic mb-4">
+                    &ldquo;As a former foster youth, it&apos;s rare to find spaces where your story
+                    isn&apos;t just listened to but it&apos;s respected and uplifted. They didn&apos;t
+                    just ask me to share my story&nbsp;&mdash; they gave me the tools to shape it.&rdquo;
+                  </p>
+                  <footer className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                      <Image
+                        src="/assets/images/storytellers/emmerald-evans.jpg"
+                        alt="Emmerald Evans"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-white font-semibold text-sm">Emmerald Evans</span>
+                      <span className="text-white/50 text-sm ml-2">2025 Cohort</span>
+                    </div>
+                  </footer>
+                </motion.blockquote>
+
+                {/* Scale pitch */}
+                <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <p className="text-white/70 text-sm leading-relaxed max-w-lg">
+                    <span className="text-white font-semibold">9 storytellers in our pilot.</span>{' '}
+                    With your support, we can train the next generation of foster youth
+                    advocates&nbsp;&mdash; giving them the platform, tools, and community to
+                    turn lived experience into systemic change.
+                  </p>
+                  <Link
+                    href="/donate"
+                    className="shrink-0 inline-flex items-center gap-2 bg-white text-fg-navy px-6 py-3 rounded-full font-bold text-sm hover:bg-fg-light-blue transition-all"
+                  >
+                    Fund the Next Cohort
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </section>
 
