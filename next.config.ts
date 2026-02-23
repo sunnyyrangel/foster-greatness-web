@@ -32,6 +32,29 @@ const nextConfig: NextConfig = {
       { source: '/new-page', destination: '/', permanent: true },
       { source: '/community', destination: '/join', permanent: true },
       { source: '/join-today', destination: '/join', permanent: true },
+      // GSC: Crawled - currently not indexed (old WordPress URLs)
+      { source: '/donate-gingerbread-kits', destination: '/donate', permanent: true },
+      { source: '/fg-programs', destination: '/about', permanent: true },
+      { source: '/partner-opportunties', destination: '/partnerships', permanent: true },
+      { source: '/404-page', destination: '/', permanent: true },
+      // GSC: Excluded by noindex / Page with redirect
+      { source: '/cart', destination: '/donate', permanent: true },
+      { source: '/contact', destination: '/about', permanent: true },
+      { source: '/s/2024-Impact-Report.pdf', destination: '/impact', permanent: true },
+      // GSC: Duplicate without canonical - old WordPress page_id URLs
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'page_id' }],
+        destination: '/',
+        permanent: true,
+      },
+      // GSC: Duplicate without canonical - LinkedIn tracking params
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'trk' }],
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
 
@@ -86,7 +109,8 @@ const nextConfig: NextConfig = {
         https://*.typeform.com;
       frame-src 'self'
         https://js.stripe.com
-        https://form.typeform.com;
+        https://form.typeform.com
+        https://www.youtube.com;
       object-src 'none';
       base-uri 'self';
       form-action 'self'
