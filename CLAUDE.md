@@ -272,8 +272,15 @@ npm start       # Production server
 - `app/(site)/holiday-gift-drive-2025/` - Gift drive (custom)
 - `app/(site)/gingerbread/` - Gingerbread contest (custom)
 
+### Community Resources
+- `lib/resources/types.ts` - CommunityResource type, ResourceRow, SDOH category mapping
+- `lib/resources/client.ts` - Supabase query (searchResources)
+- `lib/resources/index.ts` - Re-exports
+- `app/api/resources/search/route.ts` - Community resources search API
+
 ### Design Documentation
 - `docs/plans/2025-12-03-site-config-system-design.md` - Configuration system design
+- `docs/plans/2026-02-24-custom-resources-integration-design.md` - Community resources design
 
 ### Known Tech Debt
 - `public/images/` has a flat + nested structure (some images at root, some in subdirs) — defer asset reorg to a separate effort
@@ -352,6 +359,7 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
   - `/api/findhelp/tags`: 30 requests/minute
   - `/api/findhelp/search`: 10 requests/minute
   - `/api/findhelp/programs/[id]`: 15 requests/minute
+  - `/api/resources/search`: 15 requests/minute
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
