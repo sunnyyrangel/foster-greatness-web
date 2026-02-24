@@ -19,6 +19,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import type { Program, Office, NextStep } from '@/lib/findhelp';
+import type { CommunityResource } from '@/lib/resources';
 import { useResourceBoard } from './ResourceBoardContext';
 
 // Clean HTML/markdown from API text for display
@@ -43,6 +44,7 @@ interface ProgramDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   onTagSearch?: (tagId: string, label: string) => void;
+  communityResource?: CommunityResource | null;
 }
 
 // Format office hours for display
@@ -210,6 +212,7 @@ export default function ProgramDetailModal({
   isOpen,
   onClose,
   onTagSearch,
+  communityResource,
 }: ProgramDetailModalProps) {
   const [program, setProgram] = useState<Program | null>(null);
   const [loading, setLoading] = useState(true);
@@ -217,7 +220,11 @@ export default function ProgramDetailModal({
   const [copied, setCopied] = useState(false);
 
   const { addToBoard, removeFromBoard, isInBoard } = useResourceBoard();
-  const isSaved = program ? isInBoard(program.id) : false;
+  const isSaved = communityResource
+    ? isInBoard(communityResource.id)
+    : program
+    ? isInBoard(program.id)
+    : false;
 
   // Fetch program details when modal opens
   useEffect(() => {
@@ -225,6 +232,11 @@ export default function ProgramDetailModal({
       setProgram(null);
       setLoading(true);
       setError(null);
+      return;
+    }
+
+    if (communityResource) {
+      setLoading(false);
       return;
     }
 
@@ -251,7 +263,7 @@ export default function ProgramDetailModal({
     };
 
     fetchDetails();
-  }, [isOpen, programId, zip]);
+  }, [isOpen, programId, zip, communityResource]);
 
   // Handle escape key
   useEffect(() => {
@@ -286,6 +298,25 @@ export default function ProgramDetailModal({
   };
 
   const handleSaveToggle = () => {
+    if (communityResource) {
+      const rid = communityResource.id;
+      if (isInBoard(rid)) {
+        removeFromBoard(rid);
+      } else {
+        addToBoard({
+          id: rid,
+          name: communityResource.name,
+          provider: communityResource.provider_name,
+          description: communityResource.description,
+          phone: communityResource.phone,
+          address: communityResource.address,
+          website: communityResource.website_url,
+          savedAt: Date.now(),
+        });
+      }
+      return;
+    }
+
     if (!program) return;
 
     if (isSaved) {
@@ -364,6 +395,81 @@ export default function ProgramDetailModal({
               >
                 Close
               </button>
+            </div>
+          )}
+
+          {communityResource && !loading && (
+            <div className="space-y-6">
+              {/* Title and Save */}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="mb-2">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+                      Community Recommended
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-fg-navy">{communityResource.name}</h2>
+                </div>
+                <button
+                  onClick={handleSaveToggle}
+                  className={`flex-shrink-0 p-3 rounded-full transition-colors ${
+                    isSaved
+                      ? 'bg-red-100 text-red-500 hover:bg-red-200'
+                      : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-red-500'
+                  }`}
+                  aria-label={isSaved ? 'Remove from saved' : 'Save program'}
+                >
+                  <Heart className={`w-6 h-6 ${isSaved ? 'fill-current' : ''}`} />
+                </button>
+              </div>
+
+              {/* Description */}
+              <div>
+                <h3 className="font-semibold text-fg-navy mb-2">About this program</h3>
+                <p className="text-gray-600 whitespace-pre-line">{communityResource.description}</p>
+              </div>
+
+              {/* Contact Info */}
+              <div className="space-y-3">
+                {communityResource.phone && (
+                  <a
+                    href={`tel:${communityResource.phone}`}
+                    className="flex items-center gap-2 text-sm text-fg-blue hover:underline"
+                  >
+                    <Phone className="w-4 h-4" />
+                    {communityResource.phone}
+                  </a>
+                )}
+                {communityResource.website_url && (
+                  <a
+                    href={communityResource.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-fg-blue hover:underline"
+                  >
+                    <Globe className="w-4 h-4" />
+                    Visit website
+                  </a>
+                )}
+                {communityResource.address && (
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(communityResource.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-fg-blue hover:underline"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    {communityResource.address}
+                  </a>
+                )}
+              </div>
+
+              {/* Category */}
+              <div>
+                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                  {communityResource.category}
+                </span>
+              </div>
             </div>
           )}
 
@@ -507,6 +613,45 @@ export default function ProgramDetailModal({
             </div>
           )}
         </div>
+
+        {/* Footer with community resource actions */}
+        {communityResource && !loading && (
+          <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+            <div className="flex flex-wrap gap-2">
+              {communityResource.phone && (
+                <a
+                  href={`tel:${communityResource.phone}`}
+                  className="flex items-center gap-3 px-4 py-3 bg-fg-blue/10 text-fg-blue rounded-xl font-medium hover:bg-fg-blue/20 transition-colors"
+                >
+                  <Phone className="w-5 h-5 flex-shrink-0" />
+                  <span className="truncate">{communityResource.phone}</span>
+                </a>
+              )}
+              {communityResource.website_url && (
+                <a
+                  href={communityResource.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-3 bg-fg-blue/10 text-fg-blue rounded-xl font-medium hover:bg-fg-blue/20 transition-colors"
+                >
+                  <Globe className="w-5 h-5 flex-shrink-0" />
+                  <span className="truncate">Visit website</span>
+                </a>
+              )}
+              {communityResource.address && (
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(communityResource.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-3 bg-fg-blue/10 text-fg-blue rounded-xl font-medium hover:bg-fg-blue/20 transition-colors"
+                >
+                  <MapPin className="w-5 h-5 flex-shrink-0" />
+                  <span className="truncate">Get directions</span>
+                </a>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Footer with main actions */}
         {program && !loading && !error && (
