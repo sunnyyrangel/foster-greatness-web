@@ -28,6 +28,7 @@ interface ProgramCardProps {
   onMouseLeave?: () => void;
   id?: string;
   compact?: boolean;
+  source?: 'community' | 'findhelp';
 }
 
 // Get availability badge color and text
@@ -170,7 +171,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
   }
 }
 
-export default function ProgramCard({ program, onClick, isHighlighted, onMouseEnter, onMouseLeave, id, compact }: ProgramCardProps) {
+export default function ProgramCard({ program, onClick, isHighlighted, onMouseEnter, onMouseLeave, id, compact, source }: ProgramCardProps) {
   const { addToBoard, removeFromBoard, isInBoard } = useResourceBoard();
   const isSaved = isInBoard(program.id);
 
@@ -220,6 +221,11 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
             </h3>
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-xs text-gray-500 truncate">{program.provider_name}</span>
+              {source === 'community' && (
+                <span className="flex-shrink-0 text-xs font-medium text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded">
+                  Community
+                </span>
+              )}
               {program.distance !== undefined && program.distance > 0 && (
                 <span className="flex-shrink-0 text-xs text-gray-400">
                   {program.distance.toFixed(1)} mi
@@ -275,9 +281,17 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
 
       {/* Badges */}
       <div className="flex flex-wrap gap-2 mb-3">
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${availability.color}`}>
-          {availability.text}
-        </span>
+        {source === 'community' && (
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+            Community Recommended
+          </span>
+        )}
+
+        {source !== 'community' && (
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${availability.color}`}>
+            {availability.text}
+          </span>
+        )}
 
         {freeReduced && (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
