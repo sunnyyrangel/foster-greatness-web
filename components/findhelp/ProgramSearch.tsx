@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { List, Map, Heart, ArrowLeft, Loader2, Search, MapPin, ExternalLink } from 'lucide-react';
 import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
+import type { CommunityResource } from '@/lib/resources';
 import { ResourceBoardProvider, useResourceBoard } from './ResourceBoardContext';
 import ResourceBoard from './ResourceBoard';
 import ZipCodeInput from './ZipCodeInput';
@@ -34,6 +35,11 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [boardOpen, setBoardOpen] = useState(false);
   const [searchTerms, setSearchTerms] = useState('');
+
+  // Community resources state
+  const [communityResources, setCommunityResources] = useState<CommunityResource[]>([]);
+  const [communityLoading, setCommunityLoading] = useState(false);
+  const [modalCommunityResource, setModalCommunityResource] = useState<CommunityResource | null>(null);
 
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
@@ -124,6 +130,26 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     [zip]
   );
 
+  // Fetch community resources from Supabase
+  const fetchCommunityResources = useCallback(async (zipCode: string, categoryLabel: string) => {
+    setCommunityLoading(true);
+    try {
+      const params = new URLSearchParams({ zip: zipCode, category: categoryLabel });
+      const response = await fetch(`/api/resources/search?${params}`);
+      const data = await response.json();
+      if (response.ok && data.data?.resources) {
+        setCommunityResources(data.data.resources);
+      } else {
+        setCommunityResources([]);
+      }
+    } catch {
+      // Silently fail — community resources are supplementary
+      setCommunityResources([]);
+    } finally {
+      setCommunityLoading(false);
+    }
+  }, []);
+
   // Handle ZIP submission
   const handleZipSubmit = (zipCode: string) => {
     setZip(zipCode);
@@ -138,7 +164,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(tagIds);
     setSelectedTagLabel(label);
     setCursor(0);
+    setCommunityResources([]);
     fetchPrograms(tagIds, 0, false);
+    fetchCommunityResources(zip, label);
   };
 
   // Handle load more
@@ -154,6 +182,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
       setStep('category');
       setSelectedTag(null);
       setPrograms([]);
+      setCommunityResources([]);
+      setModalCommunityResource(null);
     } else if (step === 'category') {
       setStep('zip');
       setTags([]);
@@ -162,6 +192,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
 
   // Handle program click
   const handleProgramClick = (programId: string) => {
+    // Check if this is a community resource
+    const communityMatch = communityResources.find(r => r.id === programId);
+    setModalCommunityResource(communityMatch || null);
     setModalProgramId(programId);
     setModalOpen(true);
 
@@ -176,6 +209,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   const handleModalClose = () => {
     setModalOpen(false);
     setModalProgramId(null);
+    setModalCommunityResource(null);
 
     // Remove program from URL
     const url = new URL(window.location.href);
@@ -199,6 +233,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     if (!searchTerms.trim()) return;
     setSelectedTag(null);
     setCursor(0);
+    setCommunityResources([]);
     setSelectedTagLabel(`"${searchTerms.trim()}"`);
     fetchPrograms('', 0, false, searchTerms.trim());
   };
@@ -209,7 +244,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTagLabel(label);
     setSearchTerms('');
     setCursor(0);
+    setCommunityResources([]);
     fetchPrograms(tagIds, 0, false);
+    fetchCommunityResources(zip, label);
   };
 
   // Compute available SDOH categories for the category bar
@@ -238,6 +275,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setSearchTerms('');
     setPrograms([]);
+    setCommunityResources([]);
     fetchTags(trimmed);
   };
 
@@ -278,6 +316,22 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   }, []);
 
   const hasMore = programs.length < totalCount;
+
+  // Convert CommunityResource to ProgramLite shape for ProgramCard
+  const communityToProgramLite = useCallback((resource: CommunityResource): ProgramLite => ({
+    id: resource.id,
+    name: resource.name,
+    provider_name: resource.provider_name,
+    description: resource.description,
+    availability: 'available' as const,
+    free_or_reduced: 'indeterminate' as const,
+    next_steps: [
+      ...(resource.phone ? [{ channel: 'phone' as const, action: 'call', contact: resource.phone }] : []),
+      ...(resource.website_url ? [{ channel: 'website' as const, action: 'visit', contact: resource.website_url }] : []),
+    ],
+    offices: [],
+    service_tags: [],
+  }), []);
 
   return (
     <div className="w-full">
@@ -364,6 +418,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                 {selectedTagLabel} in {zip}
               </h2>
               <p className="text-gray-500">
+                {communityResources.length > 0 && (
+                  <>{communityResources.length} recommended{' '}&bull;{' '}</>
+                )}
                 {totalCount} {totalCount === 1 ? 'program' : 'programs'} found
               </p>
             </div>
@@ -494,7 +551,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           )}
 
           {/* Empty state */}
-          {!programsLoading && !programsError && programs.length === 0 && (
+          {!programsLoading && !programsError && programs.length === 0 && communityResources.length === 0 && (
             <div className="text-center py-16">
               <p className="text-gray-500 mb-4">No programs found in this category.</p>
               <button
@@ -507,7 +564,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           )}
 
           {/* Results view */}
-          {!programsLoading && !programsError && programs.length > 0 && (
+          {!programsLoading && !programsError && (programs.length > 0 || communityResources.length > 0) && (
             <>
               {/* Desktop split view (lg+) — hidden in widget mode */}
               {!widget && (
@@ -518,6 +575,18 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                       ref={listPanelRef}
                       className="max-h-[600px] overflow-y-auto space-y-4 p-1 -m-1"
                     >
+                      {communityResources.map((resource) => (
+                        <ProgramCard
+                          key={resource.id}
+                          id={`program-card-${resource.id}`}
+                          program={communityToProgramLite(resource)}
+                          source="community"
+                          onClick={() => handleProgramClick(resource.id)}
+                          isHighlighted={hoveredProgramId === resource.id}
+                          onMouseEnter={() => handleCardHover(resource.id)}
+                          onMouseLeave={() => handleCardHover(null)}
+                        />
+                      ))}
                       {programs.map((program) => (
                         <ProgramCard
                           key={program.id}
@@ -569,6 +638,15 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                   widget ? (
                     /* Compact card list for widget */
                     <div className="space-y-2">
+                      {communityResources.map((resource) => (
+                        <ProgramCard
+                          key={resource.id}
+                          program={communityToProgramLite(resource)}
+                          source="community"
+                          onClick={() => handleProgramClick(resource.id)}
+                          compact
+                        />
+                      ))}
                       {programs.map((program) => (
                         <ProgramCard
                           key={program.id}
@@ -580,6 +658,14 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                     </div>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2">
+                      {communityResources.map((resource) => (
+                        <ProgramCard
+                          key={resource.id}
+                          program={communityToProgramLite(resource)}
+                          source="community"
+                          onClick={() => handleProgramClick(resource.id)}
+                        />
+                      ))}
                       {programs.map((program) => (
                         <ProgramCard
                           key={program.id}
@@ -660,6 +746,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
         isOpen={modalOpen}
         onClose={handleModalClose}
         onTagSearch={handleTagSearch}
+        communityResource={modalCommunityResource}
       />
     </div>
   );
