@@ -275,6 +275,9 @@ npm start       # Production server
 ### Design Documentation
 - `docs/plans/2025-12-03-site-config-system-design.md` - Configuration system design
 
+### Known Tech Debt
+- `public/images/` has a flat + nested structure (some images at root, some in subdirs) — defer asset reorg to a separate effort
+
 ---
 
 ## Analytics
@@ -451,6 +454,7 @@ NEXT_PUBLIC_MAPBOX_TOKEN=<from Mapbox account>
 lib/findhelp/
   types.ts           # TypeScript interfaces
   client.ts          # Server-side API client with token management
+  utils.ts           # Shared utility functions (description cleaning, formatting, etc.)
   index.ts           # Re-exports
 
 app/api/findhelp/
@@ -639,18 +643,6 @@ import ErrorBoundary from '@/components/shared/ErrorBoundary';
   <YourComponent />
 </ErrorBoundary>
 ```
-
-### Testing Sentry
-**Test API route (development only):**
-```bash
-# Test error capture
-curl http://localhost:3000/api/sentry-test
-
-# Test message capture
-curl http://localhost:3000/api/sentry-test?type=message
-```
-
-**Important:** Remove or comment out `/api/sentry-test` before production deployment.
 
 ### Privacy & PII
 Sentry configuration automatically:

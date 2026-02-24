@@ -38,3 +38,16 @@ export {
   getProgramDetails,
   isConfigured,
 } from './client';
+
+// Utility functions
+export {
+  cleanDescriptionInline,
+  cleanDescriptionBlock,
+  getAvailabilityInfo,
+  getFreeReducedText,
+  getOpenStatus,
+  getPrimaryContact,
+  formatOfficeHours,
+  formatAddress,
+  escapeHTML,
+} from './utils';

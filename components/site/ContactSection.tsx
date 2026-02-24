@@ -3,54 +3,26 @@
 import { motion } from 'framer-motion';
 import { Mail, ArrowRight } from 'lucide-react';
 import TypeformEmbed from '@/components/shared/TypeformEmbed';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-    },
-  },
-};
+import { containerVariants, itemVariants } from '@/components/site/home/animations';
 
 interface ContactSectionProps {
   title?: string;
   subtitle?: string;
   description?: string;
   email?: string;
+  showEmailButton?: boolean;
   showCommunityButton?: boolean;
   className?: string;
-  /**
-   * Optional custom Typeform ID. If not provided, uses the default contact form.
-   */
   typeformId?: string;
+  typeformMinHeight?: string;
 }
 
 /**
  * ContactSection - Reusable contact section with Typeform embed
  *
- * This component provides a styled contact section with:
- * - Customizable title, subtitle, and description
- * - Email button
- * - Optional community button
- * - Embedded Typeform contact form
- *
  * Usage:
  *   <ContactSection />                                    // Default settings
+ *   <ContactSection showEmailButton />                    // With email button (homepage variant)
  *   <ContactSection email="custom@email.com" />           // Custom email
  *   <ContactSection typeformId="abc123" />                // Custom form
  */
@@ -59,9 +31,11 @@ export default function ContactSection({
   subtitle = "We'd love to hear from you",
   description = "Whether you're a foster youth looking for support, an organization wanting to partner, or someone who wants to make a difference—reach out. We're here for you.",
   email = "info@fostergreatness.co",
+  showEmailButton = false,
   showCommunityButton = true,
   className = "",
   typeformId,
+  typeformMinHeight,
 }: ContactSectionProps) {
   return (
     <motion.section
@@ -82,7 +56,7 @@ export default function ContactSection({
             {/* Content */}
             <motion.div variants={itemVariants}>
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-                <Mail className="w-4 h-4 text-white" />
+                <Mail className={`w-4 h-4 ${showEmailButton ? 'text-fg-blue' : 'text-white'}`} />
                 <span className="text-sm font-semibold text-white/90">{subtitle}</span>
               </div>
 
@@ -93,19 +67,32 @@ export default function ContactSection({
                 {description}
               </p>
 
-              {showCommunityButton && (
-                <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4">
+                {showEmailButton && (
+                  <a
+                    href={`mailto:${email}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-blue hover:text-white transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Email Us
+                  </a>
+                )}
+                {showCommunityButton && (
                   <a
                     href="https://community.fostergreatness.co"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors"
+                    className={`inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-full transition-colors ${
+                      showEmailButton
+                        ? 'bg-transparent text-white border-2 border-white/30 hover:bg-white/10'
+                        : 'bg-white text-fg-navy hover:bg-fg-light-blue'
+                    }`}
                   >
                     Join Community
                     <ArrowRight className="w-4 h-4" />
                   </a>
-                </div>
-              )}
+                )}
+              </div>
             </motion.div>
 
             {/* Typeform */}
@@ -113,7 +100,7 @@ export default function ContactSection({
               variants={itemVariants}
               className="bg-white rounded-2xl shadow-2xl overflow-hidden"
             >
-              <TypeformEmbed formId={typeformId} />
+              <TypeformEmbed formId={typeformId} minHeight={typeformMinHeight} />
             </motion.div>
           </div>
         </div>

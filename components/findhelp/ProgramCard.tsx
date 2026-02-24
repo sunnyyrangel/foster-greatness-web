@@ -1,24 +1,15 @@
 'use client';
 
 import { Heart, Phone, Globe, Mail, MapPin, Clock, ExternalLink } from 'lucide-react';
-import type { ProgramLite, NextStep, Office } from '@/lib/findhelp';
+import type { ProgramLite, NextStep } from '@/lib/findhelp';
+import {
+  cleanDescriptionInline,
+  getAvailabilityInfo,
+  getFreeReducedText,
+  getOpenStatus,
+  getPrimaryContact,
+} from '@/lib/findhelp';
 import { useResourceBoard } from './ResourceBoardContext';
-
-// Clean HTML/markup from API text for display
-function cleanDescription(text: string): string {
-  return text
-    .replace(/<br\s*\/?>/gi, ' ')        // <br /> → space (cards are single-line)
-    .replace(/<[^>]+>/g, '')             // strip remaining HTML tags
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/--\s*/g, '')               // strip -- list markers
-    .replace(/\s{2,}/g, ' ')            // collapse whitespace
-    .trim();
-}
 
 interface ProgramCardProps {
   program: ProgramLite;
@@ -29,70 +20,6 @@ interface ProgramCardProps {
   id?: string;
   compact?: boolean;
   source?: 'community' | 'findhelp';
-}
-
-// Get availability badge color and text
-function getAvailabilityInfo(availability: string) {
-  switch (availability) {
-    case 'available':
-      return { color: 'bg-green-100 text-green-700', text: 'Available' };
-    case 'limited':
-      return { color: 'bg-yellow-100 text-yellow-700', text: 'Limited' };
-    case 'unavailable':
-      return { color: 'bg-red-100 text-red-700', text: 'Unavailable' };
-    default:
-      return { color: 'bg-gray-100 text-gray-700', text: 'Unknown' };
-  }
-}
-
-// Get free/reduced indicator
-function getFreeReducedText(freeOrReduced: string) {
-  switch (freeOrReduced) {
-    case 'free':
-      return 'Free';
-    case 'reduced':
-      return 'Reduced cost';
-    default:
-      return null;
-  }
-}
-
-// Get open status from nearest office
-function getOpenStatus(offices: Office[]): { text: string; isOpen: boolean } | null {
-  if (!offices.length) return null;
-
-  // Find first office with open_now_info
-  const officeWithHours = offices.find((o) => o.open_now_info);
-  if (!officeWithHours?.open_now_info) return null;
-
-  const info = officeWithHours.open_now_info;
-  if (info.is_open) {
-    return {
-      text: info.closes_at ? `Open until ${info.closes_at}` : 'Open now',
-      isOpen: true,
-    };
-  } else {
-    return {
-      text: info.opens_at ? `Opens ${info.opens_at}` : 'Closed',
-      isOpen: false,
-    };
-  }
-}
-
-// Get primary contact info from offices
-function getPrimaryContact(program: ProgramLite) {
-  const office = program.offices[0];
-  if (!office) return null;
-
-  const address = [office.address1, office.city, office.state, office.postal]
-    .filter(Boolean)
-    .join(', ');
-
-  return {
-    phone: office.phone_number,
-    address: address || null,
-    website: office.website_url || program.website_url,
-  };
 }
 
 // Render action button for next step
@@ -197,7 +124,7 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
         id: program.id,
         name: program.name,
         provider: program.provider_name,
-        description: cleanDescription(program.description),
+        description: cleanDescriptionInline(program.description),
         phone: contact?.phone || undefined,
         address: contact?.address || undefined,
         website: contact?.website || undefined,
@@ -319,7 +246,7 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{cleanDescription(program.description)}</p>
+      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{cleanDescriptionInline(program.description)}</p>
 
       {/* Next Steps / Actions */}
       {uniqueSteps.length > 0 && (

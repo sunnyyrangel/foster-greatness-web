@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Foster Greatness Brand Colors
+        // Legacy non-prefixed colors — prefer fg-* variants in new code
         navy: "#1a2949",
         blue: "#0067a2",
         teal: "#00c8b7",

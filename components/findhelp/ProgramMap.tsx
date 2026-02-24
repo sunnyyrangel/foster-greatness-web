@@ -5,6 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapPin } from 'lucide-react';
 import type { ProgramLite, Office } from '@/lib/findhelp';
+import { escapeHTML } from '@/lib/findhelp';
 
 interface ProgramMapProps {
   programs: ProgramLite[];
@@ -113,12 +114,6 @@ function buildPopupHTML(program: ProgramLite, office: Office): string {
 
   html += `</div></div>`;
   return html;
-}
-
-function escapeHTML(str: string): string {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
 }
 
 export default function ProgramMap({

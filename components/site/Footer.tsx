@@ -4,7 +4,7 @@ import { siteConfig } from '@/data';
 
 export default function Footer() {
   return (
-    <footer className="bg-navy text-white mt-auto">
+    <footer className="bg-fg-navy text-white mt-auto">
       {/* Contact Banner */}
       <div className="bg-gradient-to-r from-fg-navy to-fg-blue">
         <div className="container mx-auto px-4 py-8">

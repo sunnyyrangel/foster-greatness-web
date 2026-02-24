@@ -19,24 +19,9 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import type { Program, Office, NextStep } from '@/lib/findhelp';
+import { cleanDescriptionBlock, formatOfficeHours, formatAddress } from '@/lib/findhelp';
 import type { CommunityResource } from '@/lib/resources';
 import { useResourceBoard } from './ResourceBoardContext';
-
-// Clean HTML/markdown from API text for display
-function cleanDescription(text: string): string {
-  return text
-    .replace(/<br\s*\/?>/gi, '\n')       // <br /> → newline
-    .replace(/<[^>]+>/g, '')             // strip remaining HTML tags
-    .replace(/&amp;/g, '&')             // decode entities
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/^--\s*/gm, '• ')          // -- list items → bullet
-    .replace(/\n{3,}/g, '\n\n')         // collapse excess newlines
-    .trim();
-}
 
 interface ProgramDetailModalProps {
   programId: string;
@@ -45,35 +30,6 @@ interface ProgramDetailModalProps {
   onClose: () => void;
   onTagSearch?: (tagId: string, label: string) => void;
   communityResource?: CommunityResource | null;
-}
-
-// Format office hours for display
-function formatOfficeHours(office: Office): string[] {
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
-  const hours: string[] = [];
-
-  for (const day of days) {
-    const allDay = office.hours?.[`${day}_all_day` as keyof typeof office.hours];
-    const start = office.hours?.[`${day}_start` as keyof typeof office.hours];
-    const finish = office.hours?.[`${day}_finish` as keyof typeof office.hours];
-
-    const dayName = day.charAt(0).toUpperCase() + day.slice(1);
-
-    if (allDay) {
-      hours.push(`${dayName}: 24 hours`);
-    } else if (start && finish) {
-      hours.push(`${dayName}: ${start} - ${finish}`);
-    }
-  }
-
-  return hours;
-}
-
-// Get formatted address
-function formatAddress(office: Office): string {
-  return [office.address1, office.address2, office.city, office.state, office.postal]
-    .filter(Boolean)
-    .join(', ');
 }
 
 // Render contact button
@@ -327,7 +283,7 @@ export default function ProgramDetailModal({
         id: program.id,
         name: program.name,
         provider: program.provider_name,
-        description: cleanDescription(program.description),
+        description: cleanDescriptionBlock(program.description),
         phone: office?.phone_number || undefined,
         address: office ? formatAddress(office) : undefined,
         website: office?.website_url || program.website_url || undefined,
@@ -497,7 +453,7 @@ export default function ProgramDetailModal({
               {/* Description */}
               <div>
                 <h3 className="font-semibold text-fg-navy mb-2">About this program</h3>
-                <p className="text-gray-600 whitespace-pre-line">{cleanDescription(program.description)}</p>
+                <p className="text-gray-600 whitespace-pre-line">{cleanDescriptionBlock(program.description)}</p>
               </div>
 
               {/* Eligibility / Rules */}
