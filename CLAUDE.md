@@ -528,6 +528,42 @@ Programs are automatically filtered to exclude populations not relevant to foste
 3. **At least one filter required** - serviceTag, attributeTag, or terms
 4. **Handle 401** - Client auto-refreshes token and retries
 
+### Community Resources (Supabase)
+
+The services page also shows curated community-recommended resources from the Supabase `resources` table, displayed **above** Findhelp results with a teal "Community Recommended" badge.
+
+**Supabase Table:** `resources` (requires `zip` column for filtering)
+
+**Module:** `lib/resources/`
+```
+lib/resources/
+  types.ts    # CommunityResource, ResourceRow, SDOH category mapping
+  client.ts   # searchResources() — queries Supabase by ZIP + category
+  index.ts    # Re-exports
+```
+
+**API Route:** `GET /api/resources/search?zip=XXXXX&category=Education`
+- Rate limit: 15 req/min
+- Filters by exact ZIP match and SDOH category
+- Returns `{ success: true, data: { resources: [...], count: N } }`
+
+**SDOH Category Mapping:**
+
+| Resource Category | SDOH Category |
+|---|---|
+| Education support, Education & Training | Education |
+| Housing | Housing & Shelter |
+| Child care, Foster Care Support, Mentorship and social support | Family & Childcare |
+| Food assistance | Food & Nutrition |
+| Other | *Excluded from filtered results* |
+
+**How it works:**
+- `ProgramSearch` fires parallel fetches to both `/api/resources/search` and `/api/findhelp/search` on category selection
+- Community resources render first with `source="community"` badge on `ProgramCard`
+- `ProgramDetailModal` shows simplified view for community resources (no API fetch needed)
+- If Supabase is not configured or no resources match, Findhelp results show as normal
+- Keyword search only queries Findhelp (community resources clear)
+
 ---
 
 ## Error Tracking & Monitoring
