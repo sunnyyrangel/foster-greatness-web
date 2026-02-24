@@ -443,7 +443,7 @@ The `/services` page integrates with the Findhelp (formerly Aunt Bertha) API to 
 FINDHELP_USERNAME=<from findhelp account>
 FINDHELP_PASSWORD=<from findhelp account>
 FINDHELP_API_KEY=<from findhelp account>
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<from Google Cloud Console>
+NEXT_PUBLIC_MAPBOX_TOKEN=<from Mapbox account>
 ```
 
 ### File Structure

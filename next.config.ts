@@ -40,7 +40,8 @@ const nextConfig: NextConfig = {
         https://beehiiv-images-production.s3.amazonaws.com
         https://assets-v2.circle.so
         https://placehold.co
-        https://*.typeform.com;
+        https://*.typeform.com
+        https://api.mapbox.com;
       font-src 'self' data:;
       connect-src 'self'
         https://api.beehiiv.com
@@ -48,10 +49,13 @@ const nextConfig: NextConfig = {
         https://*.sentry.io
         https://*.ingest.sentry.io
         https://vercel.live
-        https://*.vercel-scripts.com;
+        https://*.vercel-scripts.com
+        https://api.mapbox.com
+        https://events.mapbox.com;
       frame-src 'self'
         https://js.stripe.com
         https://form.typeform.com;
+      worker-src 'self' blob:;
       object-src 'none';
       base-uri 'self';
       form-action 'self'
@@ -60,44 +64,50 @@ const nextConfig: NextConfig = {
       upgrade-insecure-requests;
     `.replace(/\s{2,}/g, ' ').trim();
 
+    const widgetCspHeader = cspHeader.replace(
+      "frame-ancestors 'none'",
+      "frame-ancestors *"
+    );
+
     return [
       {
         source: '/:path*',
         headers: [
-          // Content Security Policy - XSS protection
           {
             key: 'Content-Security-Policy',
             value: cspHeader,
           },
-          // Prevent clickjacking attacks
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          // Prevent MIME type sniffing
+          // X-Frame-Options set via middleware (widgets need different policy)
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
-          // Control referrer information
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
           },
-          // Restrict browser features for privacy
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
           },
-          // Force HTTPS connections
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains',
           },
-          // XSS protection (legacy browsers)
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
+          },
+        ],
+      },
+      // Widget pages — override CSP to allow Circle.so embedding
+      // This MUST come after the catch-all so it overrides the CSP header
+      {
+        source: '/widgets/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: widgetCspHeader,
           },
         ],
       },

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { List, Map, Heart, ArrowLeft, Loader2 } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { List, Map, Heart, ArrowLeft, Loader2, Search, MapPin, ExternalLink } from 'lucide-react';
 import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
 import { ResourceBoardProvider, useResourceBoard } from './ResourceBoardContext';
 import ResourceBoard from './ResourceBoard';
 import ZipCodeInput from './ZipCodeInput';
-import ServiceTagSelector from './ServiceTagSelector';
+import ServiceTagSelector, { SDOH_CATEGORIES, groupTagsByCategory } from './ServiceTagSelector';
 import ProgramCard from './ProgramCard';
 import ProgramDetailModal from './ProgramDetailModal';
 import ProgramMap from './ProgramMap';
@@ -17,12 +17,14 @@ type SearchStep = 'zip' | 'category' | 'results';
 interface ProgramSearchInnerProps {
   initialZip?: string;
   initialProgramId?: string;
+  widget?: boolean;
 }
 
-function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInnerProps) {
+function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSearchInnerProps) {
   // State
   const [step, setStep] = useState<SearchStep>(initialZip ? 'category' : 'zip');
   const [zip, setZip] = useState(initialZip || '');
+  const [zipInput, setZipInput] = useState(initialZip || '');
   const [tags, setTags] = useState<ServiceTag[]>([]);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedTagLabel, setSelectedTagLabel] = useState<string>('');
@@ -31,6 +33,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
   const [cursor, setCursor] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [boardOpen, setBoardOpen] = useState(false);
+  const [searchTerms, setSearchTerms] = useState('');
 
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
@@ -40,6 +43,11 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
   // Error states
   const [tagsError, setTagsError] = useState<string | null>(null);
   const [programsError, setProgramsError] = useState<string | null>(null);
+
+  // Hover sync state
+  const [hoveredProgramId, setHoveredProgramId] = useState<string | null>(null);
+  const [hoveredFromMap, setHoveredFromMap] = useState(false);
+  const listPanelRef = useRef<HTMLDivElement>(null);
 
   // Modal state
   const [modalProgramId, setModalProgramId] = useState<string | null>(initialProgramId || null);
@@ -72,7 +80,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
 
   // Fetch programs
   const fetchPrograms = useCallback(
-    async (tagId: string, cursorValue: number = 0, append: boolean = false) => {
+    async (tagId: string, cursorValue: number = 0, append: boolean = false, terms?: string) => {
       if (append) {
         setLoadingMore(true);
       } else {
@@ -83,10 +91,11 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
       try {
         const params = new URLSearchParams({
           zip,
-          serviceTag: tagId,
           cursor: cursorValue.toString(),
-          limit: '20',
+          limit: widget ? '6' : '20',
         });
+        if (tagId) params.set('serviceTag', tagId);
+        if (terms) params.set('terms', terms);
 
         const response = await fetch(`/api/findhelp/search?${params}`);
         const data = await response.json();
@@ -118,6 +127,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
   // Handle ZIP submission
   const handleZipSubmit = (zipCode: string) => {
     setZip(zipCode);
+    setZipInput(zipCode);
     setSelectedTag(null);
     setPrograms([]);
     fetchTags(zipCode);
@@ -133,8 +143,8 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
 
   // Handle load more
   const handleLoadMore = () => {
-    if (selectedTag && !loadingMore) {
-      fetchPrograms(selectedTag, cursor, true);
+    if ((selectedTag || searchTerms) && !loadingMore) {
+      fetchPrograms(selectedTag || '', cursor, true, searchTerms || undefined);
     }
   };
 
@@ -173,6 +183,64 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
     window.history.pushState({}, '', url.toString());
   };
 
+  // Handle tag search from modal
+  const handleTagSearch = (tagId: string, label: string) => {
+    handleModalClose();
+    setSelectedTag(tagId);
+    setSelectedTagLabel(label);
+    setSearchTerms('');
+    setCursor(0);
+    fetchPrograms(tagId, 0, false);
+  };
+
+  // Handle keyword search
+  const handleTermsSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerms.trim()) return;
+    setSelectedTag(null);
+    setCursor(0);
+    setSelectedTagLabel(`"${searchTerms.trim()}"`);
+    fetchPrograms('', 0, false, searchTerms.trim());
+  };
+
+  // Handle category switch from results view
+  const handleCategorySwitch = (tagIds: string, label: string) => {
+    setSelectedTag(tagIds);
+    setSelectedTagLabel(label);
+    setSearchTerms('');
+    setCursor(0);
+    fetchPrograms(tagIds, 0, false);
+  };
+
+  // Compute available SDOH categories for the category bar
+  const availableCategories = useMemo(() => {
+    if (tags.length === 0) return [];
+    const grouped = groupTagsByCategory(tags);
+    return SDOH_CATEGORIES
+      .filter((cat) => {
+        const group = grouped.get(cat.id);
+        return group && group.totalCount > 0;
+      })
+      .map((cat) => {
+        const group = grouped.get(cat.id)!;
+        const tagIds = group.tags.map((t) => t.id).join(',');
+        return { ...cat, tagIds };
+      });
+  }, [tags]);
+
+  // Handle ZIP change from results view
+  const handleZipChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = zipInput.trim();
+    if (!/^\d{5}$/.test(trimmed)) return;
+    if (trimmed === zip) return;
+    setZip(trimmed);
+    setSelectedTag(null);
+    setSearchTerms('');
+    setPrograms([]);
+    fetchTags(trimmed);
+  };
+
   // Auto-open modal if initialProgramId provided
   useEffect(() => {
     if (initialProgramId && initialZip) {
@@ -187,6 +255,27 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
       fetchTags(initialZip);
     }
   }, [initialZip, fetchTags]);
+
+  // Scroll card into view when hovered from map
+  useEffect(() => {
+    if (hoveredFromMap && hoveredProgramId && listPanelRef.current) {
+      const card = document.getElementById(`program-card-${hoveredProgramId}`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [hoveredFromMap, hoveredProgramId]);
+
+  // Handlers for hover sync
+  const handleCardHover = useCallback((programId: string | null) => {
+    setHoveredFromMap(false);
+    setHoveredProgramId(programId);
+  }, []);
+
+  const handleMapHover = useCallback((programId: string | null) => {
+    setHoveredFromMap(true);
+    setHoveredProgramId(programId);
+  }, []);
 
   const hasMore = programs.length < totalCount;
 
@@ -229,7 +318,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
 
       {/* ZIP Code Entry */}
       {step === 'zip' && (
-        <div className="py-8">
+        <div className={widget ? 'py-4' : 'py-8'}>
           <ZipCodeInput onSubmit={handleZipSubmit} isLoading={tagsLoading} />
           {tagsError && (
             <p className="mt-4 text-center text-red-600">{tagsError}</p>
@@ -269,7 +358,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
       {step === 'results' && (
         <div>
           {/* Results header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
               <h2 className="text-xl font-bold text-fg-navy">
                 {selectedTagLabel} in {zip}
@@ -279,8 +368,8 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
               </p>
             </div>
 
-            {/* View toggle */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            {/* View toggle — hidden on desktop split view and in widget mode */}
+            <div className={`flex bg-gray-100 rounded-lg p-1 lg:hidden ${widget ? 'hidden' : ''}`}>
               <button
                 onClick={() => setViewMode('list')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors ${
@@ -304,6 +393,81 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
                 Map
               </button>
             </div>
+          </div>
+
+          {/* Category bar + search */}
+          <div className="mb-6 space-y-3">
+            {/* Category chips */}
+            {availableCategories.length > 0 && (
+              <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+                {availableCategories.map((cat) => {
+                  const Icon = cat.icon;
+                  const isActive = selectedTag === cat.tagIds;
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => handleCategorySwitch(cat.tagIds, cat.label)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
+                        isActive
+                          ? 'bg-fg-blue text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* ZIP + Keyword search */}
+            <div className="flex gap-2">
+              {/* ZIP input */}
+              <form onSubmit={handleZipChange} className="flex-shrink-0">
+                <div className="relative">
+                  <MapPin className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d{5}"
+                    maxLength={5}
+                    value={zipInput}
+                    onChange={(e) => setZipInput(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                    onBlur={handleZipChange as unknown as React.FocusEventHandler}
+                    className="w-[7rem] pl-8 pr-2 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-fg-blue/30 focus:border-fg-blue"
+                  />
+                </div>
+              </form>
+
+              {/* Keyword input */}
+              <form onSubmit={handleTermsSearch} className="flex gap-2 flex-1">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchTerms}
+                    onChange={(e) => setSearchTerms(e.target.value)}
+                    placeholder="Search by keyword..."
+                    className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-fg-blue/30 focus:border-fg-blue"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-fg-navy text-white rounded-lg text-sm font-medium hover:bg-fg-blue transition-colors"
+                >
+                  Search
+                </button>
+              </form>
+            </div>
+
+            {/* Save hint — hidden in widget mode */}
+            {!widget && (
+              <p className="text-xs text-gray-400 flex items-center gap-1">
+                <Heart className="w-3 h-3" />
+                Click the heart on any program to save it. Access your saved list from the &ldquo;Saved&rdquo; button above.
+              </p>
+            )}
           </div>
 
           {/* Loading state */}
@@ -345,45 +509,131 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
           {/* Results view */}
           {!programsLoading && !programsError && programs.length > 0 && (
             <>
-              {viewMode === 'list' ? (
-                <div className="grid gap-4 md:grid-cols-2">
-                  {programs.map((program) => (
-                    <ProgramCard
-                      key={program.id}
-                      program={program}
-                      onClick={() => handleProgramClick(program.id)}
+              {/* Desktop split view (lg+) — hidden in widget mode */}
+              {!widget && (
+                <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6">
+                  {/* List panel */}
+                  <div>
+                    <div
+                      ref={listPanelRef}
+                      className="max-h-[600px] overflow-y-auto space-y-4 p-1 -m-1"
+                    >
+                      {programs.map((program) => (
+                        <ProgramCard
+                          key={program.id}
+                          id={`program-card-${program.id}`}
+                          program={program}
+                          onClick={() => handleProgramClick(program.id)}
+                          isHighlighted={hoveredProgramId === program.id}
+                          onMouseEnter={() => handleCardHover(program.id)}
+                          onMouseLeave={() => handleCardHover(null)}
+                        />
+                      ))}
+                    </div>
+                    {hasMore && (
+                      <div className="mt-6 text-center">
+                        <button
+                          onClick={handleLoadMore}
+                          disabled={loadingMore}
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-fg-navy text-white rounded-xl font-semibold hover:bg-fg-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                        >
+                          {loadingMore ? (
+                            <>
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                              Loading...
+                            </>
+                          ) : (
+                            `Load more (${programs.length} of ${totalCount})`
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Map panel */}
+                  <div className="h-[600px] sticky top-4 rounded-xl overflow-hidden border border-gray-200">
+                    <ProgramMap
+                      programs={programs}
+                      onProgramSelect={handleProgramClick}
+                      selectedProgramId={modalProgramId}
+                      hoveredProgramId={hoveredProgramId}
+                      onProgramHover={handleMapHover}
                     />
-                  ))}
-                </div>
-              ) : (
-                <div className="h-[500px] md:h-[600px] rounded-xl overflow-hidden border border-gray-200">
-                  <ProgramMap
-                    programs={programs}
-                    onProgramSelect={handleProgramClick}
-                    selectedProgramId={modalProgramId}
-                  />
+                  </div>
                 </div>
               )}
 
-              {/* Load more */}
-              {viewMode === 'list' && hasMore && (
-                <div className="mt-8 text-center">
-                  <button
-                    onClick={handleLoadMore}
-                    disabled={loadingMore}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-fg-navy text-white rounded-xl font-semibold hover:bg-fg-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {loadingMore ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Loading...
-                      </>
-                    ) : (
-                      `Load more (${programs.length} of ${totalCount})`
-                    )}
-                  </button>
-                </div>
-              )}
+              {/* List view — mobile (<lg) or widget mode */}
+              <div className={widget ? '' : 'lg:hidden'}>
+                {viewMode === 'list' ? (
+                  widget ? (
+                    /* Compact card list for widget */
+                    <div className="space-y-2">
+                      {programs.map((program) => (
+                        <ProgramCard
+                          key={program.id}
+                          program={program}
+                          onClick={() => handleProgramClick(program.id)}
+                          compact
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {programs.map((program) => (
+                        <ProgramCard
+                          key={program.id}
+                          program={program}
+                          onClick={() => handleProgramClick(program.id)}
+                        />
+                      ))}
+                    </div>
+                  )
+                ) : (
+                  <div className="h-[500px] md:h-[600px] rounded-xl overflow-hidden border border-gray-200">
+                    <ProgramMap
+                      programs={programs}
+                      onProgramSelect={handleProgramClick}
+                      selectedProgramId={modalProgramId}
+                    />
+                  </div>
+                )}
+
+                {/* Load more (mobile, non-widget) */}
+                {!widget && viewMode === 'list' && hasMore && (
+                  <div className="mt-8 text-center">
+                    <button
+                      onClick={handleLoadMore}
+                      disabled={loadingMore}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-fg-navy text-white rounded-xl font-semibold hover:bg-fg-blue disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {loadingMore ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        `Load more (${programs.length} of ${totalCount})`
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* View all link (widget only) */}
+                {widget && hasMore && (
+                  <div className="mt-4 text-center">
+                    <a
+                      href={`https://www.fostergreatness.co/services`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
+                    >
+                      View all {totalCount} results on Foster Greatness
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>
@@ -409,6 +659,7 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
         zip={zip}
         isOpen={modalOpen}
         onClose={handleModalClose}
+        onTagSearch={handleTagSearch}
       />
     </div>
   );
@@ -418,12 +669,13 @@ function ProgramSearchInner({ initialZip, initialProgramId }: ProgramSearchInner
 interface ProgramSearchProps {
   initialZip?: string;
   initialProgramId?: string;
+  widget?: boolean;
 }
 
-export default function ProgramSearch({ initialZip, initialProgramId }: ProgramSearchProps) {
+export default function ProgramSearch({ initialZip, initialProgramId, widget }: ProgramSearchProps) {
   return (
     <ResourceBoardProvider>
-      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} />
+      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} widget={widget} />
     </ResourceBoardProvider>
   );
 }

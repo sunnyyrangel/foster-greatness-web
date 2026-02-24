@@ -21,11 +21,28 @@ import {
 import type { Program, Office, NextStep } from '@/lib/findhelp';
 import { useResourceBoard } from './ResourceBoardContext';
 
+// Clean HTML/markdown from API text for display
+function cleanDescription(text: string): string {
+  return text
+    .replace(/<br\s*\/?>/gi, '\n')       // <br /> → newline
+    .replace(/<[^>]+>/g, '')             // strip remaining HTML tags
+    .replace(/&amp;/g, '&')             // decode entities
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/^--\s*/gm, '• ')          // -- list items → bullet
+    .replace(/\n{3,}/g, '\n\n')         // collapse excess newlines
+    .trim();
+}
+
 interface ProgramDetailModalProps {
   programId: string;
   zip: string;
   isOpen: boolean;
   onClose: () => void;
+  onTagSearch?: (tagId: string, label: string) => void;
 }
 
 // Format office hours for display
@@ -192,6 +209,7 @@ export default function ProgramDetailModal({
   zip,
   isOpen,
   onClose,
+  onTagSearch,
 }: ProgramDetailModalProps) {
   const [program, setProgram] = useState<Program | null>(null);
   const [loading, setLoading] = useState(true);
@@ -278,6 +296,7 @@ export default function ProgramDetailModal({
         id: program.id,
         name: program.name,
         provider: program.provider_name,
+        description: cleanDescription(program.description),
         phone: office?.phone_number || undefined,
         address: office ? formatAddress(office) : undefined,
         website: office?.website_url || program.website_url || undefined,
@@ -372,32 +391,39 @@ export default function ProgramDetailModal({
               {/* Description */}
               <div>
                 <h3 className="font-semibold text-fg-navy mb-2">About this program</h3>
-                <p className="text-gray-600 whitespace-pre-line">{program.description}</p>
+                <p className="text-gray-600 whitespace-pre-line">{cleanDescription(program.description)}</p>
               </div>
 
               {/* Eligibility / Rules */}
-              {program.rules && program.rules.length > 0 && (
-                <div>
-                  <h3 className="font-semibold text-fg-navy mb-2 flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    Who can get help
-                  </h3>
-                  <ul className="list-disc list-inside text-gray-600 space-y-1">
-                    {program.rules.map((rule, i) => (
-                      <li key={i}>
-                        {rule.description ||
-                          (rule.min_age && rule.max_age
-                            ? `Ages ${rule.min_age}-${rule.max_age}`
-                            : rule.min_age
-                            ? `Age ${rule.min_age}+`
-                            : rule.max_age
-                            ? `Under age ${rule.max_age}`
-                            : rule.type)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {(() => {
+                const displayRules = (program.rules || [])
+                  .map((rule) =>
+                    rule.description ||
+                    (rule.min_age && rule.max_age
+                      ? `Ages ${rule.min_age}-${rule.max_age}`
+                      : rule.min_age
+                      ? `Age ${rule.min_age}+`
+                      : rule.max_age
+                      ? `Under age ${rule.max_age}`
+                      : rule.type) ||
+                    null
+                  )
+                  .filter(Boolean);
+
+                return displayRules.length > 0 ? (
+                  <div>
+                    <h3 className="font-semibold text-fg-navy mb-2 flex items-center gap-2">
+                      <Users className="w-5 h-5" />
+                      Who can get help
+                    </h3>
+                    <ul className="list-disc list-inside text-gray-600 space-y-1">
+                      {displayRules.map((text, i) => (
+                        <li key={i}>{text}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null;
+              })()}
 
               {program.rule_attributes && program.rule_attributes.length > 0 && (
                 <div>
@@ -464,14 +490,16 @@ export default function ProgramDetailModal({
               {program.service_tags && program.service_tags.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-fg-navy mb-2">Services provided</h3>
+                  <p className="text-xs text-gray-400 mb-2">Click a tag to search for similar programs</p>
                   <div className="flex flex-wrap gap-2">
                     {program.service_tags.map((tag, i) => (
-                      <span
+                      <button
                         key={i}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm capitalize"
+                        onClick={() => onTagSearch?.(tag, tag.replace(/_/g, ' '))}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm capitalize hover:bg-fg-blue/10 hover:text-fg-blue transition-colors cursor-pointer"
                       >
                         {tag.replace(/_/g, ' ')}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 </div>

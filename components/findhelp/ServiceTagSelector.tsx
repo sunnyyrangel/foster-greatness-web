@@ -25,7 +25,7 @@ interface SDOHCategory {
   keywords: string[]; // Matches against tag id and label (case-insensitive)
 }
 
-const SDOH_CATEGORIES: SDOHCategory[] = [
+export const SDOH_CATEGORIES: SDOHCategory[] = [
   {
     id: 'food',
     label: 'Food & Nutrition',
@@ -106,7 +106,7 @@ function matchTagToCategories(tag: ServiceTag): string[] {
 /**
  * Group service tags by SDOH category and sum counts
  */
-function groupTagsByCategory(tags: ServiceTag[]): Map<string, { tags: ServiceTag[]; totalCount: number }> {
+export function groupTagsByCategory(tags: ServiceTag[]): Map<string, { tags: ServiceTag[]; totalCount: number }> {
   const grouped = new Map<string, { tags: ServiceTag[]; totalCount: number }>();
 
   // Initialize all categories

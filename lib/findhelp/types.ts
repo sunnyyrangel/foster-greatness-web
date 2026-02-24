@@ -256,6 +256,7 @@ export interface SavedProgram {
   id: string;
   name: string;
   provider: string;
+  description?: string;
   phone?: string;
   address?: string;
   website?: string;

@@ -56,7 +56,7 @@ export default async function ServicesPage({
 
       {/* Search Section */}
       <section className="relative py-12 px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-16">

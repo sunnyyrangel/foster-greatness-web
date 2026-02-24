@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Phone, Globe, ExternalLink } from 'lucide-react';
+import { useRef, useEffect, useMemo, useCallback } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { MapPin } from 'lucide-react';
 import type { ProgramLite, Office } from '@/lib/findhelp';
 
 interface ProgramMapProps {
@@ -10,30 +11,9 @@ interface ProgramMapProps {
   onProgramSelect?: (programId: string) => void;
   selectedProgramId?: string | null;
   center?: { lat: number; lng: number };
+  hoveredProgramId?: string | null;
+  onProgramHover?: (programId: string | null) => void;
 }
-
-// Map container style
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-  minHeight: '400px',
-};
-
-// Default map options
-const mapOptions: google.maps.MapOptions = {
-  disableDefaultUI: false,
-  zoomControl: true,
-  streetViewControl: false,
-  mapTypeControl: false,
-  fullscreenControl: true,
-  styles: [
-    {
-      featureType: 'poi',
-      elementType: 'labels',
-      stylers: [{ visibility: 'off' }],
-    },
-  ],
-};
 
 // Get all offices with coordinates from programs
 function getOfficesWithCoords(programs: ProgramLite[]): Array<{
@@ -65,24 +45,80 @@ function getOfficesWithCoords(programs: ProgramLite[]): Array<{
   return offices;
 }
 
-// Calculate map center from offices
-function calculateCenter(
-  offices: Array<{ lat: number; lng: number }>
-): { lat: number; lng: number } {
-  if (offices.length === 0) {
-    // Default to center of US
-    return { lat: 39.8283, lng: -98.5795 };
+// Create a marker element (default style)
+function createMarkerElement(): HTMLDivElement {
+  const el = document.createElement('div');
+  el.style.borderRadius = '50%';
+  el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+  el.style.cursor = 'pointer';
+  el.style.transition = 'width 0.15s, height 0.15s, background-color 0.15s, border-color 0.15s';
+  applyMarkerStyle(el, 'default');
+  return el;
+}
+
+// Apply style to a marker element
+function applyMarkerStyle(el: HTMLDivElement, state: 'default' | 'hovered' | 'selected') {
+  switch (state) {
+    case 'selected':
+      el.style.width = '20px';
+      el.style.height = '20px';
+      el.style.backgroundColor = '#00c8b7';
+      el.style.border = '3px solid #1a2949';
+      el.style.zIndex = '3';
+      break;
+    case 'hovered':
+      el.style.width = '20px';
+      el.style.height = '20px';
+      el.style.backgroundColor = '#00c8b7';
+      el.style.border = '3px solid #1a2949';
+      el.style.zIndex = '2';
+      break;
+    default:
+      el.style.width = '14px';
+      el.style.height = '14px';
+      el.style.backgroundColor = '#1a2949';
+      el.style.border = '2px solid #fff';
+      el.style.zIndex = '1';
+      break;
+  }
+}
+
+// Build popup HTML for an office
+function buildPopupHTML(program: ProgramLite, office: Office): string {
+  const address = [office.address1, office.city, office.state]
+    .filter(Boolean)
+    .join(', ');
+
+  const websiteUrl = office.website_url || program.website_url;
+
+  let html = `<div style="max-width:240px;font-family:Poppins,sans-serif;">`;
+  html += `<h3 style="font-weight:700;color:#1a2949;margin:0 0 4px;font-size:14px;">${escapeHTML(program.name)}</h3>`;
+  html += `<p style="color:#6b7280;font-size:12px;margin:0 0 8px;">${escapeHTML(program.provider_name)}</p>`;
+
+  if (address) {
+    html += `<p style="color:#4b5563;font-size:12px;margin:0 0 8px;">${escapeHTML(address)}</p>`;
   }
 
-  const sum = offices.reduce(
-    (acc, o) => ({ lat: acc.lat + o.lat, lng: acc.lng + o.lng }),
-    { lat: 0, lng: 0 }
-  );
+  html += `<div style="display:flex;gap:8px;flex-wrap:wrap;">`;
 
-  return {
-    lat: sum.lat / offices.length,
-    lng: sum.lng / offices.length,
-  };
+  if (office.phone_number) {
+    html += `<a href="tel:${escapeHTML(office.phone_number)}" style="color:#0067a2;font-size:12px;text-decoration:none;">📞 Call</a>`;
+  }
+
+  if (websiteUrl) {
+    html += `<a href="${escapeHTML(websiteUrl)}" target="_blank" rel="noopener noreferrer" style="color:#0067a2;font-size:12px;text-decoration:none;">🌐 Website</a>`;
+  }
+
+  html += `<a href="#" class="mapbox-details-link" data-program-id="${escapeHTML(program.id)}" style="color:#0067a2;font-size:12px;text-decoration:none;">📋 Details</a>`;
+
+  html += `</div></div>`;
+  return html;
+}
+
+function escapeHTML(str: string): string {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 export default function ProgramMap({
@@ -90,91 +126,196 @@ export default function ProgramMap({
   onProgramSelect,
   selectedProgramId,
   center: propCenter,
+  hoveredProgramId,
+  onProgramHover,
 }: ProgramMapProps) {
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [infoWindowData, setInfoWindowData] = useState<{
-    program: ProgramLite;
-    office: Office;
-    position: { lat: number; lng: number };
-  } | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const markerElementsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+  const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const popupFromClickRef = useRef(false);
 
-  // Load Google Maps API
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-  });
-
-  // Get all offices with coordinates
   const officesWithCoords = useMemo(() => getOfficesWithCoords(programs), [programs]);
 
-  // Calculate center
-  const center = useMemo(
-    () => propCenter || calculateCenter(officesWithCoords),
-    [propCenter, officesWithCoords]
-  );
+  const center = useMemo(() => {
+    if (propCenter) return propCenter;
+    if (officesWithCoords.length === 0) return { lat: 39.8283, lng: -98.5795 };
+    const sum = officesWithCoords.reduce(
+      (acc, o) => ({ lat: acc.lat + o.lat, lng: acc.lng + o.lng }),
+      { lat: 0, lng: 0 }
+    );
+    return {
+      lat: sum.lat / officesWithCoords.length,
+      lng: sum.lng / officesWithCoords.length,
+    };
+  }, [propCenter, officesWithCoords]);
 
-  // Calculate bounds to fit all markers
-  const fitBounds = useCallback(() => {
-    if (!map || officesWithCoords.length === 0) return;
+  // Store callbacks in refs so markers can access latest versions
+  const onProgramSelectRef = useRef(onProgramSelect);
+  onProgramSelectRef.current = onProgramSelect;
+  const onProgramHoverRef = useRef(onProgramHover);
+  onProgramHoverRef.current = onProgramHover;
 
-    const bounds = new google.maps.LatLngBounds();
-    officesWithCoords.forEach((o) => {
-      bounds.extend({ lat: o.lat, lng: o.lng });
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainerRef.current || officesWithCoords.length === 0) return;
+
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (!token) return;
+
+    mapboxgl.accessToken = token;
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [center.lng, center.lat],
+      zoom: 10,
     });
 
-    // Add some padding
-    map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
-  }, [map, officesWithCoords]);
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
-  // On map load
-  const onLoad = useCallback(
-    (map: google.maps.Map) => {
-      setMap(map);
-      // Fit bounds after map loads
-      if (officesWithCoords.length > 0) {
-        const bounds = new google.maps.LatLngBounds();
-        officesWithCoords.forEach((o) => {
-          bounds.extend({ lat: o.lat, lng: o.lng });
-        });
-        map.fitBounds(bounds, { top: 50, right: 50, bottom: 50, left: 50 });
+    mapRef.current = map;
+
+    // Listen for details link clicks
+    map.getContainer().addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('mapbox-details-link')) {
+        e.preventDefault();
+        const programId = target.getAttribute('data-program-id');
+        if (programId) {
+          onProgramSelectRef.current?.(programId);
+        }
       }
-    },
-    [officesWithCoords]
-  );
+    });
 
-  const onUnmount = useCallback(() => {
-    setMap(null);
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle marker click
-  const handleMarkerClick = (data: typeof officesWithCoords[0]) => {
-    setInfoWindowData({
-      program: data.program,
-      office: data.office,
-      position: { lat: data.lat, lng: data.lng },
+  // Create markers when programs change (not on selection/hover)
+  const updateMarkers = useCallback(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Remove old markers
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
+    markerElementsRef.current.clear();
+
+    // Close existing popup
+    if (popupRef.current) {
+      popupRef.current.remove();
+      popupRef.current = null;
+    }
+
+    if (officesWithCoords.length === 0) return;
+
+    const bounds = new mapboxgl.LngLatBounds();
+
+    officesWithCoords.forEach((data) => {
+      const el = createMarkerElement();
+      markerElementsRef.current.set(data.program.id, el);
+
+      const marker = new mapboxgl.Marker({ element: el })
+        .setLngLat([data.lng, data.lat])
+        .addTo(map);
+
+      el.addEventListener('click', () => {
+        // Close existing popup
+        if (popupRef.current) {
+          popupRef.current.remove();
+        }
+
+        const popup = new mapboxgl.Popup({ offset: 15, maxWidth: '280px', closeOnClick: true })
+          .setLngLat([data.lng, data.lat])
+          .setHTML(buildPopupHTML(data.program, data.office))
+          .addTo(map);
+
+        popupRef.current = popup;
+        popupFromClickRef.current = true;
+        popup.on('close', () => {
+          if (popupRef.current === popup) {
+            popupRef.current = null;
+            popupFromClickRef.current = false;
+          }
+        });
+        onProgramSelectRef.current?.(data.program.id);
+      });
+
+      // Hover events for bidirectional sync + hover popup
+      el.addEventListener('mouseenter', () => {
+        onProgramHoverRef.current?.(data.program.id);
+
+        // Show popup on hover (unless a click popup is already open)
+        if (!popupFromClickRef.current) {
+          if (popupRef.current) {
+            popupRef.current.remove();
+          }
+          const popup = new mapboxgl.Popup({ offset: 15, maxWidth: '280px', closeButton: false, closeOnClick: false })
+            .setLngLat([data.lng, data.lat])
+            .setHTML(buildPopupHTML(data.program, data.office))
+            .addTo(map);
+          popupRef.current = popup;
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        onProgramHoverRef.current?.(null);
+
+        // Close hover popup (but not click popups)
+        if (!popupFromClickRef.current && popupRef.current) {
+          popupRef.current.remove();
+          popupRef.current = null;
+        }
+      });
+
+      bounds.extend([data.lng, data.lat]);
+      markersRef.current.push(marker);
     });
-    onProgramSelect?.(data.program.id);
-  };
 
-  // Loading state
-  if (!isLoaded) {
-    return (
-      <div className="w-full h-full min-h-[400px] bg-gray-100 rounded-xl flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-fg-blue mx-auto mb-3" />
-          <p className="text-gray-500">Loading map...</p>
-        </div>
-      </div>
-    );
-  }
+    map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
+  }, [officesWithCoords]);
 
-  // Error state
-  if (loadError) {
+  // Update marker styles when hover/selection changes (no marker rebuild)
+  useEffect(() => {
+    markerElementsRef.current.forEach((el, programId) => {
+      if (selectedProgramId === programId) {
+        applyMarkerStyle(el, 'selected');
+      } else if (hoveredProgramId === programId) {
+        applyMarkerStyle(el, 'hovered');
+      } else {
+        applyMarkerStyle(el, 'default');
+      }
+    });
+  }, [hoveredProgramId, selectedProgramId]);
+
+  // Run updateMarkers when map is loaded or data changes
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (map.loaded()) {
+      updateMarkers();
+    } else {
+      map.on('load', updateMarkers);
+      return () => {
+        map.off('load', updateMarkers);
+      };
+    }
+  }, [updateMarkers]);
+
+  // No token
+  if (!process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
     return (
       <div className="w-full h-full min-h-[400px] bg-gray-100 rounded-xl flex items-center justify-center">
         <div className="text-center p-4">
           <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600 mb-2">Unable to load map</p>
-          <p className="text-sm text-gray-400">Please check your connection and try again</p>
+          <p className="text-sm text-gray-400">Map configuration is missing</p>
         </div>
       </div>
     );
@@ -195,90 +336,7 @@ export default function ProgramMap({
 
   return (
     <div className="w-full h-full min-h-[400px] rounded-xl overflow-hidden">
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-        options={mapOptions}
-      >
-        {officesWithCoords.map((data, index) => {
-          const isSelected = selectedProgramId === data.program.id;
-
-          return (
-            <Marker
-              key={`${data.program.id}-${data.office.office_numeric_id || index}`}
-              position={{ lat: data.lat, lng: data.lng }}
-              onClick={() => handleMarkerClick(data)}
-              icon={{
-                url: isSelected
-                  ? 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                  : 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                scaledSize: new google.maps.Size(isSelected ? 48 : 40, isSelected ? 48 : 40),
-              }}
-              animation={isSelected ? google.maps.Animation.BOUNCE : undefined}
-              title={data.program.name}
-            />
-          );
-        })}
-
-        {infoWindowData && (
-          <InfoWindow
-            position={infoWindowData.position}
-            onCloseClick={() => setInfoWindowData(null)}
-          >
-            <div className="p-2 max-w-xs">
-              <h3 className="font-bold text-fg-navy mb-1">{infoWindowData.program.name}</h3>
-              <p className="text-sm text-gray-500 mb-2">{infoWindowData.program.provider_name}</p>
-
-              {infoWindowData.office.address1 && (
-                <p className="text-sm text-gray-600 mb-2">
-                  {[
-                    infoWindowData.office.address1,
-                    infoWindowData.office.city,
-                    infoWindowData.office.state,
-                  ]
-                    .filter(Boolean)
-                    .join(', ')}
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-2">
-                {infoWindowData.office.phone_number && (
-                  <a
-                    href={`tel:${infoWindowData.office.phone_number}`}
-                    className="inline-flex items-center gap-1 text-sm text-fg-blue hover:underline"
-                  >
-                    <Phone className="w-3 h-3" />
-                    Call
-                  </a>
-                )}
-
-                {(infoWindowData.office.website_url || infoWindowData.program.website_url) && (
-                  <a
-                    href={infoWindowData.office.website_url || infoWindowData.program.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-fg-blue hover:underline"
-                  >
-                    <Globe className="w-3 h-3" />
-                    Website
-                  </a>
-                )}
-
-                <button
-                  onClick={() => onProgramSelect?.(infoWindowData.program.id)}
-                  className="inline-flex items-center gap-1 text-sm text-fg-blue hover:underline"
-                >
-                  <ExternalLink className="w-3 h-3" />
-                  Details
-                </button>
-              </div>
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap>
+      <div ref={mapContainerRef} style={{ width: '100%', height: '100%', minHeight: '400px' }} />
     </div>
   );
 }

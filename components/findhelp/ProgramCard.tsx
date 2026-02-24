@@ -4,9 +4,30 @@ import { Heart, Phone, Globe, Mail, MapPin, Clock, ExternalLink } from 'lucide-r
 import type { ProgramLite, NextStep, Office } from '@/lib/findhelp';
 import { useResourceBoard } from './ResourceBoardContext';
 
+// Clean HTML/markup from API text for display
+function cleanDescription(text: string): string {
+  return text
+    .replace(/<br\s*\/?>/gi, ' ')        // <br /> → space (cards are single-line)
+    .replace(/<[^>]+>/g, '')             // strip remaining HTML tags
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/--\s*/g, '')               // strip -- list markers
+    .replace(/\s{2,}/g, ' ')            // collapse whitespace
+    .trim();
+}
+
 interface ProgramCardProps {
   program: ProgramLite;
   onClick: () => void;
+  isHighlighted?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  id?: string;
+  compact?: boolean;
 }
 
 // Get availability badge color and text
@@ -149,7 +170,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
   }
 }
 
-export default function ProgramCard({ program, onClick }: ProgramCardProps) {
+export default function ProgramCard({ program, onClick, isHighlighted, onMouseEnter, onMouseLeave, id, compact }: ProgramCardProps) {
   const { addToBoard, removeFromBoard, isInBoard } = useResourceBoard();
   const isSaved = isInBoard(program.id);
 
@@ -175,6 +196,7 @@ export default function ProgramCard({ program, onClick }: ProgramCardProps) {
         id: program.id,
         name: program.name,
         provider: program.provider_name,
+        description: cleanDescription(program.description),
         phone: contact?.phone || undefined,
         address: contact?.address || undefined,
         website: contact?.website || undefined,
@@ -183,10 +205,51 @@ export default function ProgramCard({ program, onClick }: ProgramCardProps) {
     }
   };
 
+  // Compact card for widget mode
+  if (compact) {
+    return (
+      <article
+        id={id}
+        onClick={onClick}
+        className="bg-white rounded-xl border border-gray-200 px-4 py-3 hover:shadow-md hover:border-fg-blue/30 transition-all cursor-pointer group"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-sm text-fg-navy group-hover:text-fg-blue transition-colors truncate">
+              {program.name}
+            </h3>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-xs text-gray-500 truncate">{program.provider_name}</span>
+              {program.distance !== undefined && program.distance > 0 && (
+                <span className="flex-shrink-0 text-xs text-gray-400">
+                  {program.distance.toFixed(1)} mi
+                </span>
+              )}
+              {freeReduced && (
+                <span className="flex-shrink-0 text-xs font-medium text-green-600">{freeReduced}</span>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {uniqueSteps.slice(0, 2).map((step, i) => (
+              <NextStepButton key={`${step.channel}-${i}`} step={step} program={program} />
+            ))}
+            <ExternalLink className="w-3.5 h-3.5 text-gray-300 group-hover:text-fg-blue transition-colors" />
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article
+      id={id}
       onClick={onClick}
-      className="bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-lg hover:border-fg-blue/30 transition-all cursor-pointer group"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-lg hover:border-fg-blue/30 transition-all cursor-pointer group ${
+        isHighlighted ? 'ring-2 ring-fg-blue shadow-lg' : ''
+      }`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -242,7 +305,7 @@ export default function ProgramCard({ program, onClick }: ProgramCardProps) {
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{program.description}</p>
+      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{cleanDescription(program.description)}</p>
 
       {/* Next Steps / Actions */}
       {uniqueSteps.length > 0 && (

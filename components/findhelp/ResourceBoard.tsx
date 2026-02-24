@@ -18,6 +18,7 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
     return savedPrograms
       .map((p) => {
         const lines = [`${p.name} (${p.provider})`];
+        if (p.description) lines.push(`${p.description}`);
         if (p.phone) lines.push(`Phone: ${p.phone}`);
         if (p.address) lines.push(`Address: ${p.address}`);
         if (p.website) lines.push(`Website: ${p.website}`);
@@ -68,7 +69,8 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
           .program { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e5e7eb; }
           .program:last-child { border-bottom: none; }
           .name { font-size: 18px; font-weight: bold; color: #1a2949; margin-bottom: 4px; }
-          .provider { color: #6b7280; margin-bottom: 8px; }
+          .provider { color: #6b7280; margin-bottom: 4px; }
+          .description { color: #374151; font-size: 14px; margin-bottom: 8px; white-space: pre-line; }
           .detail { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: #374151; font-size: 14px; }
           .icon { width: 16px; color: #0067a2; }
           footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px; }
@@ -82,6 +84,7 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
           <div class="program">
             <div class="name">${p.name}</div>
             <div class="provider">${p.provider}</div>
+            ${p.description ? `<div class="description">${p.description}</div>` : ''}
             ${p.phone ? `<div class="detail"><span class="icon">P</span> ${p.phone}</div>` : ''}
             ${p.address ? `<div class="detail"><span class="icon">A</span> ${p.address}</div>` : ''}
             ${p.website ? `<div class="detail"><span class="icon">W</span> ${p.website}</div>` : ''}
@@ -166,6 +169,10 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
                         {program.name}
                       </h3>
                       <p className="text-sm text-gray-500 truncate">{program.provider}</p>
+
+                      {program.description && (
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{program.description}</p>
+                      )}
 
                       <div className="mt-2 space-y-1">
                         {program.phone && (
