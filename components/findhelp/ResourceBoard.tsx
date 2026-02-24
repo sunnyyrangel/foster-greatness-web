@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { track } from '@vercel/analytics';
 import { X, Trash2, Mail, Share2, Printer, Phone, MapPin, Globe, ChevronRight } from 'lucide-react';
 import { useResourceBoard } from './ResourceBoardContext';
 
@@ -29,6 +30,7 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
 
   // Email export
   const handleEmail = () => {
+    track('service_board_export', { method: 'email', count: savedPrograms.length });
     const subject = encodeURIComponent('My Saved Programs - Foster Greatness');
     const body = encodeURIComponent(
       `Here are the programs I saved from Foster Greatness:\n\n${formatProgramsText()}`
@@ -38,6 +40,7 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
 
   // Web Share API
   const handleShare = async () => {
+    track('service_board_export', { method: 'share', count: savedPrograms.length });
     if (navigator.share) {
       try {
         await navigator.share({
@@ -58,6 +61,7 @@ export default function ResourceBoard({ isOpen, onClose }: ResourceBoardProps) {
 
   // Print
   const handlePrint = () => {
+    track('service_board_export', { method: 'print', count: savedPrograms.length });
     const printContent = `
       <!DOCTYPE html>
       <html>

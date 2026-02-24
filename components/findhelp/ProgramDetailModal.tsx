@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import { track } from '@vercel/analytics';
 import type { Program, Office, NextStep } from '@/lib/findhelp';
 import { cleanDescriptionBlock, formatOfficeHours, formatAddress } from '@/lib/findhelp';
 import type { CommunityResource } from '@/lib/resources';
@@ -256,6 +257,8 @@ export default function ProgramDetailModal({
   const handleSaveToggle = () => {
     if (communityResource) {
       const rid = communityResource.id;
+      const action = isInBoard(rid) ? 'service_program_unsave' : 'service_program_save';
+      track(action, { program: communityResource.name, source: 'community' });
       if (isInBoard(rid)) {
         removeFromBoard(rid);
       } else {
@@ -275,6 +278,7 @@ export default function ProgramDetailModal({
 
     if (!program) return;
 
+    track(isSaved ? 'service_program_unsave' : 'service_program_save', { program: program.name, source: 'findhelp' });
     if (isSaved) {
       removeFromBoard(program.id);
     } else {

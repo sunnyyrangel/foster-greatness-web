@@ -1,5 +1,6 @@
 'use client';
 
+import { track } from '@vercel/analytics';
 import { Heart, Phone, Globe, Mail, MapPin, Clock, ExternalLink } from 'lucide-react';
 import type { ProgramLite, NextStep } from '@/lib/findhelp';
 import {
@@ -34,7 +35,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
       return (
         <a
           href={`tel:${phone}`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); track('service_contact_click', { type: 'call', program: program.name }); }}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-fg-blue/10 text-fg-blue rounded-lg text-sm font-medium hover:bg-fg-blue/20 transition-colors"
         >
           <Phone className="w-3.5 h-3.5" />
@@ -52,7 +53,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); track('service_contact_click', { type: 'website', program: program.name }); }}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-fg-blue/10 text-fg-blue rounded-lg text-sm font-medium hover:bg-fg-blue/20 transition-colors"
         >
           <Globe className="w-3.5 h-3.5" />
@@ -67,7 +68,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
       return (
         <a
           href={`mailto:${email}`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); track('service_contact_click', { type: 'email', program: program.name }); }}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-fg-blue/10 text-fg-blue rounded-lg text-sm font-medium hover:bg-fg-blue/20 transition-colors"
         >
           <Mail className="w-3.5 h-3.5" />
@@ -85,7 +86,7 @@ function NextStepButton({ step, program }: { step: NextStep; program: ProgramLit
           href={`https://maps.google.com/?q=${encodeURIComponent(address.trim())}`}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); track('service_contact_click', { type: 'directions', program: program.name }); }}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-fg-blue/10 text-fg-blue rounded-lg text-sm font-medium hover:bg-fg-blue/20 transition-colors"
         >
           <MapPin className="w-3.5 h-3.5" />
@@ -117,6 +118,7 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
 
   const handleSaveToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
+    track(isSaved ? 'service_program_unsave' : 'service_program_save', { program: program.name });
     if (isSaved) {
       removeFromBoard(program.id);
     } else {

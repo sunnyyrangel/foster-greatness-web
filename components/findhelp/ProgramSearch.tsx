@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { track } from '@vercel/analytics';
 import { List, Map, Heart, ArrowLeft, Loader2, Search, MapPin, ExternalLink } from 'lucide-react';
 import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
 import type { CommunityResource } from '@/lib/resources';
@@ -157,6 +158,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setPrograms([]);
     fetchTags(zipCode);
+    track('service_search', { zip: zipCode });
   };
 
   // Handle category selection
@@ -167,6 +169,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCommunityResources([]);
     fetchPrograms(tagIds, 0, false);
     fetchCommunityResources(zip, label);
+    track('service_category_select', { category: label, zip });
   };
 
   // Handle load more
@@ -197,6 +200,11 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setModalCommunityResource(communityMatch || null);
     setModalProgramId(programId);
     setModalOpen(true);
+    track('service_program_view', {
+      program_id: programId,
+      source: communityMatch ? 'community' : 'findhelp',
+      zip,
+    });
 
     // Update URL without navigation
     const url = new URL(window.location.href);
@@ -236,6 +244,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCommunityResources([]);
     setSelectedTagLabel(`"${searchTerms.trim()}"`);
     fetchPrograms('', 0, false, searchTerms.trim());
+    track('service_keyword_search', { terms: searchTerms.trim(), zip });
   };
 
   // Handle category switch from results view
