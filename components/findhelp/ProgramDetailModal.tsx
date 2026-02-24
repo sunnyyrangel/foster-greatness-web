@@ -617,7 +617,7 @@ export default function ProgramDetailModal({
         {program && !loading && !error && (
           <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
             <div className="flex flex-wrap gap-2">
-              {program.next_steps.slice(0, 4).map((step, i) => {
+              {(program.next_steps || []).slice(0, 4).map((step, i) => {
                 const office = program.offices[0];
 
                 switch (step.channel) {

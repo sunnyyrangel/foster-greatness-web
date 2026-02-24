@@ -109,7 +109,7 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
   const contact = getPrimaryContact(program);
 
   // Unique next steps (deduplicate by channel)
-  const uniqueSteps = program.next_steps.reduce((acc, step) => {
+  const uniqueSteps = (program.next_steps || []).reduce((acc, step) => {
     if (!acc.some((s) => s.channel === step.channel)) {
       acc.push(step);
     }
