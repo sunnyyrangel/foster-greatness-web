@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { defaultMetadata, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import SentryInit from "@/components/SentryInit";
 
 const poppins = Poppins({
