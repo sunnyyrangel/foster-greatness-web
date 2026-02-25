@@ -72,8 +72,11 @@ export async function GET(request: NextRequest) {
       zip: validation.data.zip,
     });
 
+    // DEBUG: temporary logging to diagnose empty results
+    console.log('[informational] category:', validation.data.category, 'zip:', validation.data.zip, 'count:', results.count);
+
     return NextResponse.json(
-      { success: true, data: results },
+      { success: true, data: results, _debug: { category: validation.data.category, zip: validation.data.zip, count: results.count } },
       {
         headers: {
           ...rateLimitHeaders(rateLimitResult),

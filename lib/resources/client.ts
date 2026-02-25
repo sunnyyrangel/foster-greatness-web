@@ -83,6 +83,14 @@ export async function searchInformationalResources(
     user_state: userState,
   });
 
+  // DEBUG: temporary logging
+  console.log('[informational] zip_to_state result:', userState);
+  console.log('[informational] RPC error:', error);
+  console.log('[informational] RPC data type:', typeof data, 'isArray:', Array.isArray(data), 'length:', Array.isArray(data) ? data.length : 'N/A');
+  if (Array.isArray(data) && data.length > 0) {
+    console.log('[informational] first row category:', data[0].category);
+  }
+
   if (error) {
     throw new Error(`Supabase RPC failed: ${error.message}`);
   }
@@ -90,6 +98,8 @@ export async function searchInformationalResources(
   // Filter by category post-RPC
   const filtered = (data as InformationalResourceRow[])
     .filter((row) => row.category === params.category);
+
+  console.log('[informational] filter category:', params.category, 'pre-filter:', (data as InformationalResourceRow[]).length, 'post-filter:', filtered.length);
 
   const resources = filtered.map(toInformationalResource);
 
