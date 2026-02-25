@@ -4,13 +4,14 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { track } from '@vercel/analytics';
 import { List, Map, Heart, ArrowLeft, Loader2, Search, MapPin, ExternalLink } from 'lucide-react';
 import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
-import type { CommunityResource } from '@/lib/resources';
+import type { CommunityResource, InformationalResource } from '@/lib/resources';
 import { ResourceBoardProvider, useResourceBoard } from './ResourceBoardContext';
 import ResourceBoard from './ResourceBoard';
 import ZipCodeInput from './ZipCodeInput';
 import ServiceTagSelector, { SDOH_CATEGORIES, groupTagsByCategory } from './ServiceTagSelector';
 import ProgramCard from './ProgramCard';
 import ProgramDetailModal from './ProgramDetailModal';
+import InformationalResourceCard from './InformationalResourceCard';
 import ProgramMap from './ProgramMap';
 
 type ViewMode = 'list' | 'map';
@@ -41,6 +42,11 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   const [communityResources, setCommunityResources] = useState<CommunityResource[]>([]);
   const [communityLoading, setCommunityLoading] = useState(false);
   const [modalCommunityResource, setModalCommunityResource] = useState<CommunityResource | null>(null);
+
+  // Informational resources state
+  const [informationalResources, setInformationalResources] = useState<InformationalResource[]>([]);
+  const [informationalLoading, setInformationalLoading] = useState(false);
+  const [informationalExpanded, setInformationalExpanded] = useState(false);
 
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
@@ -151,6 +157,27 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     }
   }, []);
 
+  // Fetch informational resources from Supabase
+  const fetchInformationalResources = useCallback(async (zipCode: string, categoryLabel: string) => {
+    setInformationalLoading(true);
+    setInformationalExpanded(false);
+    try {
+      const params = new URLSearchParams({ category: categoryLabel, zip: zipCode });
+      const response = await fetch(`/api/resources/informational?${params}`);
+      const data = await response.json();
+      if (response.ok && data.data?.resources) {
+        setInformationalResources(data.data.resources);
+      } else {
+        setInformationalResources([]);
+      }
+    } catch {
+      // Silently fail — informational resources are supplementary
+      setInformationalResources([]);
+    } finally {
+      setInformationalLoading(false);
+    }
+  }, []);
+
   // Handle ZIP submission
   const handleZipSubmit = (zipCode: string) => {
     setZip(zipCode);
@@ -167,8 +194,10 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTagLabel(label);
     setCursor(0);
     setCommunityResources([]);
+    setInformationalResources([]);
     fetchPrograms(tagIds, 0, false);
     fetchCommunityResources(zip, label);
+    fetchInformationalResources(zip, label);
     track('service_category_select', { category: label, zip });
   };
 
@@ -186,6 +215,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
       setSelectedTag(null);
       setPrograms([]);
       setCommunityResources([]);
+      setInformationalResources([]);
       setModalCommunityResource(null);
     } else if (step === 'category') {
       setStep('zip');
@@ -242,6 +272,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setCursor(0);
     setCommunityResources([]);
+    setInformationalResources([]);
     setSelectedTagLabel(`"${searchTerms.trim()}"`);
     fetchPrograms('', 0, false, searchTerms.trim());
     track('service_keyword_search', { terms: searchTerms.trim(), zip });
@@ -254,8 +285,10 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSearchTerms('');
     setCursor(0);
     setCommunityResources([]);
+    setInformationalResources([]);
     fetchPrograms(tagIds, 0, false);
     fetchCommunityResources(zip, label);
+    fetchInformationalResources(zip, label);
   };
 
   // Compute available SDOH categories for the category bar
@@ -285,6 +318,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSearchTerms('');
     setPrograms([]);
     setCommunityResources([]);
+    setInformationalResources([]);
     fetchTags(trimmed);
   };
 
@@ -427,6 +461,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                 {selectedTagLabel} in {zip}
               </h2>
               <p className="text-gray-500">
+                {informationalResources.length > 0 && (
+                  <>{informationalResources.length} {informationalResources.length === 1 ? 'guide' : 'guides'}{' '}&bull;{' '}</>
+                )}
                 {communityResources.length > 0 && (
                   <>{communityResources.length} recommended{' '}&bull;{' '}</>
                 )}
@@ -560,7 +597,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           )}
 
           {/* Empty state */}
-          {!programsLoading && !programsError && programs.length === 0 && communityResources.length === 0 && (
+          {!programsLoading && !programsError && programs.length === 0 && communityResources.length === 0 && informationalResources.length === 0 && (
             <div className="text-center py-16">
               <p className="text-gray-500 mb-4">No programs found in this category.</p>
               <button
@@ -573,7 +610,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           )}
 
           {/* Results view */}
-          {!programsLoading && !programsError && (programs.length > 0 || communityResources.length > 0) && (
+          {!programsLoading && !programsError && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
             <>
               {/* Desktop split view (lg+) — hidden in widget mode */}
               {!widget && (
@@ -584,6 +621,32 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                       ref={listPanelRef}
                       className="max-h-[600px] overflow-y-auto space-y-4 p-1 -m-1"
                     >
+                      {/* Informational Resources Section */}
+                      {informationalResources.length > 0 && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+                              Guides & Resources
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {informationalResources.length} {informationalResources.length === 1 ? 'resource' : 'resources'}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
+                              <InformationalResourceCard key={resource.id} resource={resource} />
+                            ))}
+                          </div>
+                          {informationalResources.length > 4 && !informationalExpanded && (
+                            <button
+                              onClick={() => setInformationalExpanded(true)}
+                              className="mt-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
+                            >
+                              Show all {informationalResources.length} guides
+                            </button>
+                          )}
+                        </div>
+                      )}
                       {communityResources.map((resource) => (
                         <ProgramCard
                           key={resource.id}
@@ -647,6 +710,29 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                   widget ? (
                     /* Compact card list for widget */
                     <div className="space-y-2">
+                      {/* Informational Resources Section */}
+                      {informationalResources.length > 0 && (
+                        <div className="mb-2">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+                              Guides & Resources
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
+                              <InformationalResourceCard key={resource.id} resource={resource} />
+                            ))}
+                          </div>
+                          {informationalResources.length > 4 && !informationalExpanded && (
+                            <button
+                              onClick={() => setInformationalExpanded(true)}
+                              className="mt-1 text-xs font-medium text-fg-blue hover:text-fg-navy transition-colors"
+                            >
+                              Show all {informationalResources.length} guides
+                            </button>
+                          )}
+                        </div>
+                      )}
                       {communityResources.map((resource) => (
                         <ProgramCard
                           key={resource.id}
@@ -667,6 +753,32 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                     </div>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2">
+                      {/* Informational Resources Section */}
+                      {informationalResources.length > 0 && (
+                        <div className="col-span-full mb-2">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+                              Guides & Resources
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {informationalResources.length} {informationalResources.length === 1 ? 'resource' : 'resources'}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
+                              <InformationalResourceCard key={resource.id} resource={resource} />
+                            ))}
+                          </div>
+                          {informationalResources.length > 4 && !informationalExpanded && (
+                            <button
+                              onClick={() => setInformationalExpanded(true)}
+                              className="mt-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
+                            >
+                              Show all {informationalResources.length} guides
+                            </button>
+                          )}
+                        </div>
+                      )}
                       {communityResources.map((resource) => (
                         <ProgramCard
                           key={resource.id}
