@@ -8,7 +8,7 @@ import type { CommunityResource, InformationalResource } from '@/lib/resources';
 import { ResourceBoardProvider, useResourceBoard } from './ResourceBoardContext';
 import ResourceBoard from './ResourceBoard';
 import ZipCodeInput from './ZipCodeInput';
-import ServiceTagSelector, { SDOH_CATEGORIES, groupTagsByCategory } from './ServiceTagSelector';
+import ServiceTagSelector from './ServiceTagSelector';
 import ProgramCard from './ProgramCard';
 import ProgramDetailModal from './ProgramDetailModal';
 import InformationalResourceCard from './InformationalResourceCard';
@@ -294,20 +294,11 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     fetchInformationalResources(zip, label);
   };
 
-  // Compute available SDOH categories for the category bar
-  const availableCategories = useMemo(() => {
-    if (tags.length === 0) return [];
-    const grouped = groupTagsByCategory(tags);
-    return SDOH_CATEGORIES
-      .filter((cat) => {
-        const group = grouped.get(cat.id);
-        return group && group.totalCount > 0;
-      })
-      .map((cat) => {
-        const group = grouped.get(cat.id)!;
-        const tagIds = group.tags.map((t) => t.id).join(',');
-        return { ...cat, tagIds };
-      });
+  // Sort tags by count for the category bar in results view
+  const sortedTags = useMemo(() => {
+    return [...tags].sort(
+      (a, b) => parseInt(b.count || '0') - parseInt(a.count || '0')
+    );
   }, [tags]);
 
   // Handle ZIP change from results view
@@ -504,23 +495,21 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           {/* Category bar + search */}
           <div className="mb-6 space-y-3">
             {/* Category chips */}
-            {availableCategories.length > 0 && (
+            {sortedTags.length > 0 && (
               <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
-                {availableCategories.map((cat) => {
-                  const Icon = cat.icon;
-                  const isActive = selectedTag === cat.tagIds;
+                {sortedTags.map((tag) => {
+                  const isActive = selectedTag === tag.id;
                   return (
                     <button
-                      key={cat.id}
-                      onClick={() => handleCategorySwitch(cat.tagIds, cat.label)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
+                      key={tag.id}
+                      onClick={() => handleCategorySwitch(tag.id, tag.label)}
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
                         isActive
                           ? 'bg-fg-blue text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
-                      <Icon className="w-3.5 h-3.5" />
-                      {cat.label}
+                      {tag.label}
                     </button>
                   );
                 })}

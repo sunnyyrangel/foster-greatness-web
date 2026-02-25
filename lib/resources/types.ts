@@ -53,31 +53,39 @@ export interface CommunityResource {
 // ============================================================================
 
 /**
- * Maps SDOH category labels (used in ServiceTagSelector) to Supabase
- * `resources` table category values. Empty arrays mean no community
- * resources exist for that SDOH category yet.
+ * Maps keyword patterns to Supabase `resources` table category values.
+ * When a Findhelp tag label contains any keyword, the corresponding
+ * resource categories are included in the search.
  */
-export const SDOH_TO_RESOURCE_CATEGORIES: Record<string, string[]> = {
-  'Education': ['Education support', 'Education & Training'],
-  'Housing & Shelter': ['Housing'],
-  'Family & Childcare': ['Child care', 'Foster Care Support', 'Mentorship and social support'],
-  'Food & Nutrition': ['Food assistance'],
-  'Healthcare': [],
-  'Employment & Income': [],
-  'Transportation': [],
-  'Legal Services': [],
-};
+const KEYWORD_TO_RESOURCE_CATEGORIES: Array<{ keywords: string[]; categories: string[] }> = [
+  { keywords: ['education', 'school', 'tutor', 'ged', 'college', 'literacy'], categories: ['Education support', 'Education & Training'] },
+  { keywords: ['housing', 'shelter', 'rent', 'homeless'], categories: ['Housing'] },
+  { keywords: ['family', 'child', 'parent', 'youth', 'foster', 'mentor'], categories: ['Child care', 'Foster Care Support', 'Mentorship and social support'] },
+  { keywords: ['food', 'meal', 'nutrition', 'snap', 'pantry', 'hunger'], categories: ['Food assistance'] },
+];
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
 /**
- * Returns the Supabase category values that correspond to an SDOH category label.
- * Returns an empty array for unknown or unmapped SDOH categories.
+ * Returns the Supabase category values that correspond to a Findhelp tag label.
+ * Uses keyword matching so it works with both SDOH labels and Findhelp tag labels.
  */
-export function getResourceCategoriesForSDOH(sdohLabel: string): string[] {
-  return SDOH_TO_RESOURCE_CATEGORIES[sdohLabel] ?? [];
+export function getResourceCategoriesForSDOH(tagLabel: string): string[] {
+  const lower = tagLabel.toLowerCase();
+  const matched = new Set<string>();
+
+  for (const mapping of KEYWORD_TO_RESOURCE_CATEGORIES) {
+    for (const keyword of mapping.keywords) {
+      if (lower.includes(keyword)) {
+        mapping.categories.forEach(c => matched.add(c));
+        break;
+      }
+    }
+  }
+
+  return [...matched];
 }
 
 /**

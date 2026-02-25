@@ -153,137 +153,6 @@ function filterAdministrativeOffices(offices: Office[]): Office[] {
   return offices.filter(office => !office.is_administrative);
 }
 
-/**
- * Attribute tags that indicate a program is relevant to foster youth.
- * If ANY of these appear, the program is kept regardless of other tags.
- */
-const INCLUSIVE_TAGS = [
-  // Direct match
-  'foster youth',
-  // Armed Forces (many foster youth join the military)
-  'veterans',
-  'active duty',
-  'national guard',
-  // Age groups that overlap with foster youth (teens & young adults)
-  'teens',
-  'young adults',
-  'adults',
-  'school-aged children',
-  'children',
-  // General
-  'anyone in need',
-  // Household
-  'families',
-  'single parent',
-  'with children',
-  'individuals',
-  // Housing
-  'homeless',
-  'near homeless',
-  // Income
-  'low-income',
-  'benefit recipients',
-  // Education
-  'students',
-  'dropouts',
-  // Employment
-  'unemployed',
-  // Justice
-  'criminal justice history',
-  // Survivors
-  'abuse or neglect survivors',
-  'domestic violence survivors',
-  'human trafficking survivors',
-  'trauma survivors',
-  // Insurance
-  'uninsured',
-  'underinsured',
-  // Identity
-  'lgbtqia+',
-  // Mental health
-  'all mental health',
-  'anxiety',
-  'ptsd',
-  // Substance
-  'substance dependency',
-  // Urgency
-  'emergency',
-  'in crisis',
-  // Disability (foster youth may have disabilities)
-  'all disabilities',
-];
-
-/**
- * Attribute tags that indicate a program targets populations
- * NOT relevant to foster youth. Only used when NO inclusive tags are present.
- */
-const EXCLUSIVE_TAGS = [
-  // Age groups too young or too old
-  'infants',
-  'toddlers',
-  'preschoolers',
-  'seniors',
-  'retirement',
-  // Immigration-specific
-  'refugees',
-  'undocumented',
-  // Cancer-specific
-  'cancer',
-  'all cancer types',
-  'adult cancer survivors',
-  'all cancer survivors',
-  'childhood cancer survivors',
-  'young adult cancer survivors',
-];
-
-/**
- * Check if a program should be excluded from results.
- *
- * Logic: If ANY inclusive tag is present, KEEP the program (even if it also
- * serves veterans, seniors, etc.). Only exclude if the program's tags are
- * exclusively from the non-relevant set.
- */
-function isExcludedPopulation(program: ProgramLite | Program): boolean {
-  const allTags = [
-    ...(program.attribute_tags || []),
-    ...(program.rule_attributes || []),
-  ].map(t => t.toLowerCase());
-
-  // If any inclusive tag is present, always keep the program
-  for (const tag of allTags) {
-    for (const inclusive of INCLUSIVE_TAGS) {
-      if (tag.includes(inclusive)) {
-        return false;
-      }
-    }
-  }
-
-  // No inclusive tags found — check for exclusive-only targeting
-  for (const tag of allTags) {
-    for (const exclusive of EXCLUSIVE_TAGS) {
-      if (tag.includes(exclusive)) {
-        return true;
-      }
-    }
-  }
-
-  // Check age rules — exclude if minimum age is 55+
-  const rules = program.rules || [];
-  for (const rule of rules) {
-    if (rule.min_age && rule.min_age >= 55) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
- * Filter programs to remove those targeting excluded populations
- */
-function filterExcludedPopulations<T extends ProgramLite | Program>(programs: T[]): T[] {
-  return programs.filter(program => !isExcludedPopulation(program));
-}
 
 // ============================================================================
 // Public API Methods
@@ -316,18 +185,16 @@ export async function searchPrograms(params: SearchParams): Promise<ProgramsLite
   const url = `${PROGRAMS_BASE_URL}/zipcodes/${postal}/programsLite?${searchParams.toString()}`;
   const response = await makeAuthenticatedRequest<ProgramsLiteResponse>(url);
 
-  // Filter out excluded populations and administrative offices
-  const filteredPrograms = filterExcludedPopulations(response.programs)
-    .map(program => ({
-      ...program,
-      offices: filterAdministrativeOffices(program.offices),
-    }));
+  // Filter administrative offices (not seeker-facing)
+  const programs = response.programs.map(program => ({
+    ...program,
+    offices: filterAdministrativeOffices(program.offices),
+  }));
 
   return {
     ...response,
-    programs: filteredPrograms,
-    // Update count to reflect filtered results
-    count: filteredPrograms.length,
+    programs,
+    count: programs.length,
   };
 }
 

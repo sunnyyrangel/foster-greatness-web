@@ -87,9 +87,16 @@ export async function searchInformationalResources(
     throw new Error(`Supabase RPC failed: ${error.message}`);
   }
 
-  // Filter by category post-RPC
+  // Filter by category post-RPC using keyword matching
+  const lowerCategory = params.category.toLowerCase();
   const filtered = (data as InformationalResourceRow[])
-    .filter((row) => row.category === params.category);
+    .filter((row) => {
+      const rowCat = row.category.toLowerCase();
+      // Match if either contains the other, or they share a keyword
+      return rowCat.includes(lowerCategory) ||
+        lowerCategory.includes(rowCat) ||
+        rowCat.split(/\s+/).some(word => word.length > 3 && lowerCategory.includes(word));
+    });
 
   const resources = filtered.map(toInformationalResource);
 
