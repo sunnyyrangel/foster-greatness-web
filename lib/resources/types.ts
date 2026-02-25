@@ -99,3 +99,66 @@ export function toCommunityResource(row: ResourceRow): CommunityResource {
     category: row.category,
   };
 }
+
+// ============================================================================
+// Informational Resource Types (Supabase `informational_resources` table)
+// ============================================================================
+
+/**
+ * Raw row shape from the Supabase `search_informational_resources()` RPC.
+ */
+export interface InformationalResourceRow {
+  id: string;
+  title: string;
+  description: string | null;
+  url: string | null;
+  resource_type: string;
+  category: string;
+  geography: string;
+  languages: string[];
+  audience: string[];
+  source_org: string | null;
+  tags: string[];
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  relevance: number;
+}
+
+/**
+ * Normalized informational resource for display in the services search UI.
+ * The `source` discriminator distinguishes these from Findhelp and community resources.
+ */
+export interface InformationalResource {
+  id: string;
+  source: 'informational';
+  title: string;
+  description: string;
+  url: string | null;
+  resource_type: string;
+  category: string;
+  geography: string;
+  languages: string[];
+  source_org: string;
+  relevance: number;
+}
+
+/**
+ * Converts a raw Supabase InformationalResourceRow into a normalized
+ * InformationalResource for display in the services search UI.
+ */
+export function toInformationalResource(row: InformationalResourceRow): InformationalResource {
+  return {
+    id: row.id,
+    source: 'informational',
+    title: row.title,
+    description: row.description ?? '',
+    url: row.url,
+    resource_type: row.resource_type,
+    category: row.category,
+    geography: row.geography,
+    languages: row.languages ?? ['en'],
+    source_org: row.source_org ?? '',
+    relevance: row.relevance,
+  };
+}
