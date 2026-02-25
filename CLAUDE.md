@@ -325,13 +325,25 @@ npm start       # Production server
 4. Enable in Vercel dashboard (Analytics tab)
 5. Deploy to production
 
-### Custom Event Tracking (Future)
-To track custom events (e.g., donation button clicks):
-```typescript
-import { track } from '@vercel/analytics';
+### Custom Event Tracking (Supabase)
 
-track('Donation Clicked', { campaign: 'holiday-gift-drive-2025' });
+Custom events from the resource finder are tracked to the `service_events` Supabase table (page views stay in Vercel Analytics).
+
+**Utility:** `lib/analytics.ts` — `trackEvent(eventName, properties)`
+
+```typescript
+import { trackEvent } from '@/lib/analytics';
+
+trackEvent('service_search', { zip: '90210' });
+trackEvent('service_contact_click', { type: 'call', program: 'Food Bank' });
 ```
+
+- Uses `navigator.sendBeacon` (survives tel:/mailto: navigations), falls back to `fetch` with `keepalive`
+- Fire-and-forget, never blocks UI, silently swallows all errors
+- Sends POST to `/api/analytics/track` which inserts into `service_events`
+- `zip`, `category`, `program_name` are extracted into indexed columns; everything else goes into JSONB `properties`
+
+**API Route:** `POST /api/analytics/track` (60 req/min, always returns 200)
 
 ---
 
@@ -378,6 +390,7 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
   - `/api/findhelp/programs/[id]`: 15 requests/minute
   - `/api/resources/search`: 15 requests/minute
   - `/api/resources/informational`: 15 requests/minute
+  - `/api/analytics/track`: 60 requests/minute (event bursts from resource finder)
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
@@ -692,3 +705,5 @@ Sentry configuration automatically:
 - `sentry.edge.config.ts` - Edge runtime (middleware)
 - `instrumentation.ts` - Next.js instrumentation hook
 - `lib/sentry-utils.ts` - Helper functions for error tracking
+- `lib/analytics.ts` - Client-side event tracking (Supabase)
+- `app/api/analytics/track/route.ts` - Analytics event ingestion API

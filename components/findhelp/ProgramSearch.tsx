@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { track } from '@vercel/analytics';
+import { trackEvent } from '@/lib/analytics';
 import { List, Map, Heart, ArrowLeft, Loader2, Search, MapPin, ExternalLink } from 'lucide-react';
 import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
 import type { CommunityResource, InformationalResource } from '@/lib/resources';
@@ -185,7 +185,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setPrograms([]);
     fetchTags(zipCode);
-    track('service_search', { zip: zipCode });
+    trackEvent('service_search', { zip: zipCode });
   };
 
   // Handle category selection
@@ -198,7 +198,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     fetchPrograms(tagIds, 0, false);
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
-    track('service_category_select', { category: label, zip });
+    trackEvent('service_category_select', { category: label, zip });
   };
 
   // Handle load more
@@ -230,8 +230,10 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setModalCommunityResource(communityMatch || null);
     setModalProgramId(programId);
     setModalOpen(true);
-    track('service_program_view', {
+    const programMatch = programs.find(p => p.id === programId);
+    trackEvent('service_program_view', {
       program_id: programId,
+      program_name: communityMatch?.name || programMatch?.name || '',
       source: communityMatch ? 'community' : 'findhelp',
       zip,
     });
@@ -275,7 +277,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setInformationalResources([]);
     setSelectedTagLabel(`"${searchTerms.trim()}"`);
     fetchPrograms('', 0, false, searchTerms.trim());
-    track('service_keyword_search', { terms: searchTerms.trim(), zip });
+    trackEvent('service_keyword_search', { terms: searchTerms.trim(), zip });
   };
 
   // Handle category switch from results view
