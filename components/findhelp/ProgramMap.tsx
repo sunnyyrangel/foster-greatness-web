@@ -211,6 +211,20 @@ export default function ProgramMap({
     if (officesWithCoords.length === 0) return;
 
     const bounds = new mapboxgl.LngLatBounds();
+    const MAX_RADIUS_MILES = 25;
+
+    // Haversine distance in miles
+    function distanceMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
+      const R = 3958.8;
+      const dLat = ((lat2 - lat1) * Math.PI) / 180;
+      const dLng = ((lng2 - lng1) * Math.PI) / 180;
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos((lat1 * Math.PI) / 180) *
+          Math.cos((lat2 * Math.PI) / 180) *
+          Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
 
     officesWithCoords.forEach((data) => {
       const el = createMarkerElement();
@@ -268,10 +282,18 @@ export default function ProgramMap({
         }
       });
 
-      bounds.extend([data.lng, data.lat]);
+      // Only include nearby markers in bounds calculation
+      const dist = distanceMiles(center.lat, center.lng, data.lat, data.lng);
+      if (dist <= MAX_RADIUS_MILES) {
+        bounds.extend([data.lng, data.lat]);
+      }
       markersRef.current.push(marker);
     });
 
+    // If no markers within radius, fall back to center point
+    if (bounds.isEmpty()) {
+      bounds.extend([center.lng, center.lat]);
+    }
     map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
   }, [officesWithCoords]);
 

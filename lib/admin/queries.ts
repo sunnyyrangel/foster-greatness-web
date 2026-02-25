@@ -152,7 +152,7 @@ export async function getAnalyticsSummary(
       views: programViews.get(name) ?? 0,
       saves: programSaves.get(name) ?? 0,
     }))
-    .sort((a, b) => b.views - a.views)
+    .sort((a, b) => (b.views + b.saves) - (a.views + a.saves))
     .slice(0, 10);
 
   // Contact clicks by type
