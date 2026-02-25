@@ -116,6 +116,11 @@ No navigation, for embedding:
 - `/widgets/circle-events` - Community calendar
 - `/widgets/newsletter` - Newsletter signup
 
+#### Admin Pages (`app/admin/`)
+Password-protected, no site header/footer:
+- `/admin/login` - Admin login page
+- `/admin/analytics` - Analytics dashboard (resource finder events)
+
 ### Reusable Components
 
 #### TypeformEmbed (`components/shared/TypeformEmbed.tsx`)
@@ -391,6 +396,7 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
   - `/api/resources/search`: 15 requests/minute
   - `/api/resources/informational`: 15 requests/minute
   - `/api/analytics/track`: 60 requests/minute (event bursts from resource finder)
+  - `/api/admin/analytics`: 30 requests/minute (admin dashboard)
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
@@ -486,6 +492,7 @@ FINDHELP_USERNAME=<from findhelp account>
 FINDHELP_PASSWORD=<from findhelp account>
 FINDHELP_API_KEY=<from findhelp account>
 NEXT_PUBLIC_MAPBOX_TOKEN=<from Mapbox account>
+ADMIN_PASSWORD=<password for /admin routes>
 ```
 
 ### File Structure

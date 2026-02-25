@@ -67,6 +67,12 @@ export async function POST(request: NextRequest) {
 
     const { event_name, properties } = validation.data;
 
+    // Auto-detect channel from Referer if not explicitly set
+    if (!properties.channel) {
+      const referer = request.headers.get('referer') || '';
+      properties.channel = referer.includes('/widgets/') ? 'embed' : 'web';
+    }
+
     // Extract indexed columns, put the rest in JSONB
     const { zip, category, program_name, program, ...rest } = properties;
 

@@ -185,7 +185,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setPrograms([]);
     fetchTags(zipCode);
-    trackEvent('service_search', { zip: zipCode });
+    trackEvent('service_search', { zip: zipCode, channel: widget ? 'embed' : 'web' });
   };
 
   // Handle category selection
@@ -198,7 +198,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     fetchPrograms(tagIds, 0, false);
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
-    trackEvent('service_category_select', { category: label, zip });
+    trackEvent('service_category_select', { category: label, zip, channel: widget ? 'embed' : 'web' });
   };
 
   // Handle load more
@@ -236,6 +236,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
       program_name: communityMatch?.name || programMatch?.name || '',
       source: communityMatch ? 'community' : 'findhelp',
       zip,
+      channel: widget ? 'embed' : 'web',
     });
 
     // Update URL without navigation
@@ -277,7 +278,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setInformationalResources([]);
     setSelectedTagLabel(`"${searchTerms.trim()}"`);
     fetchPrograms('', 0, false, searchTerms.trim());
-    trackEvent('service_keyword_search', { terms: searchTerms.trim(), zip });
+    trackEvent('service_keyword_search', { terms: searchTerms.trim(), zip, channel: widget ? 'embed' : 'web' });
   };
 
   // Handle category switch from results view
