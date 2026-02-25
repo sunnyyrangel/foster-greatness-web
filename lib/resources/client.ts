@@ -1,10 +1,10 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase/client';
 import type { ResourceRow, CommunityResource, InformationalResourceRow, InformationalResource } from './types';
-import { toCommunityResource, getResourceCategoriesForSDOH, toInformationalResource } from './types';
+import { toCommunityResource, getResourceCategoriesForCategory, toInformationalResource } from './types';
 
 export interface SearchResourcesParams {
   zip: string;
-  sdohCategory: string; // SDOH label like "Education" or "Housing & Shelter"
+  category: string; // Findhelp category label like "Education" or "Housing"
 }
 
 export interface SearchResourcesResult {
@@ -13,7 +13,7 @@ export interface SearchResourcesResult {
 }
 
 /**
- * Search community resources by ZIP and SDOH category.
+ * Search community resources by ZIP and category.
  * Returns empty result if Supabase is not configured or no categories map.
  */
 export async function searchResources(
@@ -23,7 +23,7 @@ export async function searchResources(
     return { resources: [], count: 0 };
   }
 
-  const categories = getResourceCategoriesForSDOH(params.sdohCategory);
+  const categories = getResourceCategoriesForCategory(params.category);
   if (categories.length === 0) {
     return { resources: [], count: 0 };
   }
@@ -48,7 +48,7 @@ export async function searchResources(
 // ============================================================================
 
 export interface SearchInformationalParams {
-  category: string;     // SDOH label like "Legal Services"
+  category: string;     // Findhelp category label like "Legal" or "Care"
   zip?: string;         // Optional ZIP for geography filtering
 }
 
@@ -60,7 +60,7 @@ export interface SearchInformationalResult {
 /**
  * Search informational resources via Supabase RPC.
  * Calls search_informational_resources() with geography filtering,
- * then filters by SDOH category client-side.
+ * then filters by category client-side.
  * Returns empty result if Supabase is not configured.
  */
 export async function searchInformationalResources(
@@ -92,7 +92,6 @@ export async function searchInformationalResources(
   const filtered = (data as InformationalResourceRow[])
     .filter((row) => {
       const rowCat = row.category.toLowerCase();
-      // Match if either contains the other, or they share a keyword
       return rowCat.includes(lowerCategory) ||
         lowerCategory.includes(rowCat) ||
         rowCat.split(/\s+/).some(word => word.length > 3 && lowerCategory.includes(word));

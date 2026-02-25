@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
 
     const results = await searchResources({
       zip: validation.data.zip,
-      sdohCategory: validation.data.category,
+      category: validation.data.category,
     });
 
     return NextResponse.json(

@@ -1,7 +1,7 @@
 'use client';
 
 import { trackEvent } from '@/lib/analytics';
-import { Heart, Phone, Globe, Mail, MapPin, Clock, ExternalLink } from 'lucide-react';
+import { Heart, Phone, Globe, Mail, MapPin, Clock, ExternalLink, Users } from 'lucide-react';
 import type { ProgramLite, NextStep } from '@/lib/findhelp';
 import {
   cleanDescriptionInline,
@@ -9,8 +9,31 @@ import {
   getFreeReducedText,
   getOpenStatus,
   getPrimaryContact,
+  formatEligibilityLine,
 } from '@/lib/findhelp';
 import { useResourceBoard } from './ResourceBoardContext';
+
+/** Determine how to display the program's reach based on grain + grain_location */
+function getReachLabel(program: ProgramLite): string | null {
+  const { grain, grain_location } = program;
+  if (!grain) return null;
+
+  if (grain === 'national') return 'Available Nationwide';
+
+  // State-level programs covering 45+ states are effectively nationwide
+  if (grain === 'state' && grain_location && grain_location.length >= 45) {
+    return 'Available Nationwide';
+  }
+
+  // State-level programs in fewer states — show "Statewide" or list the states
+  if (grain === 'state' && grain_location) {
+    if (grain_location.length === 1) return `Statewide (${grain_location[0]})`;
+    if (grain_location.length <= 3) return `Available in ${grain_location.join(', ')}`;
+    return `Available in ${grain_location.length} states`;
+  }
+
+  return null;
+}
 
 interface ProgramCardProps {
   program: ProgramLite;
@@ -155,14 +178,31 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
                   Community
                 </span>
               )}
-              {program.distance !== undefined && program.distance > 0 && (
-                <span className="flex-shrink-0 text-xs text-gray-400">
-                  {program.distance.toFixed(1)} mi
-                </span>
-              )}
+              {(() => {
+                const reach = getReachLabel(program);
+                if (reach) return (
+                  <span className="flex-shrink-0 text-xs text-fg-blue font-medium">{reach}</span>
+                );
+                if (program.distance !== undefined && program.distance > 0) return (
+                  <span className="flex-shrink-0 text-xs text-gray-400">{program.distance.toFixed(1)} mi</span>
+                );
+                return null;
+              })()}
               {freeReduced && (
                 <span className="flex-shrink-0 text-xs font-medium text-green-600">{freeReduced}</span>
               )}
+              {(() => {
+                const eligibility = formatEligibilityLine(program);
+                if (!eligibility) return null;
+                return (
+                  <span
+                    className="flex-shrink-0 text-xs text-gray-400 truncate max-w-[120px]"
+                    title={eligibility}
+                  >
+                    {eligibility}
+                  </span>
+                );
+              })()}
             </div>
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -228,12 +268,22 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
           </span>
         )}
 
-        {program.distance !== undefined && program.distance > 0 && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-            <MapPin className="w-3 h-3" />
-            {program.distance.toFixed(1)} mi
-          </span>
-        )}
+        {(() => {
+          const reach = getReachLabel(program);
+          if (reach) return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-fg-blue">
+              <Globe className="w-3 h-3" />
+              {reach}
+            </span>
+          );
+          if (program.distance !== undefined && program.distance > 0) return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+              <MapPin className="w-3 h-3" />
+              {program.distance.toFixed(1)} mi
+            </span>
+          );
+          return null;
+        })()}
 
         {openStatus && (
           <span
@@ -248,7 +298,19 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{cleanDescriptionInline(program.description)}</p>
+      <p className="text-sm text-gray-600 line-clamp-2 mb-3">{cleanDescriptionInline(program.description)}</p>
+
+      {/* Eligibility */}
+      {(() => {
+        const eligibility = formatEligibilityLine(program);
+        if (!eligibility) return null;
+        return (
+          <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-4">
+            <Users className="w-3.5 h-3.5 flex-shrink-0 text-gray-400" />
+            {eligibility}
+          </p>
+        );
+      })()}
 
       {/* Next Steps / Actions */}
       {uniqueSteps.length > 0 && (

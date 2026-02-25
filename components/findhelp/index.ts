@@ -11,4 +11,5 @@ export { default as ProgramCard } from './ProgramCard';
 export { default as ProgramDetailModal } from './ProgramDetailModal';
 export { default as ProgramMap } from './ProgramMap';
 export { default as ProgramSearch } from './ProgramSearch';
+export { default as AttributeTagFilter } from './AttributeTagFilter';
 export { default as InformationalResourceCard } from './InformationalResourceCard';

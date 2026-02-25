@@ -53,39 +53,24 @@ export interface CommunityResource {
 // ============================================================================
 
 /**
- * Maps keyword patterns to Supabase `resources` table category values.
- * When a Findhelp tag label contains any keyword, the corresponding
- * resource categories are included in the search.
+ * Maps Findhelp category labels to Supabase `resources` table category values.
  */
-const KEYWORD_TO_RESOURCE_CATEGORIES: Array<{ keywords: string[]; categories: string[] }> = [
-  { keywords: ['education', 'school', 'tutor', 'ged', 'college', 'literacy'], categories: ['Education support', 'Education & Training'] },
-  { keywords: ['housing', 'shelter', 'rent', 'homeless'], categories: ['Housing'] },
-  { keywords: ['family', 'child', 'parent', 'youth', 'foster', 'mentor'], categories: ['Child care', 'Foster Care Support', 'Mentorship and social support'] },
-  { keywords: ['food', 'meal', 'nutrition', 'snap', 'pantry', 'hunger'], categories: ['Food assistance'] },
-];
+const CATEGORY_TO_RESOURCE_CATEGORIES: Record<string, string[]> = {
+  'Education': ['Education support', 'Education & Training'],
+  'Housing': ['Housing'],
+  'Care': ['Child care', 'Foster Care Support', 'Mentorship and social support'],
+  'Food': ['Food assistance'],
+};
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
 /**
- * Returns the Supabase category values that correspond to a Findhelp tag label.
- * Uses keyword matching so it works with both SDOH labels and Findhelp tag labels.
+ * Returns the Supabase category values that correspond to a Findhelp category label.
  */
-export function getResourceCategoriesForSDOH(tagLabel: string): string[] {
-  const lower = tagLabel.toLowerCase();
-  const matched = new Set<string>();
-
-  for (const mapping of KEYWORD_TO_RESOURCE_CATEGORIES) {
-    for (const keyword of mapping.keywords) {
-      if (lower.includes(keyword)) {
-        mapping.categories.forEach(c => matched.add(c));
-        break;
-      }
-    }
-  }
-
-  return [...matched];
+export function getResourceCategoriesForCategory(categoryLabel: string): string[] {
+  return CATEGORY_TO_RESOURCE_CATEGORIES[categoryLabel] || [];
 }
 
 /**

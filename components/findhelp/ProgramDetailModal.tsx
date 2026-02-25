@@ -440,6 +440,23 @@ export default function ProgramDetailModal({
                 <div>
                   <h2 className="text-2xl font-bold text-fg-navy">{program.name}</h2>
                   <p className="text-gray-500">{program.provider_name}</p>
+                  {(() => {
+                    const { grain, grain_location } = program;
+                    let reach: string | null = null;
+                    if (grain === 'national') reach = 'Available Nationwide';
+                    else if (grain === 'state' && grain_location && grain_location.length >= 45) reach = 'Available Nationwide';
+                    else if (grain === 'state' && grain_location) {
+                      if (grain_location.length === 1) reach = `Statewide (${grain_location[0]})`;
+                      else if (grain_location.length <= 3) reach = `Available in ${grain_location.join(', ')}`;
+                      else reach = `Available in ${grain_location.length} states`;
+                    }
+                    return reach ? (
+                      <span className="inline-flex items-center gap-1 mt-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-fg-blue">
+                        <Globe className="w-3 h-3" />
+                        {reach}
+                      </span>
+                    ) : null;
+                  })()}
                 </div>
                 <button
                   onClick={handleSaveToggle}

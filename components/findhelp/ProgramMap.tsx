@@ -206,7 +206,7 @@ export default function ProgramMap({
     if (officesWithCoords.length === 0) return;
 
     const bounds = new mapboxgl.LngLatBounds();
-    const MAX_RADIUS_MILES = 25;
+    const MAX_RADIUS_MILES = 10;
 
     // Haversine distance in miles
     function distanceMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {

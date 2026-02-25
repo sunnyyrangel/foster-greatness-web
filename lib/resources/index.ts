@@ -1,6 +1,6 @@
 export type { CommunityResource, ResourceRow } from './types';
 export type { InformationalResourceRow, InformationalResource } from './types';
-export { getResourceCategoriesForSDOH, toCommunityResource } from './types';
+export { getResourceCategoriesForCategory, toCommunityResource } from './types';
 export { toInformationalResource } from './types';
 export { searchResources, searchInformationalResources } from './client';
 export type { SearchResourcesParams, SearchResourcesResult } from './client';

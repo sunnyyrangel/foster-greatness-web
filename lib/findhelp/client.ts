@@ -194,7 +194,6 @@ export async function searchPrograms(params: SearchParams): Promise<ProgramsLite
   return {
     ...response,
     programs,
-    count: programs.length,
   };
 }
 

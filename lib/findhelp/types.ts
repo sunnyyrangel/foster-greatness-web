@@ -90,9 +90,11 @@ export interface OfficeHours {
 }
 
 export interface OpenNowInfo {
-  is_open?: boolean;
-  opens_at?: string;
-  closes_at?: string;
+  open_now?: boolean;
+  day_of_the_week?: string;
+  open_time?: string;
+  close_time?: string;
+  open_all_day?: boolean;
 }
 
 export interface Office {
@@ -147,7 +149,7 @@ export interface NextStep {
 
 export type Availability = 'available' | 'limited' | 'unavailable';
 export type FreeOrReduced = 'free' | 'reduced' | 'indeterminate';
-export type Grain = 'national' | 'regional' | 'local';
+export type Grain = 'national' | 'state' | 'county' | 'city' | 'postal' | 'regional' | 'local';
 
 export interface AgeRuleAttribute {
   type?: string;

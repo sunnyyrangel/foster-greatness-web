@@ -77,14 +77,14 @@ export function getOpenStatus(offices: Office[]): { text: string; isOpen: boolea
   if (!officeWithHours?.open_now_info) return null;
 
   const info = officeWithHours.open_now_info;
-  if (info.is_open) {
+  if (info.open_now) {
     return {
-      text: info.closes_at ? `Open until ${info.closes_at}` : 'Open now',
+      text: info.close_time ? `Open until ${info.close_time}` : 'Open now',
       isOpen: true,
     };
   } else {
     return {
-      text: info.opens_at ? `Opens ${info.opens_at}` : 'Closed',
+      text: info.open_time ? `Opens ${info.open_time}` : 'Closed',
       isOpen: false,
     };
   }
@@ -133,6 +133,47 @@ export function formatAddress(office: Office): string {
   return [office.address1, office.address2, office.city, office.state, office.postal]
     .filter(Boolean)
     .join(', ');
+}
+
+/** Check if any non-administrative office reports open now */
+export function matchesOpenNowFilter(program: ProgramLite): boolean {
+  return program.offices.some(
+    (o) => !o.is_administrative && o.open_now_info?.open_now === true
+  );
+}
+
+/** Build a compact eligibility line from rules + rule_attributes */
+export function formatEligibilityLine(program: ProgramLite): string | null {
+  const parts: string[] = [];
+
+  // Extract first age range from rules[]
+  if (program.rules?.length) {
+    const ageRule = program.rules.find(
+      (r) => r.min_age !== undefined || r.max_age !== undefined
+    );
+    if (ageRule) {
+      if (ageRule.min_age != null && ageRule.max_age != null) {
+        parts.push(`Ages ${ageRule.min_age}\u2013${ageRule.max_age}`);
+      } else if (ageRule.min_age != null) {
+        parts.push(`Age ${ageRule.min_age}+`);
+      } else if (ageRule.max_age != null) {
+        parts.push(`Under ${ageRule.max_age}`);
+      }
+    }
+  }
+
+  // Take up to 2 rule_attributes
+  if (program.rule_attributes?.length) {
+    for (const attr of program.rule_attributes.slice(0, 2)) {
+      if (parts.length >= 3) break;
+      parts.push(attr);
+    }
+  }
+
+  if (parts.length === 0) return null;
+
+  const line = parts.join(' \u00b7 ');
+  return line.length > 60 ? line.slice(0, 57) + '\u2026' : line;
 }
 
 /** Escape HTML for safe insertion into innerHTML (used by map popups) */

@@ -49,5 +49,7 @@ export {
   getPrimaryContact,
   formatOfficeHours,
   formatAddress,
+  matchesOpenNowFilter,
+  formatEligibilityLine,
   escapeHTML,
 } from './utils';
