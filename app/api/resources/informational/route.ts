@@ -67,35 +67,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // DEBUG: direct table query to bypass RPC and isolate the issue
-    const { createClient } = await import('@supabase/supabase-js');
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    let directCount = -1;
-    let rpcCount = -1;
-    let rpcError = null;
-    let stateResult = null;
-    if (url && key) {
-      const sb = createClient(url, key);
-      // Test 1: direct table query
-      const { data: directData } = await sb.from('informational_resources').select('id, category').eq('category', validation.data.category).limit(5);
-      directCount = directData?.length ?? -1;
-      // Test 2: zip_to_state RPC
-      const { data: stData, error: stErr } = await sb.rpc('zip_to_state', { zip: validation.data.zip || '92618' });
-      stateResult = { data: stData, error: stErr?.message ?? null };
-      // Test 3: search RPC
-      const { data: rpcData, error: rErr } = await sb.rpc('search_informational_resources', { search_text: null, user_state: stData ?? null });
-      rpcCount = Array.isArray(rpcData) ? rpcData.length : -1;
-      rpcError = rErr?.message ?? null;
-    }
-
     const results = await searchInformationalResources({
       category: validation.data.category,
       zip: validation.data.zip,
     });
 
     return NextResponse.json(
-      { success: true, data: results, _debug: { category: validation.data.category, zip: validation.data.zip, count: results.count, directCount, rpcCount, rpcError, stateResult, supabaseConfigured: !!(url && key) } },
+      { success: true, data: results },
       {
         headers: {
           ...rateLimitHeaders(rateLimitResult),
