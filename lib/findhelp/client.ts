@@ -154,106 +154,123 @@ function filterAdministrativeOffices(offices: Office[]): Office[] {
 }
 
 /**
- * Population keywords to exclude from results
- * These are populations that typically don't apply to foster youth
+ * Attribute tags that indicate a program is relevant to foster youth.
+ * If ANY of these appear, the program is kept regardless of other tags.
  */
-const EXCLUDED_POPULATION_KEYWORDS = [
-  // Veterans & Military
-  'veteran',
-  'military',
-  'armed forces',
-  'active duty',
-  'military spouse',
-  'military family',
-  'va ',
-  'v.a.',
-
-  // Seniors (65+)
-  'senior citizen',
-  'seniors only',
-  'elderly',
-  'retiree',
-  'retired',
-  'medicare',
-  'over 65',
-  '65 and older',
-  '65+',
-  'older adult',
-
-  // Health conditions not broadly applicable
-  'cancer',
-
-  // Agricultural workers
-  'farmworker',
-  'farm worker',
-  'agricultural worker',
-  'migrant worker',
-  'seasonal worker',
-
-  // Specific immigration statuses
-  'refugee',
-  'undocumented',
+const INCLUSIVE_TAGS = [
+  // Direct match
+  'foster youth',
+  // Age groups that overlap with foster youth (teens & young adults)
+  'teens',
+  'young adults',
+  'adults',
+  'school-aged children',
+  'children',
+  // General
+  'anyone in need',
+  // Household
+  'families',
+  'single parent',
+  'with children',
+  'individuals',
+  // Housing
+  'homeless',
+  'near homeless',
+  // Income
+  'low-income',
+  'benefit recipients',
+  // Education
+  'students',
+  'dropouts',
+  // Employment
+  'unemployed',
+  // Justice
+  'criminal justice history',
+  // Survivors
+  'abuse or neglect survivors',
+  'domestic violence survivors',
+  'human trafficking survivors',
+  'trauma survivors',
+  // Insurance
+  'uninsured',
+  'underinsured',
+  // Identity
+  'lgbtqia+',
+  // Mental health
+  'all mental health',
+  'anxiety',
+  'ptsd',
+  // Substance
+  'substance dependency',
+  // Urgency
+  'emergency',
+  'in crisis',
+  // Disability (foster youth may have disabilities)
+  'all disabilities',
 ];
 
 /**
- * Check if a program is targeted at excluded populations
- * Returns true if the program should be filtered OUT
+ * Attribute tags that indicate a program targets populations
+ * NOT relevant to foster youth. Only used when NO inclusive tags are present.
+ */
+const EXCLUSIVE_TAGS = [
+  // Armed Forces
+  'veterans',
+  'active duty',
+  'national guard',
+  // Age groups too young or too old
+  'infants',
+  'toddlers',
+  'preschoolers',
+  'seniors',
+  'retirement',
+  // Immigration-specific
+  'refugees',
+  'undocumented',
+  // Cancer-specific
+  'cancer',
+  'all cancer types',
+  'adult cancer survivors',
+  'all cancer survivors',
+  'childhood cancer survivors',
+  'young adult cancer survivors',
+];
+
+/**
+ * Check if a program should be excluded from results.
+ *
+ * Logic: If ANY inclusive tag is present, KEEP the program (even if it also
+ * serves veterans, seniors, etc.). Only exclude if the program's tags are
+ * exclusively from the non-relevant set.
  */
 function isExcludedPopulation(program: ProgramLite | Program): boolean {
-  // Check attribute_tags
-  const attributeTags = program.attribute_tags || [];
-  for (const tag of attributeTags) {
-    const lowerTag = tag.toLowerCase();
-    for (const keyword of EXCLUDED_POPULATION_KEYWORDS) {
-      if (lowerTag.includes(keyword)) {
+  const allTags = [
+    ...(program.attribute_tags || []),
+    ...(program.rule_attributes || []),
+  ].map(t => t.toLowerCase());
+
+  // If any inclusive tag is present, always keep the program
+  for (const tag of allTags) {
+    for (const inclusive of INCLUSIVE_TAGS) {
+      if (tag.includes(inclusive)) {
+        return false;
+      }
+    }
+  }
+
+  // No inclusive tags found — check for exclusive-only targeting
+  for (const tag of allTags) {
+    for (const exclusive of EXCLUSIVE_TAGS) {
+      if (tag.includes(exclusive)) {
         return true;
       }
     }
   }
 
-  // Check rule_attributes
-  const ruleAttributes = program.rule_attributes || [];
-  for (const attr of ruleAttributes) {
-    const lowerAttr = attr.toLowerCase();
-    for (const keyword of EXCLUDED_POPULATION_KEYWORDS) {
-      if (lowerAttr.includes(keyword)) {
-        return true;
-      }
-    }
-  }
-
-  // Check age rules - exclude if minimum age is 65+
+  // Check age rules — exclude if minimum age is 55+
   const rules = program.rules || [];
   for (const rule of rules) {
-    if (rule.min_age && rule.min_age >= 65) {
-      return true;
-    }
-  }
-
-  // Check program name and description for strong indicators
-  const textToCheck = `${program.name} ${program.description}`.toLowerCase();
-
-  // Only exclude if it's clearly targeted (not just mentioning)
-  const strongExclusionPatterns = [
-    'veterans only',
-    'for veterans',
-    'veteran services',
-    'seniors only',
-    'for seniors',
-    'senior services',
-    'for the elderly',
-    'elderly services',
-    'must be 65',
-    'ages 65',
-    'farmworkers only',
-    'for farmworkers',
-    'cancer support',
-    'cancer services',
-    'cancer patients',
-  ];
-
-  for (const pattern of strongExclusionPatterns) {
-    if (textToCheck.includes(pattern)) {
+    if (rule.min_age && rule.min_age >= 55) {
       return true;
     }
   }

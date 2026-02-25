@@ -136,14 +136,9 @@ export default function ProgramMap({
   const center = useMemo(() => {
     if (propCenter) return propCenter;
     if (officesWithCoords.length === 0) return { lat: 39.8283, lng: -98.5795 };
-    const sum = officesWithCoords.reduce(
-      (acc, o) => ({ lat: acc.lat + o.lat, lng: acc.lng + o.lng }),
-      { lat: 0, lng: 0 }
-    );
-    return {
-      lat: sum.lat / officesWithCoords.length,
-      lng: sum.lng / officesWithCoords.length,
-    };
+    // Use the first office as center anchor — API returns results sorted by
+    // distance from the searched ZIP, so this is closest to the user's location
+    return { lat: officesWithCoords[0].lat, lng: officesWithCoords[0].lng };
   }, [propCenter, officesWithCoords]);
 
   // Store callbacks in refs so markers can access latest versions
