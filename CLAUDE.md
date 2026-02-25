@@ -278,9 +278,26 @@ npm start       # Production server
 - `lib/resources/index.ts` - Re-exports
 - `app/api/resources/search/route.ts` - Community resources search API
 
+### Informational Resources (Supabase `informational_resources` table)
+- `lib/resources/types.ts` - InformationalResource type, InformationalResourceRow, toInformationalResource()
+- `lib/resources/client.ts` - searchInformationalResources() — queries Supabase RPC by category + state
+- `app/api/resources/informational/route.ts` - Informational resources search API
+- `components/findhelp/InformationalResourceCard.tsx` - Guide/fact sheet card component
+- `supabase/migrations/20260225130000_create_informational_resources.sql` - Table schema, indexes, RLS
+- `supabase/migrations/20260225140000_search_informational_resources.sql` - search RPC + zip_to_state()
+- `supabase/scripts/generate-seed.ts` - Trello JSON → SQL seed generator
+- `supabase/scripts/download-pdfs.ts` - One-time PDF downloader from Trello CDN
+- `supabase/seed_informational_resources.sql` - 25 INSERT statements (generated)
+- `supabase/update_resource_urls.sql` - URL patches for existing rows
+- `public/assets/files/resources/*.pdf` - 10 static PDF assets
+- `RESOURCE_LIBRARY_README.md` - Integration architecture docs
+- Categories use SDOH labels (`Legal Services`, `Family & Childcare`) to align with Findhelp
+- Geography: 20 national + 5 CA-specific; 2 resources are info-only (no URL)
+
 ### Design Documentation
 - `docs/plans/2025-12-03-site-config-system-design.md` - Configuration system design
 - `docs/plans/2026-02-24-custom-resources-integration-design.md` - Community resources design
+- `docs/plans/2026-02-25-informational-resources-display-design.md` - Informational resources display design
 
 ### Known Tech Debt
 - `public/images/` has a flat + nested structure (some images at root, some in subdirs) — defer asset reorg to a separate effort
@@ -360,6 +377,7 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
   - `/api/findhelp/search`: 10 requests/minute
   - `/api/findhelp/programs/[id]`: 15 requests/minute
   - `/api/resources/search`: 15 requests/minute
+  - `/api/resources/informational`: 15 requests/minute
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
@@ -570,8 +588,9 @@ lib/resources/
 | Other | *Excluded from filtered results* |
 
 **How it works:**
-- `ProgramSearch` fires parallel fetches to both `/api/resources/search` and `/api/findhelp/search` on category selection
-- Community resources render first with `source="community"` badge on `ProgramCard`
+- `ProgramSearch` fires parallel fetches to `/api/findhelp/search`, `/api/resources/search`, and `/api/resources/informational` on category selection
+- Informational resources display in a "Guides & Resources" section above program results
+- Community resources render next with `source="community"` badge on `ProgramCard`
 - `ProgramDetailModal` shows simplified view for community resources (no API fetch needed)
 - If Supabase is not configured or no resources match, Findhelp results show as normal
 - Keyword search only queries Findhelp (community resources clear)

@@ -66,20 +66,14 @@ SELECT zip_to_state('90210');  -- → 'CA'
 SELECT zip_to_state('10001');  -- → 'NY'
 ```
 
-## Frontend integration pattern
+## Frontend integration (DOI-33 — complete)
 
-When the services page is extended to include informational resources:
+The `/services` page fetches informational resources in parallel alongside Findhelp and community resources when a user selects an SDOH category:
 
-```typescript
-// Parallel fetch alongside Findhelp and community resources
-const [findhelp, community, informational] = await Promise.all([
-  fetch(`/api/findhelp/search?zip=${zip}&serviceTag=${tags}`),
-  fetch(`/api/resources/search?zip=${zip}&category=${category}`),
-  fetch(`/api/resources/informational?category=${category}&zip=${zip}`),
-]);
-```
-
-Display as a "Guides & Resources" section, separate from location-based program results. Use the `resource_type` field to show appropriate icons (guide, fact sheet, toolkit, video, etc.).
+- **API route:** `GET /api/resources/informational?category=Legal+Services&zip=90210`
+- **Component:** `InformationalResourceCard` — document-style card with type icons, language badges, external links
+- **Integration:** `ProgramSearch` renders a "Guides & Resources" section above program results, showing 4 cards initially with an expand button
+- **Geography:** CA ZIPs see 25 resources (20 national + 5 CA-specific), others see 20 national only
 
 ## Adding new resources
 
