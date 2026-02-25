@@ -160,6 +160,10 @@ function filterAdministrativeOffices(offices: Office[]): Office[] {
 const INCLUSIVE_TAGS = [
   // Direct match
   'foster youth',
+  // Armed Forces (many foster youth join the military)
+  'veterans',
+  'active duty',
+  'national guard',
   // Age groups that overlap with foster youth (teens & young adults)
   'teens',
   'young adults',
@@ -214,10 +218,6 @@ const INCLUSIVE_TAGS = [
  * NOT relevant to foster youth. Only used when NO inclusive tags are present.
  */
 const EXCLUSIVE_TAGS = [
-  // Armed Forces
-  'veterans',
-  'active duty',
-  'national guard',
   // Age groups too young or too old
   'infants',
   'toddlers',
