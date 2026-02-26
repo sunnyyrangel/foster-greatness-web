@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { getAnalyticsSummary } from '@/lib/admin/queries';
+import { captureException } from '@/lib/sentry-utils';
 
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -73,10 +74,20 @@ export async function GET(request: NextRequest) {
       since = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   }
 
-  const data = await getAnalyticsSummary(since);
+  try {
+    const data = await getAnalyticsSummary(since);
 
-  return NextResponse.json(
-    { data, range },
-    { headers: rateLimitHeaders(rateLimitResult) }
-  );
+    return NextResponse.json(
+      { data, range },
+      { headers: rateLimitHeaders(rateLimitResult) }
+    );
+  } catch (error) {
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/admin/analytics' },
+    });
+    return NextResponse.json(
+      { error: 'Failed to fetch analytics' },
+      { status: 500, headers: rateLimitHeaders(rateLimitResult) }
+    );
+  }
 }

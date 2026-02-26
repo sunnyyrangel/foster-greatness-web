@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
 import { searchResources } from '@/lib/resources';
+import { captureException } from '@/lib/sentry-utils';
 
 const querySchema = z.object({
   zip: z.string().regex(/^\d{5}$/, 'ZIP code must be exactly 5 digits'),
@@ -82,9 +83,9 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Resources search error:', error);
-    }
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/resources/search' },
+    });
     return NextResponse.json(
       { error: 'Failed to search community resources' },
       {

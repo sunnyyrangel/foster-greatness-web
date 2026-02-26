@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import type { ErrorEvent, EventHint } from '@sentry/nextjs';
 
 /**
@@ -130,7 +131,7 @@ export function beforeSendFilter(event: ErrorEvent, hint: EventHint): ErrorEvent
 export function setSentryUser(userId?: string, userType?: 'member' | 'visitor' | 'donor') {
   if (typeof window === 'undefined') return;
 
-  const Sentry = require('@sentry/nextjs');
+
   Sentry.setUser({
     id: userId ? `user_${userId.substring(0, 8)}` : undefined, // Anonymize ID
     type: userType,
@@ -143,7 +144,7 @@ export function setSentryUser(userId?: string, userType?: 'member' | 'visitor' |
 export function setCampaignContext(campaignId: string, campaignName: string) {
   if (typeof window === 'undefined') return;
 
-  const Sentry = require('@sentry/nextjs');
+
   Sentry.setContext('campaign', {
     id: campaignId,
     name: campaignName,
@@ -161,7 +162,7 @@ export function addSentryBreadcrumb(
 ) {
   if (typeof window === 'undefined') return;
 
-  const Sentry = require('@sentry/nextjs');
+
   Sentry.addBreadcrumb({
     message,
     category,
@@ -175,10 +176,10 @@ export function addSentryBreadcrumb(
  * Manually capture an exception with context
  */
 export function captureException(error: Error, context?: Record<string, any>) {
-  const Sentry = require('@sentry/nextjs');
+
 
   if (context) {
-    Sentry.withScope((scope: any) => {
+    Sentry.withScope((scope) => {
       Object.entries(context).forEach(([key, value]) => {
         scope.setContext(key, value);
       });
@@ -193,10 +194,10 @@ export function captureException(error: Error, context?: Record<string, any>) {
  * Manually capture a message with context
  */
 export function captureMessage(message: string, level: 'info' | 'warning' | 'error' = 'info', context?: Record<string, any>) {
-  const Sentry = require('@sentry/nextjs');
+
 
   if (context) {
-    Sentry.withScope((scope: any) => {
+    Sentry.withScope((scope) => {
       Object.entries(context).forEach(([key, value]) => {
         scope.setContext(key, value);
       });

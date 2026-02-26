@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
 import { searchPrograms } from '@/lib/findhelp';
+import { captureException } from '@/lib/sentry-utils';
 
 // Validation schema for query params
 const querySchema = z.object({
@@ -109,9 +110,9 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Findhelp search error:', error);
-    }
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/findhelp/search' },
+    });
     return NextResponse.json(
       { error: 'Failed to search programs' },
       {

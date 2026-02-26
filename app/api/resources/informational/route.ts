@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
 import { searchInformationalResources } from '@/lib/resources';
+import { captureException } from '@/lib/sentry-utils';
 
 const querySchema = z.object({
   category: z.string().min(1, 'Category is required'),
@@ -82,9 +83,9 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Informational resources search error:', error);
-    }
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/resources/informational' },
+    });
     return NextResponse.json(
       { error: 'Failed to search informational resources' },
       {

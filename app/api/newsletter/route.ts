@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
+import { captureException } from '@/lib/sentry-utils';
 
 // Handle OPTIONS preflight requests
 export async function OPTIONS(request: NextRequest) {
@@ -93,9 +94,9 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Newsletter API error:', error);
-    }
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/newsletter' },
+    });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
+import { captureException } from '@/lib/sentry-utils';
 
 // Validation schema for subscription requests
 const subscriptionSchema = z.object({
@@ -139,10 +140,9 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
-    // Log errors in development only, avoid exposing stack traces in production
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Subscription error:', error);
-    }
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/subscribe' },
+    });
     return NextResponse.json({
       error: 'Internal server error'
     }, { status: 500 });

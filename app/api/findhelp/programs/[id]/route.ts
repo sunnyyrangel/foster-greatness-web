@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { validateCors, getCorsHeaders } from '@/lib/cors';
 import { getProgramDetails } from '@/lib/findhelp';
+import { captureException } from '@/lib/sentry-utils';
 
 // Validation schema for query params
 const querySchema = z.object({
@@ -103,10 +104,6 @@ export async function GET(
       }
     );
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Findhelp program details error:', error);
-    }
-
     // Handle 404 specifically
     if (error instanceof Error && error.message.includes('404')) {
       return NextResponse.json(
@@ -118,6 +115,9 @@ export async function GET(
       );
     }
 
+    captureException(error instanceof Error ? error : new Error(String(error)), {
+      endpoint: { route: '/api/findhelp/programs/[id]' },
+    });
     return NextResponse.json(
       { error: 'Failed to fetch program details' },
       {
