@@ -54,7 +54,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   // Informational resources state
   const [informationalResources, setInformationalResources] = useState<InformationalResource[]>([]);
   const [informationalLoading, setInformationalLoading] = useState(false);
-  const [informationalExpanded, setInformationalExpanded] = useState(false);
+  const [resultsTab, setResultsTab] = useState<'programs' | 'guides'>('programs');
 
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
@@ -172,7 +172,6 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   // Fetch informational resources from Supabase
   const fetchInformationalResources = useCallback(async (zipCode: string, categoryLabel: string) => {
     setInformationalLoading(true);
-    setInformationalExpanded(false);
     try {
       const params = new URLSearchParams({ category: categoryLabel, zip: zipCode });
       const response = await fetch(`/api/resources/informational?${params}`);
@@ -208,6 +207,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCurrentPage(1);
     setCommunityResources([]);
     setInformationalResources([]);
+    setResultsTab('programs');
     clearFilters();
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
@@ -294,6 +294,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCurrentPage(1);
     setCommunityResources([]);
     setInformationalResources([]);
+    setResultsTab('programs');
     clearFilters();
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
@@ -311,6 +312,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCurrentPage(1);
     setCommunityResources([]);
     setInformationalResources([]);
+    setResultsTab('programs');
     clearFilters();
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
@@ -598,22 +600,25 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                 {selectedTagLabel} in {zip}
               </h2>
               <p className="text-gray-500">
-                {informationalResources.length > 0 && (
-                  <>{informationalResources.length} {informationalResources.length === 1 ? 'guide' : 'guides'}{' '}&bull;{' '}</>
+                {resultsTab === 'guides' ? (
+                  <>{informationalResources.length} {informationalResources.length === 1 ? 'guide' : 'guides'} &amp; resources</>
+                ) : (
+                  <>
+                    {communityResources.length > 0 && (
+                      <>{communityResources.length} recommended{' '}&bull;{' '}</>
+                    )}
+                    {clientFiltersActive
+                      ? `${filteredPrograms.length} of ${totalCount} programs (filtered)`
+                      : serverFiltersActive
+                        ? `${totalCount} ${totalCount === 1 ? 'program' : 'programs'} found (filtered)`
+                        : `${totalCount} ${totalCount === 1 ? 'program' : 'programs'} found`}
+                  </>
                 )}
-                {communityResources.length > 0 && (
-                  <>{communityResources.length} recommended{' '}&bull;{' '}</>
-                )}
-                {clientFiltersActive
-                  ? `${filteredPrograms.length} of ${totalCount} programs (filtered)`
-                  : serverFiltersActive
-                    ? `${totalCount} ${totalCount === 1 ? 'program' : 'programs'} found (filtered)`
-                    : `${totalCount} ${totalCount === 1 ? 'program' : 'programs'} found`}
               </p>
             </div>
 
             {/* View toggle — hidden on desktop split view and in widget mode */}
-            <div className={`flex bg-gray-100 rounded-lg p-1 lg:hidden ${widget ? 'hidden' : ''}`}>
+            <div className={`flex bg-gray-100 rounded-lg p-1 lg:hidden ${widget || resultsTab === 'guides' ? 'hidden' : ''}`}>
               <button
                 onClick={() => setViewMode('list')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors ${
@@ -705,113 +710,143 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
               </form>
             </div>
 
-            {/* Filter chips */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => {
-                  const next = !filterFree;
-                  setFilterFree(next);
-                  trackEvent('service_filter_toggle', { filter: 'free', active: next, zip });
-                }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  filterFree
-                    ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <DollarSign className="w-3.5 h-3.5" />
-                Free
-              </button>
-              <button
-                onClick={() => {
-                  const next = !filterOpenNow;
-                  setFilterOpenNow(next);
-                  trackEvent('service_filter_toggle', { filter: 'open_now', active: next, zip });
-                }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  filterOpenNow
-                    ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <Clock className="w-3.5 h-3.5" />
-                Open Now
-              </button>
-              <button
-                onClick={() => {
-                  const active = selectedAttributeTags.has('foster youth');
-                  const next = new Set(selectedAttributeTags);
-                  if (active) {
-                    next.delete('foster youth');
-                  } else {
-                    next.add('foster youth');
-                  }
-                  handleAttributeTagChange(next);
-                  trackEvent('service_filter_toggle', { filter: 'foster_youth', active: !active, zip });
-                }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  selectedAttributeTags.has('foster youth')
-                    ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <HandHeart className="w-3.5 h-3.5" />
-                Foster Youth
-              </button>
-              <AttributeTagFilter
-                selectedTags={selectedAttributeTags}
-                onChange={handleAttributeTagChange}
-              />
-              {/* Removable attribute tag chips */}
-              {Array.from(selectedAttributeTags).filter(t => t !== 'foster youth').map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-fg-blue/10 text-fg-blue ring-1 ring-fg-blue/20"
-                >
-                  {tag}
-                  <button
-                    onClick={() => handleRemoveAttributeTag(tag)}
-                    className="ml-0.5 hover:text-fg-navy transition-colors"
-                    aria-label={`Remove ${tag} filter`}
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-              {filtersActive && (
-                <>
-                  {clientFiltersActive && (
-                    <span className="text-xs text-gray-400">
-                      Showing {filteredPrograms.length} of {programs.length} loaded
-                    </span>
-                  )}
+            {/* Filter chips — only on Programs tab */}
+            {resultsTab === 'programs' && (
+              <>
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     onClick={() => {
-                      clearFilters();
-                      if (selectedAttributeTags.size > 0) {
-                        const emptyAttrTags = new Set<string>();
-                        setSelectedAttributeTags(emptyAttrTags);
-                        setCursor(0);
-                        setCurrentPage(1);
-                        fetchPrograms(selectedTag || '', 0, false, searchTerms || undefined, emptyAttrTags);
-                      }
+                      const next = !filterFree;
+                      setFilterFree(next);
+                      trackEvent('service_filter_toggle', { filter: 'free', active: next, zip });
                     }}
-                    className="text-xs text-fg-blue hover:text-fg-navy transition-colors"
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filterFree
+                        ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
                   >
-                    Clear
+                    <DollarSign className="w-3.5 h-3.5" />
+                    Free
                   </button>
-                </>
-              )}
-            </div>
+                  <button
+                    onClick={() => {
+                      const next = !filterOpenNow;
+                      setFilterOpenNow(next);
+                      trackEvent('service_filter_toggle', { filter: 'open_now', active: next, zip });
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filterOpenNow
+                        ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Clock className="w-3.5 h-3.5" />
+                    Open Now
+                  </button>
+                  <button
+                    onClick={() => {
+                      const active = selectedAttributeTags.has('foster youth');
+                      const next = new Set(selectedAttributeTags);
+                      if (active) {
+                        next.delete('foster youth');
+                      } else {
+                        next.add('foster youth');
+                      }
+                      handleAttributeTagChange(next);
+                      trackEvent('service_filter_toggle', { filter: 'foster_youth', active: !active, zip });
+                    }}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      selectedAttributeTags.has('foster youth')
+                        ? 'bg-green-100 text-green-700 ring-1 ring-green-300'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <HandHeart className="w-3.5 h-3.5" />
+                    Foster Youth
+                  </button>
+                  <AttributeTagFilter
+                    selectedTags={selectedAttributeTags}
+                    onChange={handleAttributeTagChange}
+                  />
+                  {/* Removable attribute tag chips */}
+                  {Array.from(selectedAttributeTags).filter(t => t !== 'foster youth').map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-fg-blue/10 text-fg-blue ring-1 ring-fg-blue/20"
+                    >
+                      {tag}
+                      <button
+                        onClick={() => handleRemoveAttributeTag(tag)}
+                        className="ml-0.5 hover:text-fg-navy transition-colors"
+                        aria-label={`Remove ${tag} filter`}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                  {filtersActive && (
+                    <>
+                      {clientFiltersActive && (
+                        <span className="text-xs text-gray-400">
+                          Showing {filteredPrograms.length} of {programs.length} loaded
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          clearFilters();
+                          if (selectedAttributeTags.size > 0) {
+                            const emptyAttrTags = new Set<string>();
+                            setSelectedAttributeTags(emptyAttrTags);
+                            setCursor(0);
+                            setCurrentPage(1);
+                            fetchPrograms(selectedTag || '', 0, false, searchTerms || undefined, emptyAttrTags);
+                          }
+                        }}
+                        className="text-xs text-fg-blue hover:text-fg-navy transition-colors"
+                      >
+                        Clear
+                      </button>
+                    </>
+                  )}
+                </div>
 
-            {/* Save hint — hidden in widget mode */}
-            {!widget && !filtersActive && (
-              <p className="text-xs text-gray-400 flex items-center gap-1">
-                <Heart className="w-3 h-3" />
-                Click the heart on any program to save it. Access your saved list from the &ldquo;Saved&rdquo; button above.
-              </p>
+                {/* Save hint — hidden in widget mode */}
+                {!widget && !filtersActive && (
+                  <p className="text-xs text-gray-400 flex items-center gap-1">
+                    <Heart className="w-3 h-3" />
+                    Click the heart on any program to save it. Access your saved list from the &ldquo;Saved&rdquo; button above.
+                  </p>
+                )}
+              </>
             )}
           </div>
+
+          {/* Results tabs */}
+          {informationalResources.length > 0 && (
+            <div className="flex border-b border-gray-200 mb-4">
+              <button
+                onClick={() => setResultsTab('programs')}
+                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                  resultsTab === 'programs'
+                    ? 'border-fg-blue text-fg-blue'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Programs
+              </button>
+              <button
+                onClick={() => setResultsTab('guides')}
+                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                  resultsTab === 'guides'
+                    ? 'border-fg-blue text-fg-blue'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Guides ({informationalResources.length})
+              </button>
+            </div>
+          )}
 
           {/* Loading state */}
           {programsLoading && (
@@ -852,234 +887,170 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
           {/* Results view */}
           {!programsLoading && !programsError && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
             <>
-              {/* Desktop split view (lg+) — hidden in widget mode */}
-              {!widget && (
-                <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6">
-                  {/* List panel */}
-                  <div>
-                    <div
-                      ref={listPanelRef}
-                      className="max-h-[600px] overflow-y-auto space-y-4 p-1 -m-1"
-                    >
-                      {/* Informational Resources Section */}
-                      {informationalResources.length > 0 && (
-                        <div className="mb-4">
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
-                              Guides & Resources
-                            </span>
-                            <span className="text-xs text-gray-400">
-                              {informationalResources.length} {informationalResources.length === 1 ? 'resource' : 'resources'}
-                            </span>
-                          </div>
-                          <div className="space-y-3">
-                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
-                              <InformationalResourceCard key={resource.id} resource={resource} />
-                            ))}
-                          </div>
-                          {informationalResources.length > 4 && !informationalExpanded && (
-                            <button
-                              onClick={() => setInformationalExpanded(true)}
-                              className="mt-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
-                            >
-                              Show all {informationalResources.length} guides
-                            </button>
-                          )}
-                        </div>
-                      )}
-                      {communityResources.map((resource) => (
-                        <ProgramCard
-                          key={resource.id}
-                          id={`program-card-${resource.id}`}
-                          program={communityToProgramLite(resource)}
-                          source="community"
-                          onClick={() => handleProgramClick(resource.id)}
-                          isHighlighted={hoveredProgramId === resource.id}
-                          onMouseEnter={() => handleCardHover(resource.id)}
-                          onMouseLeave={() => handleCardHover(null)}
-                        />
-                      ))}
-                      {filteredPrograms.map((program) => (
-                        <ProgramCard
-                          key={program.id}
-                          id={`program-card-${program.id}`}
-                          program={program}
-                          onClick={() => handleProgramClick(program.id)}
-                          isHighlighted={hoveredProgramId === program.id}
-                          onMouseEnter={() => handleCardHover(program.id)}
-                          onMouseLeave={() => handleCardHover(null)}
-                        />
-                      ))}
-
-                      {/* Filtered-empty state */}
-                      {filtersActive && filteredPrograms.length === 0 && programs.length > 0 && (
-                        <div className="text-center py-10">
-                          <p className="text-gray-500 mb-3">No programs match your current filters.</p>
-                          <button
-                            onClick={clearFilters}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-fg-blue bg-fg-blue/10 rounded-lg hover:bg-fg-blue/20 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                            Clear filters
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    {renderPagination()}
-                  </div>
-
-                  {/* Map panel */}
-                  <div className="h-[600px] sticky top-4 rounded-xl overflow-hidden border border-gray-200">
-                    <ProgramMap
-                      programs={filteredPrograms}
-                      onProgramSelect={handleProgramClick}
-                      selectedProgramId={modalProgramId}
-                      hoveredProgramId={hoveredProgramId}
-                      onProgramHover={handleMapHover}
-                    />
-                  </div>
+              {resultsTab === 'guides' ? (
+                /* Guides tab — full width, all breakpoints */
+                <div className={widget ? 'space-y-2' : 'space-y-3'}>
+                  {informationalResources.map((resource) => (
+                    <InformationalResourceCard key={resource.id} resource={resource} />
+                  ))}
                 </div>
-              )}
-
-              {/* List view — mobile (<lg) or widget mode */}
-              <div className={widget ? '' : 'lg:hidden'}>
-                {viewMode === 'list' ? (
-                  widget ? (
-                    /* Compact card list for widget */
-                    <div className="space-y-2">
-                      {/* Informational Resources Section */}
-                      {informationalResources.length > 0 && (
-                        <div className="mb-2">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
-                              Guides & Resources
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
-                              <InformationalResourceCard key={resource.id} resource={resource} />
-                            ))}
-                          </div>
-                          {informationalResources.length > 4 && !informationalExpanded && (
-                            <button
-                              onClick={() => setInformationalExpanded(true)}
-                              className="mt-1 text-xs font-medium text-fg-blue hover:text-fg-navy transition-colors"
-                            >
-                              Show all {informationalResources.length} guides
-                            </button>
-                          )}
-                        </div>
-                      )}
-                      {communityResources.map((resource) => (
-                        <ProgramCard
-                          key={resource.id}
-                          program={communityToProgramLite(resource)}
-                          source="community"
-                          onClick={() => handleProgramClick(resource.id)}
-                          compact
-                        />
-                      ))}
-                      {filteredPrograms.map((program) => (
-                        <ProgramCard
-                          key={program.id}
-                          program={program}
-                          onClick={() => handleProgramClick(program.id)}
-                          compact
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {/* Informational Resources Section */}
-                      {informationalResources.length > 0 && (
-                        <div className="col-span-full mb-2">
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
-                              Guides & Resources
-                            </span>
-                            <span className="text-xs text-gray-400">
-                              {informationalResources.length} {informationalResources.length === 1 ? 'resource' : 'resources'}
-                            </span>
-                          </div>
-                          <div className="space-y-3">
-                            {(informationalExpanded ? informationalResources : informationalResources.slice(0, 4)).map((resource) => (
-                              <InformationalResourceCard key={resource.id} resource={resource} />
-                            ))}
-                          </div>
-                          {informationalResources.length > 4 && !informationalExpanded && (
-                            <button
-                              onClick={() => setInformationalExpanded(true)}
-                              className="mt-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
-                            >
-                              Show all {informationalResources.length} guides
-                            </button>
-                          )}
-                        </div>
-                      )}
-                      {communityResources.map((resource) => (
-                        <ProgramCard
-                          key={resource.id}
-                          program={communityToProgramLite(resource)}
-                          source="community"
-                          onClick={() => handleProgramClick(resource.id)}
-                        />
-                      ))}
-                      {filteredPrograms.map((program) => (
-                        <ProgramCard
-                          key={program.id}
-                          program={program}
-                          onClick={() => handleProgramClick(program.id)}
-                        />
-                      ))}
-
-                      {/* Filtered-empty state (mobile) */}
-                      {filtersActive && filteredPrograms.length === 0 && programs.length > 0 && (
-                        <div className="col-span-full text-center py-10">
-                          <p className="text-gray-500 mb-3">No programs match your current filters.</p>
-                          <button
-                            onClick={clearFilters}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-fg-blue bg-fg-blue/10 rounded-lg hover:bg-fg-blue/20 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                            Clear filters
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )
-                ) : (
-                  <div className="h-[500px] md:h-[600px] rounded-xl overflow-hidden border border-gray-200">
-                    <ProgramMap
-                      programs={filteredPrograms}
-                      onProgramSelect={handleProgramClick}
-                      selectedProgramId={modalProgramId}
-                    />
-                  </div>
-                )}
-
-                {/* Load more (mobile, non-widget) */}
-                {!widget && viewMode === 'list' && renderPagination()}
-
-                {/* View all link (widget only) */}
-                {widget && (
-                  <>
-                    {renderPagination()}
-                    {totalCount > pageSize && (
-                      <div className="mt-4 text-center">
-                        <a
-                          href="https://www.fostergreatness.co/services"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
+              ) : (
+                <>
+                  {/* Desktop split view (lg+) — hidden in widget mode */}
+                  {!widget && (
+                    <div className="hidden lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6">
+                      {/* List panel */}
+                      <div>
+                        <div
+                          ref={listPanelRef}
+                          className="max-h-[600px] overflow-y-auto space-y-4 p-1 -m-1"
                         >
-                          View all {totalCount} results on Foster Greatness
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+                          {communityResources.map((resource) => (
+                            <ProgramCard
+                              key={resource.id}
+                              id={`program-card-${resource.id}`}
+                              program={communityToProgramLite(resource)}
+                              source="community"
+                              onClick={() => handleProgramClick(resource.id)}
+                              isHighlighted={hoveredProgramId === resource.id}
+                              onMouseEnter={() => handleCardHover(resource.id)}
+                              onMouseLeave={() => handleCardHover(null)}
+                            />
+                          ))}
+                          {filteredPrograms.map((program) => (
+                            <ProgramCard
+                              key={program.id}
+                              id={`program-card-${program.id}`}
+                              program={program}
+                              onClick={() => handleProgramClick(program.id)}
+                              isHighlighted={hoveredProgramId === program.id}
+                              onMouseEnter={() => handleCardHover(program.id)}
+                              onMouseLeave={() => handleCardHover(null)}
+                            />
+                          ))}
+
+                          {/* Filtered-empty state */}
+                          {filtersActive && filteredPrograms.length === 0 && programs.length > 0 && (
+                            <div className="text-center py-10">
+                              <p className="text-gray-500 mb-3">No programs match your current filters.</p>
+                              <button
+                                onClick={clearFilters}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-fg-blue bg-fg-blue/10 rounded-lg hover:bg-fg-blue/20 transition-colors"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                                Clear filters
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        {renderPagination()}
+                      </div>
+
+                      {/* Map panel */}
+                      <div className="h-[600px] sticky top-4 rounded-xl overflow-hidden border border-gray-200">
+                        <ProgramMap
+                          programs={filteredPrograms}
+                          onProgramSelect={handleProgramClick}
+                          selectedProgramId={modalProgramId}
+                          hoveredProgramId={hoveredProgramId}
+                          onProgramHover={handleMapHover}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* List view — mobile (<lg) or widget mode */}
+                  <div className={widget ? '' : 'lg:hidden'}>
+                    {viewMode === 'list' ? (
+                      widget ? (
+                        /* Compact card list for widget */
+                        <div className="space-y-2">
+                          {communityResources.map((resource) => (
+                            <ProgramCard
+                              key={resource.id}
+                              program={communityToProgramLite(resource)}
+                              source="community"
+                              onClick={() => handleProgramClick(resource.id)}
+                              compact
+                            />
+                          ))}
+                          {filteredPrograms.map((program) => (
+                            <ProgramCard
+                              key={program.id}
+                              program={program}
+                              onClick={() => handleProgramClick(program.id)}
+                              compact
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="grid gap-4 md:grid-cols-2">
+                          {communityResources.map((resource) => (
+                            <ProgramCard
+                              key={resource.id}
+                              program={communityToProgramLite(resource)}
+                              source="community"
+                              onClick={() => handleProgramClick(resource.id)}
+                            />
+                          ))}
+                          {filteredPrograms.map((program) => (
+                            <ProgramCard
+                              key={program.id}
+                              program={program}
+                              onClick={() => handleProgramClick(program.id)}
+                            />
+                          ))}
+
+                          {/* Filtered-empty state (mobile) */}
+                          {filtersActive && filteredPrograms.length === 0 && programs.length > 0 && (
+                            <div className="col-span-full text-center py-10">
+                              <p className="text-gray-500 mb-3">No programs match your current filters.</p>
+                              <button
+                                onClick={clearFilters}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-fg-blue bg-fg-blue/10 rounded-lg hover:bg-fg-blue/20 transition-colors"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                                Clear filters
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    ) : (
+                      <div className="h-[500px] md:h-[600px] rounded-xl overflow-hidden border border-gray-200">
+                        <ProgramMap
+                          programs={filteredPrograms}
+                          onProgramSelect={handleProgramClick}
+                          selectedProgramId={modalProgramId}
+                        />
                       </div>
                     )}
-                  </>
-                )}
-              </div>
+
+                    {/* Load more (mobile, non-widget) */}
+                    {!widget && viewMode === 'list' && renderPagination()}
+
+                    {/* View all link (widget only) */}
+                    {widget && (
+                      <>
+                        {renderPagination()}
+                        {totalCount > pageSize && (
+                          <div className="mt-4 text-center">
+                            <a
+                              href="https://www.fostergreatness.co/services"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
+                            >
+                              View all {totalCount} results on Foster Greatness
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
