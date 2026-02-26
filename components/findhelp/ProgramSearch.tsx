@@ -40,6 +40,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [boardOpen, setBoardOpen] = useState(false);
   const [searchTerms, setSearchTerms] = useState('');
+  const [zipCenter, setZipCenter] = useState<{ lat: number; lng: number } | undefined>();
 
   // Filter state
   const [filterFree, setFilterFree] = useState(false);
@@ -189,6 +190,24 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     }
   }, []);
 
+  // Geocode ZIP to get map center coordinates
+  const geocodeZip = useCallback(async (zipCode: string) => {
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    if (!token) return;
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${zipCode}.json?types=postcode&country=US&access_token=${token}`
+      );
+      const data = await res.json();
+      if (data.features?.[0]?.center) {
+        const [lng, lat] = data.features[0].center;
+        setZipCenter({ lat, lng });
+      }
+    } catch {
+      // Silently fail — map will fall back to first office
+    }
+  }, []);
+
   // Handle ZIP submission
   const handleZipSubmit = (zipCode: string) => {
     setZip(zipCode);
@@ -196,6 +215,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setSelectedTag(null);
     setPrograms([]);
     fetchTags(zipCode);
+    geocodeZip(zipCode);
     trackEvent('service_search', { zip: zipCode, channel: widget ? 'embed' : 'web' });
   };
 
@@ -394,6 +414,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
     setCommunityResources([]);
     setInformationalResources([]);
     fetchTags(trimmed);
+    geocodeZip(trimmed);
   };
 
   // Auto-open modal if initialProgramId provided
@@ -408,8 +429,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   useEffect(() => {
     if (initialZip) {
       fetchTags(initialZip);
+      geocodeZip(initialZip);
     }
-  }, [initialZip, fetchTags]);
+  }, [initialZip, fetchTags, geocodeZip]);
 
   // Scroll card into view when hovered from map
   useEffect(() => {
@@ -954,6 +976,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                           selectedProgramId={modalProgramId}
                           hoveredProgramId={hoveredProgramId}
                           onProgramHover={handleMapHover}
+                          center={zipCenter}
                         />
                       </div>
                     </div>
@@ -1022,6 +1045,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                           programs={filteredPrograms}
                           onProgramSelect={handleProgramClick}
                           selectedProgramId={modalProgramId}
+                          center={zipCenter}
                         />
                       </div>
                     )}
