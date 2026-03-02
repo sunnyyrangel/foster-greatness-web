@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import ProgramSearch from '@/components/findhelp/ProgramSearch';
 
 const SITE_URL = 'https://www.fostergreatness.co';
@@ -44,6 +45,18 @@ export default async function ServicesWidgetPage({
         >
           <ProgramSearch initialZip={initialZip} initialProgramId={initialProgramId} widget />
         </Suspense>
+        <div className="flex items-center justify-center gap-1 mt-3 pt-2 border-t border-gray-50">
+          <span className="text-xs text-gray-300">Powered by</span>
+          <a href="https://www.fostergreatness.co" target="_blank" rel="noopener noreferrer">
+            <Image
+              src="/images/foster-greatness-horizontal.svg"
+              alt="Foster Greatness"
+              width={56}
+              height={14}
+              className="h-2.5 w-auto opacity-40 hover:opacity-80 transition-opacity"
+            />
+          </a>
+        </div>
       </div>
     </div>
   );
