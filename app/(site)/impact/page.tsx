@@ -22,6 +22,7 @@ import {
   ShoppingBasket,
   Handshake,
   Sparkles,
+  PenLine,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -372,6 +373,124 @@ export default function ImpactPage() {
             {heroStats.map((stat) => (
               <HeroCounter key={stat.label} stat={stat} />
             ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* A Letter from Our Director */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 px-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={containerVariants}
+          className="max-w-3xl mx-auto"
+        >
+          <motion.div
+            variants={itemVariants}
+            className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 relative overflow-hidden"
+          >
+            {/* Decorative accent */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fg-navy via-fg-blue to-fg-teal" />
+
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-3 rounded-xl bg-fg-navy/10">
+                <PenLine className="w-6 h-6 text-fg-navy" aria-hidden="true" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-fg-navy">
+                A Letter from Our Director
+              </h2>
+            </div>
+
+            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-5">
+              <p>
+                When we launched Foster Greatness, we held a belief that felt radical to
+                some: that community, belonging, and lifelong support aren&apos;t optional.
+                They aren&apos;t nice-to-haves for those who have experienced foster care.
+                They are the foundation of any potential to build and sustain a meaningful
+                life.
+              </p>
+              <p>
+                We know this because we&apos;ve seen it. We&apos;ve heard time and again
+                about the power that just one person can have in a child&apos;s life. That
+                one consistent person. That one believer.
+              </p>
+              <p>
+                But at Foster Greatness, we dared to ask a bigger question:{' '}
+                <strong className="text-fg-navy">
+                  What could happen if that one person became a whole community?
+                </strong>
+              </p>
+              <p>This year, we started to find out.</p>
+              <p>
+                In 2025, the Foster Greatness Community grew in ways we only ever
+                imagined. We saw:
+              </p>
+              <ul className="space-y-3 list-none pl-0">
+                <li className="flex gap-3">
+                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
+                  <span>
+                    Our Community expand by more than{' '}
+                    <strong className="text-fg-navy">1,000 new members</strong>&mdash;each
+                    one a reminder that no one should navigate this journey alone.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
+                  <span>
+                    Our first formal partnerships take root, connecting our members with
+                    opportunities and support we couldn&apos;t provide on our own.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
+                  <span>
+                    Hundreds of resource requests fulfilled through our peer-coaching
+                    support.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
+                  <span>
+                    Former foster youth and alumni stepping up to advocate for change,
+                    proving that those closest to the problem are also closest to the
+                    solution.
+                  </span>
+                </li>
+              </ul>
+              <p>
+                <strong className="text-fg-navy">
+                  None of this happened by accident. It happened through community.
+                </strong>
+              </p>
+              <p>
+                What began as a vision where former foster youth leaders imagined a
+                lifelong network of support has grown into something far greater. A
+                series of endless possibilities. Real, measurable transformation. And a
+                future where no one exits foster care without somewhere to belong. A
+                future where &ldquo;aging out&rdquo; now means &ldquo;aging
+                into&rdquo; something lifelong and life changing.
+              </p>
+              <p>
+                This report is a snapshot of that growth. But more than that, it&apos;s
+                a thank you. To every member, every partner, and every believer who has
+                shown us what community can do.
+              </p>
+              <p>
+                As a former foster youth myself, I know we could not do this without
+                you.
+              </p>
+            </div>
+
+            {/* Signature */}
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <p className="text-fg-navy font-bold text-lg">Isabel Stasa, MPA</p>
+              <p className="text-gray-500 text-sm">
+                Director of Community Affairs &amp; Social Impact, Foster Greatness
+              </p>
+            </div>
           </motion.div>
         </motion.div>
       </section>
