@@ -2,6 +2,62 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
+  // Redirects for SEO
+  async redirects() {
+    return [
+      // Non-www to www
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'fostergreatness.co' }],
+        destination: 'https://www.fostergreatness.co/:path*',
+        permanent: true,
+      },
+      // Old site URLs → new pages
+      { source: '/about-us', destination: '/about', permanent: true },
+      { source: '/home', destination: '/', permanent: true },
+      { source: '/download', destination: '/join', permanent: true },
+      { source: '/donate-1', destination: '/donate', permanent: true },
+      { source: '/impact-report', destination: '/impact', permanent: true },
+      { source: '/join-our-community', destination: '/join', permanent: true },
+      { source: '/faqs', destination: '/about', permanent: true },
+      { source: '/resources-provided', destination: '/resources', permanent: true },
+      { source: '/donate-meal-kits', destination: '/donate', permanent: true },
+      { source: '/get-involved', destination: '/donate', permanent: true },
+      { source: '/resource-benefit-screener', destination: '/resources', permanent: true },
+      { source: '/resource-support', destination: '/resources', permanent: true },
+      { source: '/storytellers-', destination: '/storytellers-collective', permanent: true },
+      { source: '/our-community', destination: '/about', permanent: true },
+      { source: '/learn-more', destination: '/about', permanent: true },
+      { source: '/privacy-policy', destination: '/about', permanent: true },
+      { source: '/new-page', destination: '/', permanent: true },
+      { source: '/community', destination: '/join', permanent: true },
+      { source: '/join-today', destination: '/join', permanent: true },
+      // GSC: Crawled - currently not indexed (old WordPress URLs)
+      { source: '/donate-gingerbread-kits', destination: '/donate', permanent: true },
+      { source: '/fg-programs', destination: '/about', permanent: true },
+      { source: '/partner-opportunties', destination: '/partnerships', permanent: true },
+      { source: '/404-page', destination: '/', permanent: true },
+      // GSC: Excluded by noindex / Page with redirect
+      { source: '/cart', destination: '/donate', permanent: true },
+      { source: '/contact', destination: '/about', permanent: true },
+      { source: '/s/2024-Impact-Report.pdf', destination: '/impact', permanent: true },
+      // GSC: Duplicate without canonical - old WordPress page_id URLs
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'page_id' }],
+        destination: '/',
+        permanent: true,
+      },
+      // GSC: Duplicate without canonical - LinkedIn tracking params
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'trk' }],
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
@@ -30,11 +86,12 @@ const nextConfig: NextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline'
         https://js.stripe.com
-        https://embed.typeform.com
+        https://*.typeform.com
         https://*.vercel-scripts.com
         https://vercel.live;
       style-src 'self' 'unsafe-inline'
-        https://js.stripe.com;
+        https://js.stripe.com
+        https://*.typeform.com;
       img-src 'self' blob: data:
         https://*.vercel.sh
         https://beehiiv-images-production.s3.amazonaws.com
@@ -51,10 +108,12 @@ const nextConfig: NextConfig = {
         https://vercel.live
         https://*.vercel-scripts.com
         https://api.mapbox.com
-        https://events.mapbox.com;
+        https://events.mapbox.com
+        https://*.typeform.com;
       frame-src 'self'
         https://js.stripe.com
-        https://form.typeform.com;
+        https://form.typeform.com
+        https://www.youtube.com;
       worker-src 'self' blob:;
       object-src 'none';
       base-uri 'self';

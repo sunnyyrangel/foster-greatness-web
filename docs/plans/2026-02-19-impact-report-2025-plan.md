@@ -1,10 +1,32 @@
+# 2025 Impact Report Page — Implementation Plan
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+
+**Goal:** Replace the current `/impact` page with a narrative-scroll impact report that alternates 2025 data with member testimonials, telling the story of fighting isolation through community.
+
+**Architecture:** Single client component page (`'use client'`) using Framer Motion for scroll-triggered animations. All data is static (no API calls). CSS-driven bar chart for resource needs breakdown — no chart library. The page follows the existing site pattern: gradient hero, white card sections with alternating backgrounds, staggered reveal animations.
+
+**Tech Stack:** Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, Lucide React icons
+
+**Design doc:** `docs/plans/2026-02-19-impact-report-2025-design.md`
+
+---
+
+### Task 1: Replace Impact Page — Data, Metadata, and Skeleton
+
+**Files:**
+- Modify: `app/(site)/impact/page.tsx` (replace entirely)
+
+**Step 1: Create the new page file with metadata and data constants**
+
+Replace the entire contents of `app/(site)/impact/page.tsx` with:
+
+```tsx
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { siteConfig } from '@/data/site';
 import {
   Users,
   Heart,
@@ -22,7 +44,6 @@ import {
   ShoppingBasket,
   Handshake,
   Sparkles,
-  PenLine,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -96,30 +117,6 @@ const storyStats = [
   { value: '11', label: 'Conferences Attended', icon: Calendar },
 ];
 
-const storytellersCohort = [
-  { name: 'Emmerald Evans', image: '/assets/images/storytellers/emmerald-evans.jpg' },
-  { name: 'Jennifer Tai', image: '/assets/images/storytellers/jennifer-tai.jpg' },
-  { name: 'Antoinette Gutierrez', image: '/assets/images/storytellers/antoinette-gutierrez.jpg' },
-  { name: 'Chyenne Santini', image: '/assets/images/storytellers/chyenne-santini.jpg' },
-  { name: 'Abril Leonyvelez', image: '/assets/images/storytellers/abril-leonyvelez.jpg' },
-];
-
-const partners = [
-  { name: 'Staffmark Group', logo: '/images/partners/smg.png' },
-  { name: 'One Simple Wish', logo: '/images/partners/osw.png' },
-  { name: 'EatWell', logo: '/images/partners/eatwell.png' },
-  { name: 'First Star', logo: '/images/partners/firststar.png' },
-  { name: 'Foster Care Alumni of America', logo: '/images/partners/fcalumni.png' },
-  { name: 'Lotus Grove Counseling', logo: '/images/partners/lotus-grove.png' },
-  { name: 'A Home Within', logo: '/images/partners/a-home-within.png' },
-  { name: 'Youth Voices Rising', logo: '/images/partners/youth-voices-rising.png' },
-  { name: 'Cetera', logo: '/images/partners/cetera.png' },
-  { name: 'Str8Up Employment Services', logo: '/images/partners/str8up.png' },
-  { name: 'National Foster Youth Institute', logo: '/images/partners/nfyi.png' },
-  { name: 'For Others', logo: '/images/partners/for-others.png' },
-  { name: 'Doing Good Works', logo: '/images/partners/dgw-branded.png' },
-];
-
 const testimonials = {
   community: {
     quote:
@@ -187,8 +184,6 @@ function useCountUp(end: number, duration: number = 2000) {
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
-      } else {
-        setCount(end);
       }
     };
 
@@ -210,7 +205,7 @@ function HeroCounter({ stat }: { stat: (typeof heroStats)[number] }) {
   return (
     <motion.div variants={itemVariants} ref={ref} className="text-center">
       <div className="inline-flex p-3 rounded-2xl bg-white/10 backdrop-blur-sm mb-3">
-        <Icon className="w-6 h-6 text-white" aria-hidden="true" />
+        <Icon className="w-6 h-6 text-white" />
       </div>
       <div className="text-4xl md:text-5xl font-bold text-white mb-1">
         {count.toLocaleString()}
@@ -235,7 +230,7 @@ function StatCard({
       className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 text-center"
     >
       <div className="inline-flex p-3 rounded-xl bg-fg-blue/10 mb-4">
-        <Icon className="w-6 h-6 text-fg-blue" aria-hidden="true" />
+        <Icon className="w-6 h-6 text-fg-blue" />
       </div>
       <div className="text-3xl md:text-4xl font-bold text-fg-navy mb-1">{value}</div>
       <div className="text-sm text-gray-600">{label}</div>
@@ -257,7 +252,7 @@ function TestimonialCard({
       variants={itemVariants}
       className="relative bg-white rounded-2xl p-8 md:p-10 shadow-md border-l-4 border-fg-teal"
     >
-      <Quote className="w-8 h-8 text-fg-teal/30 mb-4" aria-hidden="true" />
+      <Quote className="w-8 h-8 text-fg-teal/30 mb-4" />
       <p className="text-lg md:text-xl text-gray-700 leading-relaxed italic mb-6">
         &ldquo;{quote}&rdquo;
       </p>
@@ -290,21 +285,14 @@ function NeedsBar({
   return (
     <motion.div variants={itemVariants} className="flex items-center gap-4">
       <div className="hidden sm:flex p-2 rounded-lg bg-fg-blue/10 shrink-0">
-        <Icon className="w-5 h-5 text-fg-blue" aria-hidden="true" />
+        <Icon className="w-5 h-5 text-fg-blue" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-baseline mb-1">
           <span className="text-sm font-medium text-fg-navy">{label}</span>
           <span className="text-sm font-bold text-fg-navy ml-2">{count}</span>
         </div>
-        <div
-          className="h-3 bg-gray-100 rounded-full overflow-hidden"
-          role="progressbar"
-          aria-valuenow={count}
-          aria-valuemin={0}
-          aria-valuemax={maxCount}
-          aria-label={`${label}: ${count} requests`}
-        >
+        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-fg-blue to-fg-teal rounded-full"
             initial={{ width: 0 }}
@@ -345,7 +333,7 @@ export default function ImpactPage() {
             variants={itemVariants}
             className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6"
           >
-            <Heart className="w-4 h-4 text-fg-teal" aria-hidden="true" />
+            <Heart className="w-4 h-4 text-fg-teal" />
             <span className="text-sm font-semibold text-white/90">2025 Impact Report</span>
           </motion.div>
 
@@ -373,124 +361,6 @@ export default function ImpactPage() {
             {heroStats.map((stat) => (
               <HeroCounter key={stat.label} stat={stat} />
             ))}
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* ----------------------------------------------------------------- */}
-      {/* A Letter from Our Director */}
-      {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={containerVariants}
-          className="max-w-3xl mx-auto"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 relative overflow-hidden"
-          >
-            {/* Decorative accent */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fg-navy via-fg-blue to-fg-teal" />
-
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 rounded-xl bg-fg-navy/10">
-                <PenLine className="w-6 h-6 text-fg-navy" aria-hidden="true" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-fg-navy">
-                A Letter from Our Director
-              </h2>
-            </div>
-
-            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-5">
-              <p>
-                When we launched Foster Greatness, we held a belief that felt radical to
-                some: that community, belonging, and lifelong support aren&apos;t optional.
-                They aren&apos;t nice-to-haves for those who have experienced foster care.
-                They are the foundation of any potential to build and sustain a meaningful
-                life.
-              </p>
-              <p>
-                We know this because we&apos;ve seen it. We&apos;ve heard time and again
-                about the power that just one person can have in a child&apos;s life. That
-                one consistent person. That one believer.
-              </p>
-              <p>
-                But at Foster Greatness, we dared to ask a bigger question:{' '}
-                <strong className="text-fg-navy">
-                  What could happen if that one person became a whole community?
-                </strong>
-              </p>
-              <p>This year, we started to find out.</p>
-              <p>
-                In 2025, the Foster Greatness Community grew in ways we only ever
-                imagined. We saw:
-              </p>
-              <ul className="space-y-3 list-none pl-0">
-                <li className="flex gap-3">
-                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
-                  <span>
-                    Our Community expand by more than{' '}
-                    <strong className="text-fg-navy">1,000 new members</strong>&mdash;each
-                    one a reminder that no one should navigate this journey alone.
-                  </span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
-                  <span>
-                    Our first formal partnerships take root, connecting our members with
-                    opportunities and support we couldn&apos;t provide on our own.
-                  </span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
-                  <span>
-                    Hundreds of resource requests fulfilled through our peer-coaching
-                    support.
-                  </span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-fg-blue font-bold mt-0.5">&#x2022;</span>
-                  <span>
-                    Former foster youth and alumni stepping up to advocate for change,
-                    proving that those closest to the problem are also closest to the
-                    solution.
-                  </span>
-                </li>
-              </ul>
-              <p>
-                <strong className="text-fg-navy">
-                  None of this happened by accident. It happened through community.
-                </strong>
-              </p>
-              <p>
-                What began as a vision where former foster youth leaders imagined a
-                lifelong network of support has grown into something far greater. A
-                series of endless possibilities. Real, measurable transformation. And a
-                future where no one exits foster care without somewhere to belong. A
-                future where &ldquo;aging out&rdquo; now means &ldquo;aging
-                into&rdquo; something lifelong and life changing.
-              </p>
-              <p>
-                This report is a snapshot of that growth. But more than that, it&apos;s
-                a thank you. To every member, every partner, and every believer who has
-                shown us what community can do.
-              </p>
-              <p>
-                As a former foster youth myself, I know we could not do this without
-                you.
-              </p>
-            </div>
-
-            {/* Signature */}
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <p className="text-fg-navy font-bold text-lg">Isabel Stasa, MPA</p>
-              <p className="text-gray-500 text-sm">
-                Director of Community Affairs &amp; Social Impact, Foster Greatness
-              </p>
-            </div>
           </motion.div>
         </motion.div>
       </section>
@@ -559,82 +429,9 @@ export default function ImpactPage() {
       </section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* Section: Partners — Stronger Together */}
-      {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={containerVariants}
-          className="max-w-5xl mx-auto"
-        >
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
-              Stronger Together
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our {partners.length} partners help us expand what&apos;s possible&nbsp;&mdash;
-              from employment pipelines to therapy access to holiday meals.
-            </p>
-          </motion.div>
-
-          {/* Partner logo grid */}
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 md:gap-8 items-center justify-items-center mb-16"
-          >
-            {partners.map((partner) => (
-              <motion.div
-                key={partner.name}
-                variants={itemVariants}
-                className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 w-full flex items-center justify-center h-20 hover:shadow-md transition-shadow"
-              >
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  width={120}
-                  height={48}
-                  className="object-contain max-h-12"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Staffmark video spotlight */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg bg-fg-blue/10">
-                    <Handshake className="w-5 h-5 text-fg-blue" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-lg font-bold text-fg-navy">Partner Spotlight: Staffmark Group</h3>
-                </div>
-                <p className="text-gray-600 mb-6">
-                  Staffmark Group created a first-of-its-kind employment pipeline for our
-                  community&nbsp;&mdash; connecting foster youth to career advisors, interview
-                  prep, resume building, and real job opportunities.
-                </p>
-              </div>
-              <div className="relative w-full aspect-video">
-                <iframe
-                  src="https://www.youtube.com/embed/lhtbPMxTCCI"
-                  title="Staffmark Group x Foster Greatness Partnership"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* ----------------------------------------------------------------- */}
       {/* Section 4: Resources — Meeting Real Needs */}
       {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 md:py-24 px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -695,7 +492,7 @@ export default function ImpactPage() {
       {/* ----------------------------------------------------------------- */}
       {/* Section 5: Stories — Our Stories Matter */}
       {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4">
+      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -720,108 +517,6 @@ export default function ImpactPage() {
           </div>
 
           <TestimonialCard {...testimonials.stories} />
-
-          {/* Storytellers Collective pilot */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={containerVariants}
-            className="mt-16"
-          >
-            <motion.div
-              variants={itemVariants}
-              className="bg-gradient-to-br from-fg-navy via-fg-navy to-fg-blue rounded-2xl p-8 md:p-12 overflow-hidden relative"
-            >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-fg-teal/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-fg-orange/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
-
-              <div className="relative z-10">
-                <motion.div variants={itemVariants} className="mb-8">
-                  <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white/80 mb-4">
-                    <Sparkles className="w-3 h-3" aria-hidden="true" />
-                    Pilot Program
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                    The Storytellers Collective
-                  </h3>
-                  <p className="text-white/80 max-w-2xl leading-relaxed">
-                    In 2025, we launched a first-of-its-kind program training foster
-                    youth to own their narratives. Professional media training,
-                    premium storyteller kits, and a national platform&nbsp;&mdash;
-                    all designed to turn lived experience into advocacy.
-                  </p>
-                </motion.div>
-
-                {/* Cohort headshots */}
-                <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
-                  <div className="flex -space-x-3">
-                    {storytellersCohort.map((member) => (
-                      <div
-                        key={member.name}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white overflow-hidden relative"
-                      >
-                        <Image
-                          src={member.image}
-                          alt={member.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center border-2 border-white/20">
-                    <span className="text-white text-sm font-bold">+4</span>
-                  </div>
-                  <span className="text-white/70 text-sm ml-1">9 storytellers in our pilot cohort</span>
-                </motion.div>
-
-                {/* Emmerald's testimonial */}
-                <motion.blockquote
-                  variants={itemVariants}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8"
-                >
-                  <Quote className="w-6 h-6 text-fg-teal/50 mb-3" aria-hidden="true" />
-                  <p className="text-white/90 leading-relaxed italic mb-4">
-                    &ldquo;As a former foster youth, it&apos;s rare to find spaces where your story
-                    isn&apos;t just listened to but it&apos;s respected and uplifted. They didn&apos;t
-                    just ask me to share my story&nbsp;&mdash; they gave me the tools to shape it.&rdquo;
-                  </p>
-                  <footer className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                      <Image
-                        src="/assets/images/storytellers/emmerald-evans.jpg"
-                        alt="Emmerald Evans"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold text-sm">Emmerald Evans</span>
-                      <span className="text-white/50 text-sm ml-2">2025 Cohort</span>
-                    </div>
-                  </footer>
-                </motion.blockquote>
-
-                {/* Scale pitch */}
-                <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                  <p className="text-white/70 text-sm leading-relaxed max-w-lg">
-                    <span className="text-white font-semibold">9 storytellers in our pilot.</span>{' '}
-                    With your support, we can train the next generation of foster youth
-                    advocates&nbsp;&mdash; giving them the platform, tools, and community to
-                    turn lived experience into systemic change.
-                  </p>
-                  <Link
-                    href="/donate"
-                    className="shrink-0 inline-flex items-center gap-2 bg-white text-fg-navy px-6 py-3 rounded-full font-bold text-sm hover:bg-fg-light-blue transition-all"
-                  >
-                    Fund the Next Cohort
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
         </motion.div>
       </section>
 
@@ -858,16 +553,16 @@ export default function ImpactPage() {
                   className="inline-flex items-center justify-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-fg-light-blue transition-all shadow-lg"
                 >
                   Support Our Mission
-                  <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
                 <a
-                  href={siteConfig.links.community}
+                  href="https://community.fostergreatness.co"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all"
                 >
                   Join Our Community
-                  <Users className="w-5 h-5" aria-hidden="true" />
+                  <Users className="w-5 h-5" />
                 </a>
               </div>
             </div>
@@ -877,3 +572,118 @@ export default function ImpactPage() {
     </main>
   );
 }
+```
+
+Note: Because this is a `'use client'` component, the `export const metadata` pattern won't work. We need a separate layout or `generateMetadata` approach — see Task 2.
+
+**Step 2: Verify it compiles**
+
+Run: `npm run build 2>&1 | head -40`
+
+Expected: Successful build (or only metadata warning — addressed in Task 2).
+
+**Step 3: Commit**
+
+```bash
+git add app/(site)/impact/page.tsx
+git commit -m "feat: rebuild impact page with 2025 data and testimonials"
+```
+
+---
+
+### Task 2: Add SEO Metadata via Layout File
+
+Since the page is `'use client'`, metadata must be exported from a layout or a separate metadata file.
+
+**Files:**
+- Create: `app/(site)/impact/layout.tsx`
+
+**Step 1: Create the layout with metadata**
+
+```tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '2025 Impact Report',
+  description:
+    'See how Foster Greatness is fighting isolation and building community for foster youth. 2,147 members strong — read our 2025 impact report.',
+  openGraph: {
+    title: '2025 Impact Report | Foster Greatness',
+    description:
+      'See how Foster Greatness is fighting isolation and building community for foster youth. 2,147 members strong.',
+  },
+};
+
+export default function ImpactLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
+}
+```
+
+**Step 2: Verify build succeeds**
+
+Run: `npm run build 2>&1 | head -40`
+
+Expected: Clean build, no metadata warnings.
+
+**Step 3: Commit**
+
+```bash
+git add app/(site)/impact/layout.tsx
+git commit -m "feat: add SEO metadata for 2025 impact report"
+```
+
+---
+
+### Task 3: Visual QA and Responsive Testing
+
+**Step 1: Run dev server and test**
+
+Run: `npm run dev`
+
+Manually verify in browser at `http://localhost:3000/impact`:
+
+- [ ] Hero renders with animated counters counting up on scroll
+- [ ] Three hero stats display and animate
+- [ ] Community section shows 3 stat cards + Cara's testimonial
+- [ ] Events section shows 4 stat cards + Jessica's testimonial
+- [ ] Resources section shows 3 stat cards + bar chart + Josalinda's testimonial
+- [ ] Bar chart bars animate on scroll with correct proportions (Housing is longest)
+- [ ] Stories section shows 3 stat cards + Lauryn's testimonial
+- [ ] CTA section has two buttons: donate + join community
+- [ ] Donate links to `/donate`, community opens `community.fostergreatness.co`
+- [ ] Mobile responsive: all grids stack to 1-column on small screens
+- [ ] No horizontal scroll on mobile
+- [ ] Testimonial cards show teal left border and quote icon
+- [ ] Animations trigger on scroll (not all at once on page load)
+
+**Step 2: Fix any issues found**
+
+Address layout, spacing, or animation issues discovered during QA.
+
+**Step 3: Commit any fixes**
+
+```bash
+git add -A
+git commit -m "fix: polish impact page responsive layout and animations"
+```
+
+---
+
+### Task 4: Production Build Verification
+
+**Step 1: Run production build**
+
+Run: `npm run build`
+
+Expected: Clean build with no errors or warnings.
+
+**Step 2: Commit if any build-related fixes were needed**
+
+```bash
+git add -A
+git commit -m "fix: resolve build issues for impact page"
+```

@@ -82,15 +82,7 @@ export const defaultMetadata: Metadata = {
     creator: '@fostergreatness',
   },
   verification: {
-    // Add your Google Search Console verification code here after setting up GSC
-    // Get this from: Google Search Console > Settings > Ownership verification > HTML tag
-    // google: 'your-google-verification-code',
-
-    // Bing Webmaster Tools verification (also covers Yahoo, DuckDuckGo)
-    // Get this from: Bing Webmaster Tools > Site > Verify ownership
-    // other: {
-    //   'msvalidate.01': 'your-bing-verification-code',
-    // },
+    google: 'tOnFUvHiHmh8nYBBeB9oxfgZBXFa33jITvpp0prDz1U',
   },
   category: 'nonprofit',
 }
