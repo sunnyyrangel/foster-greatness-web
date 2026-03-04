@@ -779,7 +779,7 @@ export default function ImpactPage() {
                 {/* Emmerald's testimonial */}
                 <motion.blockquote
                   variants={itemVariants}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8"
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-6"
                 >
                   <Quote className="w-6 h-6 text-fg-teal/50 mb-3" aria-hidden="true" />
                   <p className="text-white/90 leading-relaxed italic mb-4">
@@ -802,6 +802,72 @@ export default function ImpactPage() {
                     </div>
                   </footer>
                 </motion.blockquote>
+
+                {/* Taylor Rockhold — Delaware Storytelling Companion spotlight */}
+                <motion.div
+                  variants={itemVariants}
+                  className="bg-white rounded-2xl overflow-hidden mb-8"
+                >
+                  {/* Header banner */}
+                  <div className="bg-gradient-to-r from-fg-teal to-fg-blue px-6 py-3 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-white" aria-hidden="true" />
+                    <span className="text-sm font-bold text-white tracking-wide uppercase">
+                      From Story to State Policy
+                    </span>
+                  </div>
+
+                  <div className="p-6 md:p-8">
+                    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+                      {/* Taylor's photo */}
+                      <div className="shrink-0 mx-auto md:mx-0">
+                        <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden relative shadow-lg">
+                          <Image
+                            src="/images/taylor-rockhold.jpg"
+                            alt="Taylor Rockhold"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <p className="text-center md:text-left mt-3">
+                          <span className="font-bold text-fg-navy text-sm block">Taylor Rockhold</span>
+                          <span className="text-xs text-gray-500">2025 Cohort &middot; Delaware</span>
+                        </p>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg md:text-xl font-bold text-fg-navy mb-3">
+                          Delaware Adopts the Storytelling Companion Statewide
+                        </h4>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                          Through her involvement with the Storytellers Collective, Taylor
+                          co-created the Storytelling Companion and shared it with partners
+                          across Delaware&apos;s child welfare system&nbsp;&mdash; including the
+                          Division of Family Services, Office of the Child Advocate, and
+                          Child Protection Accountability Commission.
+                        </p>
+                        <div className="bg-fg-navy/5 rounded-xl p-4 mb-4 border-l-4 border-fg-teal">
+                          <p className="text-fg-navy font-semibold text-sm">
+                            The State of Delaware will now provide the Storytelling Companion
+                            to every young person entering care and beginning Independent
+                            Living Services.
+                          </p>
+                        </div>
+                        <blockquote className="relative">
+                          <Quote className="w-5 h-5 text-fg-teal/40 mb-2" aria-hidden="true" />
+                          <p className="text-gray-700 text-sm leading-relaxed italic">
+                            &ldquo;Knowing that youth will receive this resource early in their
+                            journey fills me with deep joy and hope. It means the next generation
+                            will not have to search for a starting point&nbsp;&mdash; they will
+                            already have one. My heart is full knowing they will be empowered to
+                            own their narratives, advocate for change, and step into their
+                            greatness with confidence and support.&rdquo;
+                          </p>
+                        </blockquote>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
 
                 {/* Scale pitch */}
                 <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
