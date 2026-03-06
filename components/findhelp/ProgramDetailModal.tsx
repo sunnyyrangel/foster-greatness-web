@@ -435,7 +435,7 @@ export default function ProgramDetailModal({
               {/* Category */}
               <div>
                 <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                  {communityResource.category}
+                  {communityResource.service_tags?.[0] ?? 'Community Resource'}
                 </span>
               </div>
             </div>
