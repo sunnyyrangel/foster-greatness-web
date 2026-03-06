@@ -1073,6 +1073,21 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                       </>
                     )}
                   </div>
+
+                  {/* Suggest a Resource CTA */}
+                  {!widget && (
+                    <div className="mt-6 p-6 bg-[#ddf3ff]/30 rounded-lg border border-fg-blue/10 text-center">
+                      <p className="text-fg-navy font-medium mb-2">
+                        Know a great program?
+                      </p>
+                      <a
+                        href={`/suggest-resource${zip || selectedTagLabel ? '?' : ''}${zip ? `zip=${zip}` : ''}${zip && selectedTagLabel ? '&' : ''}${selectedTagLabel ? `category=${encodeURIComponent(selectedTagLabel)}` : ''}`}
+                        className="inline-block px-5 py-2.5 bg-fg-navy text-white rounded-md hover:bg-fg-navy/90 transition-colors font-medium text-sm"
+                      >
+                        Help us grow our resource directory
+                      </a>
+                    </div>
+                  )}
                 </>
               )}
             </>
