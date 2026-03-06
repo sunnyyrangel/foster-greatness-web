@@ -15,15 +15,39 @@
 export interface ResourceRow {
   id: string;
   program_name: string;
-  category: string;
-  phone: string | null;
-  website: string | null;
-  state: string | null;
-  address: string | null;
+  provider_name: string | null;
   description: string | null;
-  zip: string | null;
-  submitted_at: string;
+  website_url: string | null;
+  zip: string;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  service_tags: string[];
+  availability: string;
+  free_or_reduced: string;
+  eligibility: string | null;
+  populations: string[];
+  languages: string[];
+  phone: string | null;
+  email: string | null;
+  hours: Record<string, unknown> | null;
+  status: string;
+  submitted_by_role: string | null;
+  submitted_by_name: string | null;
+  submitted_by_email: string | null;
+  submitted_by_is_community_member: boolean;
+  submitted_by_used_service: boolean;
+  submitted_by_feedback: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  rejection_reason: string | null;
+  enrichment_data: Record<string, unknown> | null;
+  enriched_at: string | null;
+  category: string; // Legacy column, kept for backwards compat
   created_at: string;
+  updated_at: string;
 }
 
 // ============================================================================
@@ -41,37 +65,47 @@ export interface CommunityResource {
   provider_name: string;
   description: string;
   phone?: string;
+  email?: string;
   website_url?: string;
   address?: string;
+  city?: string;
   state?: string;
   zip?: string;
-  category: string;
+  latitude?: number;
+  longitude?: number;
+  service_tags: string[];
+  availability: string;
+  free_or_reduced: string;
+  eligibility?: string;
+  populations: string[];
+  languages: string[];
+  hours?: Record<string, unknown>;
 }
 
 // ============================================================================
-// SDOH Category Mapping
+// SDOH Categories
 // ============================================================================
 
 /**
- * Maps Findhelp category labels to Supabase `resources` table category values.
+ * SDOH categories used by both ServiceTagSelector and the submission form.
+ * These are the canonical labels stored in service_tags[].
  */
-const CATEGORY_TO_RESOURCE_CATEGORIES: Record<string, string[]> = {
-  'Education': ['Education support', 'Education & Training'],
-  'Housing': ['Housing'],
-  'Care': ['Child care', 'Foster Care Support', 'Mentorship and social support'],
-  'Food': ['Food assistance'],
-};
+export const SDOH_CATEGORIES = [
+  'Food & Nutrition',
+  'Housing & Shelter',
+  'Healthcare',
+  'Employment & Income',
+  'Education',
+  'Transportation',
+  'Legal Services',
+  'Family & Childcare',
+] as const;
+
+export type SdohCategory = (typeof SDOH_CATEGORIES)[number];
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Returns the Supabase category values that correspond to a Findhelp category label.
- */
-export function getResourceCategoriesForCategory(categoryLabel: string): string[] {
-  return CATEGORY_TO_RESOURCE_CATEGORIES[categoryLabel] || [];
-}
 
 /**
  * Converts a raw Supabase ResourceRow into a normalized CommunityResource
@@ -82,14 +116,24 @@ export function toCommunityResource(row: ResourceRow): CommunityResource {
     id: row.id,
     source: 'community',
     name: row.program_name,
-    provider_name: row.program_name,
+    provider_name: row.provider_name ?? row.program_name,
     description: row.description ?? '',
     ...(row.phone != null && { phone: row.phone }),
-    ...(row.website != null && { website_url: row.website }),
+    ...(row.email != null && { email: row.email }),
+    ...(row.website_url != null && { website_url: row.website_url }),
     ...(row.address != null && { address: row.address }),
+    ...(row.city != null && { city: row.city }),
     ...(row.state != null && { state: row.state }),
     ...(row.zip != null && { zip: row.zip }),
-    category: row.category,
+    ...(row.latitude != null && { latitude: row.latitude }),
+    ...(row.longitude != null && { longitude: row.longitude }),
+    service_tags: row.service_tags ?? [],
+    availability: row.availability ?? 'available',
+    free_or_reduced: row.free_or_reduced ?? 'indeterminate',
+    ...(row.eligibility != null && { eligibility: row.eligibility }),
+    populations: row.populations ?? [],
+    languages: row.languages ?? ['en'],
+    ...(row.hours != null && { hours: row.hours }),
   };
 }
 

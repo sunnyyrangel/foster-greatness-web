@@ -1,6 +1,6 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase/client';
 import type { ResourceRow, CommunityResource, InformationalResourceRow, InformationalResource } from './types';
-import { toCommunityResource, getResourceCategoriesForCategory, toInformationalResource } from './types';
+import { toCommunityResource, toInformationalResource } from './types';
 
 export interface SearchResourcesParams {
   zip: string;
@@ -23,16 +23,12 @@ export async function searchResources(
     return { resources: [], count: 0 };
   }
 
-  const categories = getResourceCategoriesForCategory(params.category);
-  if (categories.length === 0) {
-    return { resources: [], count: 0 };
-  }
-
   const { data, error } = await supabase
     .from('resources')
     .select('*')
     .eq('zip', params.zip)
-    .in('category', categories);
+    .eq('status', 'approved')
+    .contains('service_tags', [params.category]);
 
   if (error) {
     throw new Error(`Supabase query failed: ${error.message}`);
