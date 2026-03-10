@@ -18,6 +18,16 @@ if (process.env.NODE_ENV === 'development') {
   ALLOWED_ORIGINS.push('http://localhost:3000', 'http://127.0.0.1:3000');
 }
 
+// Allow Vercel preview deployments
+if (process.env.VERCEL_ENV === 'preview') {
+  if (process.env.VERCEL_URL) {
+    ALLOWED_ORIGINS.push(`https://${process.env.VERCEL_URL}`);
+  }
+  if (process.env.VERCEL_BRANCH_URL) {
+    ALLOWED_ORIGINS.push(`https://${process.env.VERCEL_BRANCH_URL}`);
+  }
+}
+
 /**
  * Check if origin is allowed
  */
