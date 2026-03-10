@@ -90,9 +90,9 @@ export default function SubmissionReviewPanel({
           availability,
           free_or_reduced: freeOrReduced,
           languages: langArray,
-          address: address || null,
+          address: address || '', // Original schema NOT NULL
           city: city || null,
-          state: state || null,
+          state: state || '', // Original schema NOT NULL
           description: description || null,
         }),
       });
