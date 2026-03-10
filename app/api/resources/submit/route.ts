@@ -124,7 +124,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      console.error('Supabase insert error:', { code: error.code, message: error.message, details: error.details, hint: error.hint });
       throw new Error(`Supabase insert failed: ${error.message}`);
     }
 
