@@ -106,7 +106,9 @@ export async function POST(request: NextRequest) {
       provider_name: data.provider_name,
       description: data.description,
       website_url: data.website_url || null,
-      phone: data.phone || null,
+      phone: data.phone || '', // Original schema NOT NULL
+      address: '', // Original schema NOT NULL
+      state: '', // Original schema NOT NULL (address state, not coverage states)
       coverage_level: data.coverage_level,
       zip: data.coverage_level === 'local' ? data.zip : null,
       states: data.states ?? [],
