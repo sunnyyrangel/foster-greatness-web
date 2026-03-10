@@ -110,6 +110,7 @@ export async function POST(request: NextRequest) {
       coverage_level: data.coverage_level,
       zip: data.coverage_level === 'local' ? data.zip : null,
       states: data.states ?? [],
+      category: data.category, // Legacy column, still NOT NULL
       service_tags: [data.category],
       status: 'pending',
       submitted_by_role: data.submitted_by_role,
