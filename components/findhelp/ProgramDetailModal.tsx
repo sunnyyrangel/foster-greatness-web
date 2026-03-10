@@ -389,6 +389,14 @@ export default function ProgramDetailModal({
                 <p className="text-gray-600 whitespace-pre-line">{communityResource.description}</p>
               </div>
 
+              {/* Eligibility (from enrichment) */}
+              {communityResource.eligibility && (
+                <div>
+                  <h3 className="font-semibold text-fg-navy mb-2">Eligibility</h3>
+                  <p className="text-gray-600">{communityResource.eligibility}</p>
+                </div>
+              )}
+
               {/* Contact Info */}
               <div className="space-y-3">
                 {communityResource.phone && (
@@ -427,7 +435,7 @@ export default function ProgramDetailModal({
               {/* Category */}
               <div>
                 <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                  {communityResource.category}
+                  {communityResource.service_tags?.[0] ?? 'Community Resource'}
                 </span>
               </div>
             </div>

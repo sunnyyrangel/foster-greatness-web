@@ -19,9 +19,27 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-fg-navy text-white px-6 py-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold font-poppins">
-          Foster Greatness Admin
-        </h1>
+        <div className="flex items-center gap-6">
+          <h1 className="text-lg font-semibold font-poppins">
+            Foster Greatness Admin
+          </h1>
+          {!isLoginPage && (
+            <nav className="flex gap-4 text-sm">
+              <a
+                href="/admin/analytics"
+                className={`transition-colors ${pathname === '/admin/analytics' ? 'text-white' : 'text-white/70 hover:text-white'}`}
+              >
+                Analytics
+              </a>
+              <a
+                href="/admin/submissions"
+                className={`transition-colors ${pathname === '/admin/submissions' ? 'text-white' : 'text-white/70 hover:text-white'}`}
+              >
+                Submissions
+              </a>
+            </nav>
+          )}
+        </div>
         {!isLoginPage && (
           <button
             onClick={handleLogout}

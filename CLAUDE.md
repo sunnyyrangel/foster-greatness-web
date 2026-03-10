@@ -278,10 +278,23 @@ npm start       # Production server
 - `app/(site)/gingerbread/` - Gingerbread contest (custom)
 
 ### Community Resources
-- `lib/resources/types.ts` - CommunityResource type, ResourceRow, SDOH category mapping
-- `lib/resources/client.ts` - Supabase query (searchResources)
+- `lib/resources/types.ts` - CommunityResource, ResourceRow, SDOH_CATEGORIES, toCommunityResource()
+- `lib/resources/client.ts` - searchResources() — queries by service_tags + status + ZIP
 - `lib/resources/index.ts` - Re-exports
-- `app/api/resources/search/route.ts` - Community resources search API
+- `app/api/resources/search/route.ts` - Community resources search API (15 req/min)
+- `supabase/migrations/20260306100000_redesign_resources.sql` - Schema migration (Findhelp alignment + submission workflow)
+
+### Resource Submissions
+- `components/resources/ResourceSuggestionForm.tsx` - Public suggestion form
+- `app/(site)/suggest-resource/page.tsx` - Suggestion form page (linked from /services)
+- `app/api/resources/submit/route.ts` - Submission API (5 req/min)
+- `app/admin/submissions/page.tsx` - Admin review dashboard
+- `components/admin/SubmissionReviewPanel.tsx` - Review + AI enrichment panel
+- `app/api/admin/submissions/route.ts` - Admin submissions list API
+- `app/api/admin/submissions/[id]/route.ts` - Single submission operations (approve/reject/update)
+- `app/api/admin/enrich/route.ts` - AI enrichment via Gemini Flash
+- `lib/supabase/admin.ts` - Supabase service role client (bypasses RLS)
+- `lib/admin/auth.ts` - Admin auth verification helper
 
 ### Informational Resources (Supabase `informational_resources` table)
 - `lib/resources/types.ts` - InformationalResource type, InformationalResourceRow, toInformationalResource()
@@ -303,6 +316,8 @@ npm start       # Production server
 - `docs/plans/2025-12-03-site-config-system-design.md` - Configuration system design
 - `docs/plans/2026-02-24-custom-resources-integration-design.md` - Community resources design
 - `docs/plans/2026-02-25-informational-resources-display-design.md` - Informational resources display design
+- `docs/plans/2026-03-06-resource-submission-design.md` - Resource submission & enrichment system design
+- `docs/plans/2026-03-06-resource-submission-plan.md` - Implementation plan
 
 ### Known Tech Debt
 - `public/images/` has a flat + nested structure (some images at root, some in subdirs) — defer asset reorg to a separate effort
@@ -397,6 +412,9 @@ See `docs/plans/2025-12-18-llm-txt-design.md` for complete design rationale and 
   - `/api/resources/informational`: 15 requests/minute
   - `/api/analytics/track`: 60 requests/minute (event bursts from resource finder)
   - `/api/admin/analytics`: 30 requests/minute (admin dashboard)
+  - `/api/resources/submit`: 5 requests/minute (prevents spam submissions)
+  - `/api/admin/submissions`: 30 requests/minute (admin review)
+  - `/api/admin/enrich`: 5 requests/minute (AI enrichment)
 - **Headers**: Standard rate limit headers (X-RateLimit-Limit, Remaining, Reset, Retry-After)
 
 ### CORS Protection
@@ -493,6 +511,8 @@ FINDHELP_PASSWORD=<from findhelp account>
 FINDHELP_API_KEY=<from findhelp account>
 NEXT_PUBLIC_MAPBOX_TOKEN=<from Mapbox account>
 ADMIN_PASSWORD=<password for /admin routes>
+SUPABASE_SERVICE_ROLE_KEY=<from Supabase dashboard, for admin API routes>
+GEMINI_API_KEY=<from Google AI Studio, for AI enrichment>
 ```
 
 ### File Structure
@@ -582,20 +602,32 @@ Programs are automatically filtered to exclude populations not relevant to foste
 
 The services page also shows curated community-recommended resources from the Supabase `resources` table, displayed **above** Findhelp results with a teal "Community Recommended" badge.
 
-**Supabase Table:** `resources` (requires `zip` column for filtering)
+**Supabase Table:** `resources` (supports `coverage_level` for local/statewide/multi-state/national reach)
 
 **Module:** `lib/resources/`
 ```
 lib/resources/
-  types.ts    # CommunityResource, ResourceRow, SDOH category mapping
-  client.ts   # searchResources() — queries Supabase by ZIP + category
+  types.ts    # CommunityResource, ResourceRow, CoverageLevel, SDOH categories, US_STATES
+  client.ts   # searchResources() — 3-query parallel search (local + state + national)
   index.ts    # Re-exports
 ```
 
 **API Route:** `GET /api/resources/search?zip=XXXXX&category=Education`
 - Rate limit: 15 req/min
-- Filters by exact ZIP match and SDOH category
+- Runs 3 parallel queries: local (exact ZIP), state-level (user's state via `zip_to_state()` RPC), national
+- Returns results ordered: local first, then state, then national
 - Returns `{ success: true, data: { resources: [...], count: N } }`
+
+**Coverage Levels:**
+
+| Level | `coverage_level` | `zip` | `states` | Search Match |
+|---|---|---|---|---|
+| Local | `local` | Required (5-digit) | `[]` | Exact ZIP match |
+| Statewide | `statewide` | `null` | `['CA']` | User's state in `states[]` |
+| Multi-state | `multi_state` | `null` | `['CA','NY',...]` | User's state in `states[]` |
+| National | `national` | `null` | `[]` | Always matches |
+
+Coverage level maps to Findhelp `grain`/`grain_location` in `communityToProgramLite()` so `getReachLabel()` in ProgramCard automatically shows "Available Nationwide", "Statewide (CA)", etc.
 
 **SDOH Category Mapping:**
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { List, Map, Heart, ArrowLeft, Search, MapPin, ExternalLink, Clock, DollarSign, X, ChevronLeft, ChevronRight, HandHeart } from 'lucide-react';
-import type { ServiceTag, ProgramLite } from '@/lib/findhelp';
+import type { ServiceTag, ProgramLite, Office, OfficeHours, Availability, FreeOrReduced, NextStep } from '@/lib/findhelp';
 import { matchesOpenNowFilter } from '@/lib/findhelp';
 import type { CommunityResource, InformationalResource } from '@/lib/resources';
 import { ResourceBoardProvider, useResourceBoard } from './ResourceBoardContext';
@@ -522,20 +522,54 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   }, [totalPages, currentPage, handlePageChange]);
 
   // Convert CommunityResource to ProgramLite shape for ProgramCard
-  const communityToProgramLite = useCallback((resource: CommunityResource): ProgramLite => ({
-    id: resource.id,
-    name: resource.name,
-    provider_name: resource.provider_name,
-    description: resource.description,
-    availability: 'available' as const,
-    free_or_reduced: 'indeterminate' as const,
-    next_steps: [
-      ...(resource.phone ? [{ channel: 'phone' as const, action: 'call', contact: resource.phone }] : []),
-      ...(resource.website_url ? [{ channel: 'website' as const, action: 'visit', contact: resource.website_url }] : []),
-    ],
-    offices: [],
-    service_tags: [],
-  }), []);
+  const communityToProgramLite = useCallback((resource: CommunityResource): ProgramLite => {
+    const nextSteps: NextStep[] = [];
+    if (resource.phone) nextSteps.push({ channel: 'phone', action: 'call', contact: resource.phone });
+    if (resource.website_url) nextSteps.push({ channel: 'website', action: 'visit', contact: resource.website_url });
+    if (resource.email) nextSteps.push({ channel: 'email', action: 'email', contact: resource.email });
+
+    const offices: Office[] = [];
+    if (resource.address || resource.latitude) {
+      offices.push({
+        address1: resource.address,
+        city: resource.city,
+        state: resource.state,
+        postal: resource.zip,
+        is_administrative: false,
+        ...(resource.latitude && resource.longitude && {
+          location: { latitude: resource.latitude, longitude: resource.longitude },
+        }),
+        ...(resource.phone && { phone_number: resource.phone }),
+        ...(resource.website_url && { website_url: resource.website_url }),
+        ...(resource.hours && { hours: resource.hours as OfficeHours }),
+        ...(resource.languages && { supported_languages: resource.languages }),
+      });
+    }
+
+    // Map coverage_level to Findhelp grain/grain_location for reach labels
+    const grain = resource.coverage_level === 'national'
+      ? 'national' as const
+      : resource.coverage_level === 'statewide' || resource.coverage_level === 'multi_state'
+        ? 'state' as const
+        : undefined;
+    const grain_location = (resource.coverage_level === 'statewide' || resource.coverage_level === 'multi_state')
+      ? resource.states
+      : undefined;
+
+    return {
+      id: resource.id,
+      name: resource.name,
+      provider_name: resource.provider_name,
+      description: resource.description,
+      availability: (resource.availability as Availability) ?? 'available',
+      free_or_reduced: (resource.free_or_reduced as FreeOrReduced) ?? 'indeterminate',
+      next_steps: nextSteps,
+      offices,
+      service_tags: resource.service_tags ?? [],
+      ...(grain && { grain }),
+      ...(grain_location && { grain_location }),
+    };
+  }, []);
 
   return (
     <div className="w-full">
@@ -1073,6 +1107,21 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                       </>
                     )}
                   </div>
+
+                  {/* Suggest a Resource CTA */}
+                  {!widget && (
+                    <div className="mt-6 p-6 bg-[#ddf3ff]/30 rounded-lg border border-fg-blue/10 text-center">
+                      <p className="text-fg-navy font-medium mb-2">
+                        Know a great program?
+                      </p>
+                      <a
+                        href={`/suggest-resource${zip || selectedTagLabel ? '?' : ''}${zip ? `zip=${zip}` : ''}${zip && selectedTagLabel ? '&' : ''}${selectedTagLabel ? `category=${encodeURIComponent(selectedTagLabel)}` : ''}`}
+                        className="inline-block px-5 py-2.5 bg-fg-navy text-white rounded-md hover:bg-fg-navy/90 transition-colors font-medium text-sm"
+                      >
+                        Help us grow our resource directory
+                      </a>
+                    </div>
+                  )}
                 </>
               )}
             </>
