@@ -292,7 +292,7 @@ npm start       # Production server
 - `components/admin/SubmissionReviewPanel.tsx` - Review + AI enrichment panel
 - `app/api/admin/submissions/route.ts` - Admin submissions list API
 - `app/api/admin/submissions/[id]/route.ts` - Single submission operations (approve/reject/update)
-- `app/api/admin/enrich/route.ts` - AI enrichment via Claude Haiku
+- `app/api/admin/enrich/route.ts` - AI enrichment via Gemini Flash
 - `lib/supabase/admin.ts` - Supabase service role client (bypasses RLS)
 - `lib/admin/auth.ts` - Admin auth verification helper
 
@@ -512,7 +512,7 @@ FINDHELP_API_KEY=<from findhelp account>
 NEXT_PUBLIC_MAPBOX_TOKEN=<from Mapbox account>
 ADMIN_PASSWORD=<password for /admin routes>
 SUPABASE_SERVICE_ROLE_KEY=<from Supabase dashboard, for admin API routes>
-ANTHROPIC_API_KEY=<from Anthropic console, for AI enrichment>
+GEMINI_API_KEY=<from Google AI Studio, for AI enrichment>
 ```
 
 ### File Structure

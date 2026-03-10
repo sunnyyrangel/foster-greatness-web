@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { verifyAdminAuth } from '@/lib/admin/auth';
 import { supabaseAdmin, isAdminConfigured } from '@/lib/supabase/admin';
@@ -93,10 +93,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: 'AI enrichment not configured (missing ANTHROPIC_API_KEY)' },
+      { error: 'AI enrichment not configured (missing GEMINI_API_KEY)' },
       { status: 503, headers: rateLimitHeaders(rateLimitResult) }
     );
   }
@@ -141,19 +141,18 @@ export async function POST(request: NextRequest) {
       .replace('{provider_name}', resource.provider_name ?? resource.program_name)
       .replace('{website_text}', websiteText);
 
-    // Call Claude
-    const anthropic = new Anthropic({ apiKey });
-    const message = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
+    // Call Gemini
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        maxOutputTokens: 1024,
+      },
     });
 
-    // Extract text response
-    const responseText = message.content
-      .filter((block): block is Anthropic.TextBlock => block.type === 'text')
-      .map((block) => block.text)
-      .join('');
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
 
     // Parse JSON from response
     let enrichmentData: Record<string, unknown>;
