@@ -23,6 +23,7 @@ export default function SubmissionReviewPanel({
   const [enriching, setEnriching] = useState(false);
   const [enrichError, setEnrichError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [rejecting, setRejecting] = useState(false);
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectForm, setShowRejectForm] = useState(false);
@@ -76,6 +77,7 @@ export default function SubmissionReviewPanel({
 
   async function handleApprove() {
     setSaving(true);
+    setSaveError('');
 
     try {
       const langArray = languages.split(',').map((l) => l.trim()).filter(Boolean);
@@ -97,10 +99,16 @@ export default function SubmissionReviewPanel({
         }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
         onUpdate();
         onClose();
+      } else {
+        setSaveError(data.error || `Failed (${res.status})`);
       }
+    } catch {
+      setSaveError('Something went wrong. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -373,6 +381,11 @@ export default function SubmissionReviewPanel({
               <h3 className="text-sm font-semibold text-red-800 mb-1">Rejection Reason</h3>
               <p className="text-sm text-red-700">{submission.rejection_reason}</p>
             </section>
+          )}
+
+          {/* Error display */}
+          {saveError && (
+            <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-md mb-4">{saveError}</p>
           )}
 
           {/* Action Buttons */}
