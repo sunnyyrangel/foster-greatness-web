@@ -546,6 +546,16 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
       });
     }
 
+    // Map coverage_level to Findhelp grain/grain_location for reach labels
+    const grain = resource.coverage_level === 'national'
+      ? 'national' as const
+      : resource.coverage_level === 'statewide' || resource.coverage_level === 'multi_state'
+        ? 'state' as const
+        : undefined;
+    const grain_location = (resource.coverage_level === 'statewide' || resource.coverage_level === 'multi_state')
+      ? resource.states
+      : undefined;
+
     return {
       id: resource.id,
       name: resource.name,
@@ -556,6 +566,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
       next_steps: nextSteps,
       offices,
       service_tags: resource.service_tags ?? [],
+      ...(grain && { grain }),
+      ...(grain_location && { grain_location }),
     };
   }, []);
 

@@ -602,20 +602,32 @@ Programs are automatically filtered to exclude populations not relevant to foste
 
 The services page also shows curated community-recommended resources from the Supabase `resources` table, displayed **above** Findhelp results with a teal "Community Recommended" badge.
 
-**Supabase Table:** `resources` (requires `zip` column for filtering)
+**Supabase Table:** `resources` (supports `coverage_level` for local/statewide/multi-state/national reach)
 
 **Module:** `lib/resources/`
 ```
 lib/resources/
-  types.ts    # CommunityResource, ResourceRow, SDOH category mapping
-  client.ts   # searchResources() — queries Supabase by ZIP + category
+  types.ts    # CommunityResource, ResourceRow, CoverageLevel, SDOH categories, US_STATES
+  client.ts   # searchResources() — 3-query parallel search (local + state + national)
   index.ts    # Re-exports
 ```
 
 **API Route:** `GET /api/resources/search?zip=XXXXX&category=Education`
 - Rate limit: 15 req/min
-- Filters by exact ZIP match and SDOH category
+- Runs 3 parallel queries: local (exact ZIP), state-level (user's state via `zip_to_state()` RPC), national
+- Returns results ordered: local first, then state, then national
 - Returns `{ success: true, data: { resources: [...], count: N } }`
+
+**Coverage Levels:**
+
+| Level | `coverage_level` | `zip` | `states` | Search Match |
+|---|---|---|---|---|
+| Local | `local` | Required (5-digit) | `[]` | Exact ZIP match |
+| Statewide | `statewide` | `null` | `['CA']` | User's state in `states[]` |
+| Multi-state | `multi_state` | `null` | `['CA','NY',...]` | User's state in `states[]` |
+| National | `national` | `null` | `[]` | Always matches |
+
+Coverage level maps to Findhelp `grain`/`grain_location` in `communityToProgramLite()` so `getReachLabel()` in ProgramCard automatically shows "Available Nationwide", "Statewide (CA)", etc.
 
 **SDOH Category Mapping:**
 

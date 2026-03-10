@@ -6,6 +6,74 @@
  */
 
 // ============================================================================
+// Coverage Level Types
+// ============================================================================
+
+export type CoverageLevel = 'local' | 'statewide' | 'multi_state' | 'national';
+
+export const COVERAGE_LEVELS: { value: CoverageLevel; label: string }[] = [
+  { value: 'local', label: 'Local (single ZIP code)' },
+  { value: 'statewide', label: 'Statewide (one state)' },
+  { value: 'multi_state', label: 'Multi-state (several states)' },
+  { value: 'national', label: 'National (all 50 states)' },
+];
+
+export const US_STATES: { code: string; name: string }[] = [
+  { code: 'AL', name: 'Alabama' },
+  { code: 'AK', name: 'Alaska' },
+  { code: 'AZ', name: 'Arizona' },
+  { code: 'AR', name: 'Arkansas' },
+  { code: 'CA', name: 'California' },
+  { code: 'CO', name: 'Colorado' },
+  { code: 'CT', name: 'Connecticut' },
+  { code: 'DE', name: 'Delaware' },
+  { code: 'FL', name: 'Florida' },
+  { code: 'GA', name: 'Georgia' },
+  { code: 'HI', name: 'Hawaii' },
+  { code: 'ID', name: 'Idaho' },
+  { code: 'IL', name: 'Illinois' },
+  { code: 'IN', name: 'Indiana' },
+  { code: 'IA', name: 'Iowa' },
+  { code: 'KS', name: 'Kansas' },
+  { code: 'KY', name: 'Kentucky' },
+  { code: 'LA', name: 'Louisiana' },
+  { code: 'ME', name: 'Maine' },
+  { code: 'MD', name: 'Maryland' },
+  { code: 'MA', name: 'Massachusetts' },
+  { code: 'MI', name: 'Michigan' },
+  { code: 'MN', name: 'Minnesota' },
+  { code: 'MS', name: 'Mississippi' },
+  { code: 'MO', name: 'Missouri' },
+  { code: 'MT', name: 'Montana' },
+  { code: 'NE', name: 'Nebraska' },
+  { code: 'NV', name: 'Nevada' },
+  { code: 'NH', name: 'New Hampshire' },
+  { code: 'NJ', name: 'New Jersey' },
+  { code: 'NM', name: 'New Mexico' },
+  { code: 'NY', name: 'New York' },
+  { code: 'NC', name: 'North Carolina' },
+  { code: 'ND', name: 'North Dakota' },
+  { code: 'OH', name: 'Ohio' },
+  { code: 'OK', name: 'Oklahoma' },
+  { code: 'OR', name: 'Oregon' },
+  { code: 'PA', name: 'Pennsylvania' },
+  { code: 'RI', name: 'Rhode Island' },
+  { code: 'SC', name: 'South Carolina' },
+  { code: 'SD', name: 'South Dakota' },
+  { code: 'TN', name: 'Tennessee' },
+  { code: 'TX', name: 'Texas' },
+  { code: 'UT', name: 'Utah' },
+  { code: 'VT', name: 'Vermont' },
+  { code: 'VA', name: 'Virginia' },
+  { code: 'WA', name: 'Washington' },
+  { code: 'WV', name: 'West Virginia' },
+  { code: 'WI', name: 'Wisconsin' },
+  { code: 'WY', name: 'Wyoming' },
+  { code: 'DC', name: 'District of Columbia' },
+  { code: 'PR', name: 'Puerto Rico' },
+];
+
+// ============================================================================
 // Database Row Type (Supabase)
 // ============================================================================
 
@@ -18,12 +86,14 @@ export interface ResourceRow {
   provider_name: string | null;
   description: string | null;
   website_url: string | null;
-  zip: string;
+  zip: string | null;
   address: string | null;
   city: string | null;
   state: string | null;
   latitude: number | null;
   longitude: number | null;
+  coverage_level: string;
+  states: string[];
   service_tags: string[];
   availability: string;
   free_or_reduced: string;
@@ -73,6 +143,8 @@ export interface CommunityResource {
   zip?: string;
   latitude?: number;
   longitude?: number;
+  coverage_level: CoverageLevel;
+  states: string[];
   service_tags: string[];
   availability: string;
   free_or_reduced: string;
@@ -127,6 +199,8 @@ export function toCommunityResource(row: ResourceRow): CommunityResource {
     ...(row.zip != null && { zip: row.zip }),
     ...(row.latitude != null && { latitude: row.latitude }),
     ...(row.longitude != null && { longitude: row.longitude }),
+    coverage_level: (row.coverage_level as CoverageLevel) ?? 'local',
+    states: row.states ?? [],
     service_tags: row.service_tags ?? [],
     availability: row.availability ?? 'available',
     free_or_reduced: row.free_or_reduced ?? 'indeterminate',

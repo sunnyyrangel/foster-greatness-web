@@ -38,6 +38,11 @@ ALTER TABLE resources ADD COLUMN IF NOT EXISTS reviewed_by text;
 ALTER TABLE resources ADD COLUMN IF NOT EXISTS reviewed_at timestamptz;
 ALTER TABLE resources ADD COLUMN IF NOT EXISTS rejection_reason text;
 
+-- Coverage level (local, statewide, multi_state, national)
+ALTER TABLE resources ADD COLUMN IF NOT EXISTS coverage_level text NOT NULL DEFAULT 'local';
+ALTER TABLE resources ADD COLUMN IF NOT EXISTS states text[] NOT NULL DEFAULT '{}';
+ALTER TABLE resources ALTER COLUMN zip DROP NOT NULL;
+
 -- Enrichment
 ALTER TABLE resources ADD COLUMN IF NOT EXISTS enrichment_data jsonb;
 ALTER TABLE resources ADD COLUMN IF NOT EXISTS enriched_at timestamptz;
@@ -53,6 +58,12 @@ CREATE INDEX IF NOT EXISTS idx_resources_status ON resources(status);
 CREATE INDEX IF NOT EXISTS idx_resources_zip ON resources(zip);
 CREATE INDEX IF NOT EXISTS idx_resources_service_tags ON resources USING GIN(service_tags);
 CREATE INDEX IF NOT EXISTS idx_resources_state ON resources(state);
+CREATE INDEX IF NOT EXISTS idx_resources_coverage_level ON resources(coverage_level);
+CREATE INDEX IF NOT EXISTS idx_resources_states ON resources USING GIN(states);
+
+-- Coverage level constraint
+ALTER TABLE resources ADD CONSTRAINT chk_coverage_level
+  CHECK (coverage_level IN ('local', 'statewide', 'multi_state', 'national'));
 
 -- ============================================================================
 -- Migrate existing data
@@ -76,6 +87,9 @@ UPDATE resources SET submitted_by_role = 'admin' WHERE submitted_by_role IS NULL
 
 -- Copy program_name to provider_name where provider_name is null
 UPDATE resources SET provider_name = program_name WHERE provider_name IS NULL;
+
+-- Backfill coverage_level for existing rows
+UPDATE resources SET coverage_level = 'local', states = '{}' WHERE coverage_level IS NULL;
 
 -- ============================================================================
 -- RLS Policies

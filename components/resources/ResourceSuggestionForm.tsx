@@ -2,7 +2,8 @@
 
 import { useState, FormEvent, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { SDOH_CATEGORIES } from '@/lib/resources/types';
+import { SDOH_CATEGORIES, COVERAGE_LEVELS, US_STATES } from '@/lib/resources/types';
+import type { CoverageLevel } from '@/lib/resources/types';
 
 const ROLE_OPTIONS = [
   { value: 'nonprofit_staff', label: 'Nonprofit / organization staff' },
@@ -21,7 +22,9 @@ function ResourceSuggestionFormInner() {
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
+  const [coverageLevel, setCoverageLevel] = useState<CoverageLevel>('local');
   const [zip, setZip] = useState(searchParams.get('zip') ?? '');
+  const [selectedStates, setSelectedStates] = useState<string[]>([]);
   const [category, setCategory] = useState(searchParams.get('category') ?? '');
   const [usedService, setUsedService] = useState(false);
   const [feedback, setFeedback] = useState('');
@@ -47,7 +50,9 @@ function ResourceSuggestionFormInner() {
           description,
           website_url: websiteUrl || undefined,
           phone: phone || undefined,
-          zip,
+          coverage_level: coverageLevel,
+          zip: coverageLevel === 'local' ? zip : undefined,
+          states: ['statewide', 'multi_state'].includes(coverageLevel) ? selectedStates : [],
           category,
           submitted_by_role: role,
           submitted_by_name: submitterName,
@@ -223,24 +228,28 @@ function ResourceSuggestionFormInner() {
         <p className="mt-1 text-xs text-gray-400">{description.length}/500</p>
       </div>
 
-      {/* ZIP + Category (side by side) */}
+      {/* Coverage level + Category */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-1.5">
-            ZIP code served <span className="text-red-500">*</span>
+          <label htmlFor="coverageLevel" className="block text-sm font-medium text-gray-700 mb-1.5">
+            Area served <span className="text-red-500">*</span>
           </label>
-          <input
-            id="zip"
-            type="text"
+          <select
+            id="coverageLevel"
             required
-            inputMode="numeric"
-            pattern="\d{5}"
-            maxLength={5}
-            value={zip}
-            onChange={(e) => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
+            value={coverageLevel}
+            onChange={(e) => {
+              const val = e.target.value as CoverageLevel;
+              setCoverageLevel(val);
+              if (val !== 'local') setZip('');
+              if (!['statewide', 'multi_state'].includes(val)) setSelectedStates([]);
+            }}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fg-blue focus:border-transparent"
-            placeholder="90210"
-          />
+          >
+            {COVERAGE_LEVELS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -260,6 +269,79 @@ function ResourceSuggestionFormInner() {
           </select>
         </div>
       </div>
+
+      {/* ZIP code — only for local coverage */}
+      {coverageLevel === 'local' && (
+        <div>
+          <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-1.5">
+            ZIP code served <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="zip"
+            type="text"
+            required
+            inputMode="numeric"
+            pattern="\d{5}"
+            maxLength={5}
+            value={zip}
+            onChange={(e) => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
+            className="w-full max-w-[200px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fg-blue focus:border-transparent"
+            placeholder="90210"
+          />
+        </div>
+      )}
+
+      {/* Single state dropdown — for statewide coverage */}
+      {coverageLevel === 'statewide' && (
+        <div>
+          <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1.5">
+            State <span className="text-red-500">*</span>
+          </label>
+          <select
+            id="state"
+            required
+            value={selectedStates[0] ?? ''}
+            onChange={(e) => setSelectedStates(e.target.value ? [e.target.value] : [])}
+            className="w-full max-w-[300px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fg-blue focus:border-transparent"
+          >
+            <option value="">Select a state</option>
+            {US_STATES.map((s) => (
+              <option key={s.code} value={s.code}>{s.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* Multi-state checkbox list — for multi_state coverage */}
+      {coverageLevel === 'multi_state' && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            States served <span className="text-red-500">*</span>
+          </label>
+          <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3 grid grid-cols-2 sm:grid-cols-3 gap-1">
+            {US_STATES.map((s) => (
+              <label key={s.code} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer py-0.5">
+                <input
+                  type="checkbox"
+                  checked={selectedStates.includes(s.code)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedStates((prev) => [...prev, s.code]);
+                    } else {
+                      setSelectedStates((prev) => prev.filter((c) => c !== s.code));
+                    }
+                  }}
+                  className="rounded border-gray-300 text-fg-blue focus:ring-fg-blue"
+                />
+                {s.code}
+              </label>
+            ))}
+          </div>
+          {selectedStates.length > 0 && (
+            <p className="mt-1 text-xs text-gray-400">{selectedStates.length} state{selectedStates.length !== 1 ? 's' : ''} selected</p>
+          )}
+        </div>
+      )}
 
       <hr className="border-gray-100" />
 

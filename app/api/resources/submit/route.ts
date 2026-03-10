@@ -6,13 +6,17 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase/client';
 import { captureException } from '@/lib/sentry-utils';
 import { SDOH_CATEGORIES } from '@/lib/resources/types';
 
+const COVERAGE_VALUES = ['local', 'statewide', 'multi_state', 'national'] as const;
+
 const submitSchema = z.object({
   program_name: z.string().min(1, 'Program name is required').max(200),
   provider_name: z.string().min(1, 'Organization name is required').max(200),
   description: z.string().min(1, 'Description is required').max(500),
   website_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   phone: z.string().max(20).optional().or(z.literal('')),
-  zip: z.string().regex(/^\d{5}$/, 'ZIP code must be exactly 5 digits'),
+  coverage_level: z.enum(COVERAGE_VALUES),
+  zip: z.string().regex(/^\d{5}$/, 'ZIP code must be exactly 5 digits').optional().or(z.literal('')),
+  states: z.array(z.string().length(2)).optional().default([]),
   category: z.enum(SDOH_CATEGORIES as unknown as [string, ...string[]]),
   submitted_by_role: z.enum(['nonprofit_staff', 'community_member', 'lived_experience', 'other']),
   submitted_by_name: z.string().min(1, 'Your name is required').max(100),
@@ -20,7 +24,13 @@ const submitSchema = z.object({
   submitted_by_is_community_member: z.boolean(),
   submitted_by_used_service: z.boolean().optional().default(false),
   submitted_by_feedback: z.string().max(500).optional().or(z.literal('')),
-});
+}).refine(
+  (data) => data.coverage_level !== 'local' || (data.zip && /^\d{5}$/.test(data.zip)),
+  { message: 'ZIP code is required for local resources', path: ['zip'] }
+).refine(
+  (data) => !['statewide', 'multi_state'].includes(data.coverage_level) || (data.states && data.states.length > 0),
+  { message: 'At least one state is required', path: ['states'] }
+);
 
 const CORS_METHODS = 'POST, OPTIONS';
 
@@ -97,7 +107,9 @@ export async function POST(request: NextRequest) {
       description: data.description,
       website_url: data.website_url || null,
       phone: data.phone || null,
-      zip: data.zip,
+      coverage_level: data.coverage_level,
+      zip: data.coverage_level === 'local' ? data.zip : null,
+      states: data.states ?? [],
       service_tags: [data.category],
       status: 'pending',
       submitted_by_role: data.submitted_by_role,
