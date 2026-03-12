@@ -231,14 +231,15 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     setCommunityResources([]);
     setInformationalResources([]);
     setResultsTab('programs');
-    clearFilters();
+    setFilterFree(false);
+    setFilterOpenNow(false);
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
     fetchPrograms(tagIds, 0, false, undefined, emptyAttrTags);
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
     trackEvent('service_category_select', { category: label, zip, channel: widget ? 'embed' : 'web' });
-  }, [fetchPrograms, fetchCommunityResources, fetchInformationalResources, zip, widget, clearFilters]);
+  }, [fetchPrograms, fetchCommunityResources, fetchInformationalResources, zip, widget]);
 
   // Handle load more
   const handleLoadMore = () => {
