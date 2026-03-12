@@ -23,10 +23,12 @@ interface ProgramSearchInnerProps {
   initialZip?: string;
   initialProgramId?: string;
   initialView?: 'map';
+  initialServiceTag?: string;
+  initialTerms?: string;
   widget?: boolean;
 }
 
-function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget }: ProgramSearchInnerProps) {
+function ProgramSearchInner({ initialZip, initialProgramId, initialView, initialServiceTag, initialTerms, widget }: ProgramSearchInnerProps) {
   // State
   const [step, setStep] = useState<SearchStep>(initialZip ? 'category' : 'zip');
   const [zip, setZip] = useState(initialZip || '');
@@ -221,7 +223,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
   };
 
   // Handle category selection
-  const handleCategorySelect = (tagIds: string, label: string) => {
+  const handleCategorySelect = useCallback((tagIds: string, label: string) => {
     setSelectedTag(tagIds);
     setSelectedTagLabel(label);
     setCursor(0);
@@ -236,7 +238,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
     trackEvent('service_category_select', { category: label, zip, channel: widget ? 'embed' : 'web' });
-  };
+  }, [fetchPrograms, fetchCommunityResources, fetchInformationalResources, zip, widget, clearFilters]);
 
   // Handle load more
   const handleLoadMore = () => {
@@ -433,6 +435,39 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
       geocodeZip(initialZip);
     }
   }, [initialZip, fetchTags, geocodeZip]);
+
+  // Auto-select category if initialServiceTag provided (e.g. from widget deep link)
+  const autoSelectedRef = useRef(false);
+  useEffect(() => {
+    if (autoSelectedRef.current || !initialServiceTag || tags.length === 0 || !zip) return;
+    autoSelectedRef.current = true;
+
+    // Find which category contains these tag IDs
+    const grouped = groupTagsByCategory(tags);
+    for (const category of CATEGORIES) {
+      const group = grouped.get(category.id);
+      if (!group) continue;
+      const tagIds = group.tags.map((t) => t.id).join(',');
+      if (tagIds === initialServiceTag || initialServiceTag.split(',').some(id => tagIds.includes(id))) {
+        handleCategorySelect(tagIds, category.label);
+        return;
+      }
+    }
+    // If no category match, try as raw tag IDs
+    handleCategorySelect(initialServiceTag, '');
+  }, [initialServiceTag, tags, zip, handleCategorySelect]);
+
+  // Auto-run keyword search if initialTerms provided
+  const autoSearchedRef = useRef(false);
+  useEffect(() => {
+    if (autoSearchedRef.current || !initialTerms || tags.length === 0 || !zip) return;
+    if (initialServiceTag) return; // category takes precedence
+    autoSearchedRef.current = true;
+    setSearchTerms(initialTerms);
+    setStep('results');
+    setSelectedTagLabel(`"${initialTerms}"`);
+    fetchPrograms('', 0, false, initialTerms, new Set());
+  }, [initialTerms, initialServiceTag, tags, zip, fetchPrograms]);
 
   // Scroll card into view when hovered from map
   useEffect(() => {
@@ -673,6 +708,20 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
                 )}
               </p>
             </div>
+
+            {/* View on map — widget only */}
+            {widget && resultsTab !== 'guides' && (
+              <a
+                href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium bg-fg-blue/10 text-fg-blue hover:bg-fg-blue/20 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                <Map className="w-3.5 h-3.5" />
+                Map
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
 
             {/* View toggle — hidden on desktop split view and in widget mode */}
             <div className={`flex bg-gray-100 rounded-lg p-1 lg:hidden ${widget || resultsTab === 'guides' ? 'hidden' : ''}`}>
@@ -1088,22 +1137,12 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
                     {/* Load more (mobile, non-widget) */}
                     {!widget && viewMode === 'list' && renderPagination()}
 
-                    {/* View all / View on map links (widget only) */}
+                    {/* View all link (widget only) */}
                     {widget && (
                       <>
                         {renderPagination()}
-                        <div className="mt-4 flex flex-col items-center gap-2">
-                          <a
-                            href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-medium bg-fg-blue/10 text-fg-blue hover:bg-fg-blue/20 px-4 py-2 rounded-lg transition-colors"
-                          >
-                            <Map className="w-3.5 h-3.5" />
-                            View on Map
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                          {totalCount > pageSize && (
+                        {totalCount > pageSize && (
+                          <div className="mt-4 text-center">
                             <a
                               href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
                               target="_blank"
@@ -1113,8 +1152,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget 
                               View all {totalCount} results on Foster Greatness
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
@@ -1172,13 +1211,15 @@ interface ProgramSearchProps {
   initialZip?: string;
   initialProgramId?: string;
   initialView?: 'map';
+  initialServiceTag?: string;
+  initialTerms?: string;
   widget?: boolean;
 }
 
-export default function ProgramSearch({ initialZip, initialProgramId, initialView, widget }: ProgramSearchProps) {
+export default function ProgramSearch({ initialZip, initialProgramId, initialView, initialServiceTag, initialTerms, widget }: ProgramSearchProps) {
   return (
     <ResourceBoardProvider>
-      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} widget={widget} />
+      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} initialServiceTag={initialServiceTag} initialTerms={initialTerms} widget={widget} />
     </ResourceBoardProvider>
   );
 }

@@ -20,6 +20,8 @@ export default async function ServicesPage({
   const initialZip = typeof params.zip === 'string' ? params.zip : undefined;
   const initialProgramId = typeof params.program === 'string' ? params.program : undefined;
   const initialView = params.view === 'map' ? 'map' as const : undefined;
+  const initialServiceTag = typeof params.serviceTag === 'string' ? params.serviceTag : undefined;
+  const initialTerms = typeof params.terms === 'string' ? params.terms : undefined;
 
   return (
     <main className="relative min-h-screen bg-[#fafbfc]">
@@ -65,7 +67,7 @@ export default async function ServicesPage({
               </div>
             }
           >
-            <ProgramSearch initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} />
+            <ProgramSearch initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} initialServiceTag={initialServiceTag} initialTerms={initialTerms} />
           </Suspense>
         </div>
       </section>
