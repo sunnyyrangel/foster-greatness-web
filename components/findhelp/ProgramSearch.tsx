@@ -66,7 +66,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
 
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
-  const [programsLoading, setProgramsLoading] = useState(false);
+  const [programsLoading, setProgramsLoading] = useState(!!(initialZip && (initialServiceTag || initialTerms)));
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Error states
@@ -77,6 +77,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   const [hoveredProgramId, setHoveredProgramId] = useState<string | null>(null);
   const [hoveredFromMap, setHoveredFromMap] = useState(false);
   const listPanelRef = useRef<HTMLDivElement>(null);
+  const isDeepLinked = useRef(!!(initialZip && (initialServiceTag || initialTerms)));
 
   // Modal state
   const [modalProgramId, setModalProgramId] = useState<string | null>(initialProgramId || null);
@@ -86,7 +87,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   const { savedPrograms } = useResourceBoard();
 
   // Fetch service tags for ZIP code
-  const fetchTags = useCallback(async (zipCode: string) => {
+  const fetchTags = useCallback(async (zipCode: string, autoSelectTag?: string) => {
     setTagsLoading(true);
     setTagsError(null);
 
@@ -98,13 +99,38 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
         throw new Error(data.error || 'Failed to load categories');
       }
 
-      setTags(data.data.tags || []);
+      const loadedTags = data.data.tags || [];
+      setTags(loadedTags);
+
+      // If autoSelectTag provided (deep link), skip category step and go straight to results
+      if (autoSelectTag && loadedTags.length > 0) {
+        const grouped = groupTagsByCategory(loadedTags);
+        for (const category of CATEGORIES) {
+          const group = grouped.get(category.id);
+          if (!group) continue;
+          const tagIds = group.tags.map((t: ServiceTag) => t.id).join(',');
+          if (tagIds === autoSelectTag || autoSelectTag.split(',').some((id: string) => tagIds.includes(id))) {
+            setSelectedTag(tagIds);
+            setSelectedTagLabel(category.label);
+            setStep('results');
+            setProgramsLoading(true);
+            return { matched: true, tagIds, label: category.label };
+          }
+        }
+        // No category match — use raw tag IDs
+        setSelectedTag(autoSelectTag);
+        setStep('results');
+        setProgramsLoading(true);
+        return { matched: true, tagIds: autoSelectTag, label: '' };
+      }
+
       setStep('category');
     } catch (error) {
       setTagsError(error instanceof Error ? error.message : 'Failed to load categories');
     } finally {
       setTagsLoading(false);
     }
+    return { matched: false, tagIds: '', label: '' };
   }, []);
 
   // Fetch programs
@@ -433,46 +459,33 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     }
   }, [initialProgramId, initialZip]);
 
-  // Fetch tags if initialZip provided
+  // Fetch tags if initialZip provided, auto-select category if deep-linked
   useEffect(() => {
-    if (initialZip) {
-      fetchTags(initialZip);
-      geocodeZip(initialZip);
-    }
-  }, [initialZip, fetchTags, geocodeZip]);
+    if (!initialZip) return;
+    geocodeZip(initialZip);
 
-  // Auto-select category if initialServiceTag provided (e.g. from widget deep link)
-  const autoSelectedRef = useRef(false);
-  useEffect(() => {
-    if (autoSelectedRef.current || !initialServiceTag || tags.length === 0 || !zip) return;
-    autoSelectedRef.current = true;
+    const init = async () => {
+      const result = await fetchTags(initialZip, initialServiceTag);
 
-    // Find which category contains these tag IDs
-    const grouped = groupTagsByCategory(tags);
-    for (const category of CATEGORIES) {
-      const group = grouped.get(category.id);
-      if (!group) continue;
-      const tagIds = group.tags.map((t) => t.id).join(',');
-      if (tagIds === initialServiceTag || initialServiceTag.split(',').some(id => tagIds.includes(id))) {
-        handleCategorySelect(tagIds, category.label);
-        return;
+      // If category was auto-selected, fire the program search immediately
+      if (result?.matched && result.tagIds) {
+        const emptyAttrTags = new Set<string>();
+        fetchPrograms(result.tagIds, 0, false, undefined, emptyAttrTags);
+        fetchCommunityResources(initialZip, result.label);
+        fetchInformationalResources(initialZip, result.label);
+      } else if (initialTerms && !initialServiceTag) {
+        // Keyword search deep link
+        setSearchTerms(initialTerms);
+        setStep('results');
+        setSelectedTagLabel(`"${initialTerms}"`);
+        fetchPrograms('', 0, false, initialTerms, new Set());
       }
-    }
-    // If no category match, try as raw tag IDs
-    handleCategorySelect(initialServiceTag, '');
-  }, [initialServiceTag, tags, zip, handleCategorySelect]);
-
-  // Auto-run keyword search if initialTerms provided
-  const autoSearchedRef = useRef(false);
-  useEffect(() => {
-    if (autoSearchedRef.current || !initialTerms || tags.length === 0 || !zip) return;
-    if (initialServiceTag) return; // category takes precedence
-    autoSearchedRef.current = true;
-    setSearchTerms(initialTerms);
-    setStep('results');
-    setSelectedTagLabel(`"${initialTerms}"`);
-    fetchPrograms('', 0, false, initialTerms, new Set());
-  }, [initialTerms, initialServiceTag, tags, zip, fetchPrograms]);
+      // Deep link initialization complete — allow category picker to render on back nav
+      isDeepLinked.current = false;
+    };
+    init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Scroll card into view when hovered from map
   useEffect(() => {
@@ -659,8 +672,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
         </div>
       )}
 
-      {/* Category Selection */}
-      {step === 'category' && (
+      {/* Category Selection — hidden during deep-link initialization to prevent flash */}
+      {step === 'category' && !isDeepLinked.current && (
         <div className="py-4">
           <div className="text-center mb-6">
             <p className="text-gray-500">
@@ -717,7 +730,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
             {/* View on map — widget only */}
             {widget && resultsTab !== 'guides' && (
               <a
-                href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
+                href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm font-medium bg-fg-blue/10 text-fg-blue hover:bg-fg-blue/20 px-3 py-1.5 rounded-lg transition-colors"
@@ -1149,7 +1162,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                         {totalCount > pageSize && (
                           <div className="mt-4 text-center">
                             <a
-                              href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
+                              href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
