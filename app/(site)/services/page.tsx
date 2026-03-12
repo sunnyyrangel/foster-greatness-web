@@ -19,6 +19,7 @@ export default async function ServicesPage({
   const params = await searchParams;
   const initialZip = typeof params.zip === 'string' ? params.zip : undefined;
   const initialProgramId = typeof params.program === 'string' ? params.program : undefined;
+  const initialView = params.view === 'map' ? 'map' as const : undefined;
 
   return (
     <main className="relative min-h-screen bg-[#fafbfc]">
@@ -64,7 +65,7 @@ export default async function ServicesPage({
               </div>
             }
           >
-            <ProgramSearch initialZip={initialZip} initialProgramId={initialProgramId} />
+            <ProgramSearch initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} />
           </Suspense>
         </div>
       </section>

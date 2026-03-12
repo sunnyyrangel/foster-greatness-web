@@ -22,10 +22,11 @@ type SearchStep = 'zip' | 'category' | 'results';
 interface ProgramSearchInnerProps {
   initialZip?: string;
   initialProgramId?: string;
+  initialView?: 'map';
   widget?: boolean;
 }
 
-function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSearchInnerProps) {
+function ProgramSearchInner({ initialZip, initialProgramId, initialView, widget }: ProgramSearchInnerProps) {
   // State
   const [step, setStep] = useState<SearchStep>(initialZip ? 'category' : 'zip');
   const [zip, setZip] = useState(initialZip || '');
@@ -37,7 +38,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
   const [totalCount, setTotalCount] = useState(0);
   const [cursor, setCursor] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [viewMode, setViewMode] = useState<ViewMode>(initialView || 'list');
   const [boardOpen, setBoardOpen] = useState(false);
   const [searchTerms, setSearchTerms] = useState('');
   const [zipCenter, setZipCenter] = useState<{ lat: number; lng: number } | undefined>();
@@ -1087,14 +1088,24 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                     {/* Load more (mobile, non-widget) */}
                     {!widget && viewMode === 'list' && renderPagination()}
 
-                    {/* View all link (widget only) */}
+                    {/* View all / View on map links (widget only) */}
                     {widget && (
                       <>
                         {renderPagination()}
-                        {totalCount > pageSize && (
-                          <div className="mt-4 text-center">
+                        <div className="mt-4 flex flex-col items-center gap-2">
+                          <a
+                            href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-medium bg-fg-blue/10 text-fg-blue hover:bg-fg-blue/20 px-4 py-2 rounded-lg transition-colors"
+                          >
+                            <Map className="w-3.5 h-3.5" />
+                            View on Map
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                          {totalCount > pageSize && (
                             <a
-                              href="https://www.fostergreatness.co/services"
+                              href={`https://www.fostergreatness.co/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
@@ -1102,8 +1113,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
                               View all {totalCount} results on Foster Greatness
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </>
                     )}
                   </div>
@@ -1160,13 +1171,14 @@ function ProgramSearchInner({ initialZip, initialProgramId, widget }: ProgramSea
 interface ProgramSearchProps {
   initialZip?: string;
   initialProgramId?: string;
+  initialView?: 'map';
   widget?: boolean;
 }
 
-export default function ProgramSearch({ initialZip, initialProgramId, widget }: ProgramSearchProps) {
+export default function ProgramSearch({ initialZip, initialProgramId, initialView, widget }: ProgramSearchProps) {
   return (
     <ResourceBoardProvider>
-      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} widget={widget} />
+      <ProgramSearchInner initialZip={initialZip} initialProgramId={initialProgramId} initialView={initialView} widget={widget} />
     </ResourceBoardProvider>
   );
 }
