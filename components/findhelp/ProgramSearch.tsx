@@ -30,7 +30,11 @@ interface ProgramSearchInnerProps {
 
 function ProgramSearchInner({ initialZip, initialProgramId, initialView, initialServiceTag, initialTerms, widget }: ProgramSearchInnerProps) {
   // State
-  const [step, setStep] = useState<SearchStep>(initialZip ? 'category' : 'zip');
+  const [step, setStep] = useState<SearchStep>(
+    initialZip && (initialServiceTag || initialTerms) ? 'results'
+    : initialZip ? 'category'
+    : 'zip'
+  );
   const [zip, setZip] = useState(initialZip || '');
   const [zipInput, setZipInput] = useState(initialZip || '');
   const [tags, setTags] = useState<ServiceTag[]>([]);
