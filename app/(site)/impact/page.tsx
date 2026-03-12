@@ -18,11 +18,12 @@ import {
   GraduationCap,
   Car,
   DollarSign,
-  UsersRound,
   ShoppingBasket,
   Handshake,
   Sparkles,
   PenLine,
+  Search,
+  Shield,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -68,10 +69,10 @@ const communityStats = [
 ];
 
 const eventStats = [
-  { value: '62', label: 'Events Hosted', icon: Calendar },
-  { value: '34', label: 'Community Gatherings', icon: Heart },
-  { value: '22', label: 'Workshops', icon: GraduationCap },
-  { value: '24', label: 'Lived Experience Panelists', icon: Mic },
+  { value: '62', label: 'Events Hosted', image: '/images/impact/events-hosted.jpg' },
+  { value: '34', label: 'Community Gatherings', image: '/images/impact/conferences.jpeg' },
+  { value: '22', label: 'Workshops', image: '/images/impact/workshops.jpg' },
+  { value: '24', label: 'Lived Experience Panelists', image: '/images/impact/panelists.jpeg' },
 ];
 
 const resourceStats = [
@@ -86,18 +87,19 @@ const resourceNeeds = [
   { label: 'Education', count: 52, icon: GraduationCap },
   { label: 'Transportation', count: 48, icon: Car },
   { label: 'Financial & Bills', count: 43, icon: DollarSign },
-  { label: 'Community & Connection', count: 37, icon: UsersRound },
   { label: 'Food & Groceries', count: 25, icon: ShoppingBasket },
 ];
 
 const storyStats = [
-  { value: '25', label: 'Thriver Stories Told', icon: Mic },
-  { value: '70', label: 'Hours of Storytelling', icon: Heart },
-  { value: '11', label: 'Conferences Attended', icon: Calendar },
+  { value: '25', label: 'Thriver Stories Told', image: '/images/thriver-stories.jpg' },
+  { value: '11', label: 'Conferences Attended', image: '/images/impact/conference-graphics.jpeg' },
+  { value: '70', label: 'Hours of Storytelling', image: '/images/impact/storyteller-collective.jpg' },
 ];
 
 const storytellersCohort = [
   { name: 'Emmerald Evans', image: '/assets/images/storytellers/emmerald-evans.jpg' },
+  { name: 'Majd Abdallah', image: '/images/majd-abdallah.jpg' },
+  { name: 'Taylor Rockhold', image: '/images/taylor-rockhold.jpg' },
   { name: 'Jennifer Tai', image: '/assets/images/storytellers/jennifer-tai.jpg' },
   { name: 'Antoinette Gutierrez', image: '/assets/images/storytellers/antoinette-gutierrez.jpg' },
   { name: 'Chyenne Santini', image: '/assets/images/storytellers/chyenne-santini.jpg' },
@@ -126,24 +128,28 @@ const testimonials = {
       'I aged out at 18 years old, Christmas Day, with nowhere to go, no money in my pocket and no idea what to do. It was a very lonely time. This is when I found Foster Greatness and One Simple Wish. It felt like a dream come true to find people who actually cared and wanted to help me achieve my goals. Having a support system like FG has given me hope again.',
     name: 'Cara',
     role: 'Community Member',
+    image: null as string | null,
   },
   events: {
     quote:
       "When I arrived at the Mother's Day celebration with my son, I felt that it was a very caring and thoughtful community that truly celebrated mothers. It wasn't just a place with food and sandwiches — it was a space where moms were seen, valued, and uplifted.",
     name: 'Jessica',
     role: 'Community Member',
+    image: '/images/jessica-patino.jpg',
   },
   resources: {
     quote:
       "As someone who struggles financially, it's been hard trying to stay on top of even the basic things like hygiene which can get surprisingly expensive. But thanks to the support of Foster Greatness and the gift cards they've provided, I've been able to take care of my well-being without feeling so overwhelmed.",
     name: 'Josalinda',
     role: 'Community Member',
+    image: '/images/josalinda-garcia.jpg',
   },
   stories: {
     quote:
       "Foster Greatness didn't just help me grow, it reminded me that my past doesn't define my future. It gave me tools, guidance, and a sense of belonging I never thought I'd have.",
     name: 'Lauryn',
     role: 'Community Member',
+    image: '/images/lauryn-t.jpg',
   },
 };
 
@@ -243,14 +249,49 @@ function StatCard({
   );
 }
 
+function ImageStatCard({
+  value,
+  label,
+  image,
+}: {
+  value: string;
+  label: string;
+  image: string;
+}) {
+  return (
+    <motion.div
+      variants={itemVariants}
+      className="group bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden text-center"
+    >
+      <div className="relative h-36 md:h-40 overflow-hidden">
+        <Image
+          src={image}
+          alt={label}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-fg-navy/60 to-transparent" />
+        <div className="absolute bottom-3 left-0 right-0 text-center">
+          <div className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">{value}</div>
+        </div>
+      </div>
+      <div className="p-4">
+        <div className="text-sm font-medium text-gray-700">{label}</div>
+      </div>
+    </motion.div>
+  );
+}
+
 function TestimonialCard({
   quote,
   name,
   role,
+  image,
 }: {
   quote: string;
   name: string;
   role: string;
+  image?: string | null;
 }) {
   return (
     <motion.blockquote
@@ -262,9 +303,15 @@ function TestimonialCard({
         &ldquo;{quote}&rdquo;
       </p>
       <footer className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-fg-navy to-fg-blue flex items-center justify-center">
-          <span className="text-white font-bold text-sm">{name[0]}</span>
-        </div>
+        {image ? (
+          <div className="w-12 h-12 rounded-full overflow-hidden relative shrink-0">
+            <Image src={image} alt={name} fill className="object-cover" />
+          </div>
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-fg-navy to-fg-blue flex items-center justify-center shrink-0">
+            <span className="text-white font-bold text-sm">{name[0]}</span>
+          </div>
+        )}
         <div>
           <div className="font-semibold text-fg-navy">{name}</div>
           <div className="text-sm text-gray-500">{role}</div>
@@ -491,6 +538,17 @@ export default function ImpactPage() {
                 Director of Community Affairs &amp; Social Impact, Foster Greatness
               </p>
             </div>
+
+            {/* Donate CTA */}
+            <div className="mt-8 text-center">
+              <Link
+                href="/donate"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-fg-navy to-fg-blue text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-lg hover:scale-[1.02] transition-all"
+              >
+                Support Our Mission
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
+              </Link>
+            </div>
           </motion.div>
         </motion.div>
       </section>
@@ -550,84 +608,11 @@ export default function ImpactPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {eventStats.map((stat) => (
-              <StatCard key={stat.label} {...stat} />
+              <ImageStatCard key={stat.label} {...stat} />
             ))}
           </div>
 
           <TestimonialCard {...testimonials.events} />
-        </motion.div>
-      </section>
-
-      {/* ----------------------------------------------------------------- */}
-      {/* Section: Partners — Stronger Together */}
-      {/* ----------------------------------------------------------------- */}
-      <section className="py-16 md:py-24 px-4">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={containerVariants}
-          className="max-w-5xl mx-auto"
-        >
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
-              Stronger Together
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our {partners.length} partners help us expand what&apos;s possible&nbsp;&mdash;
-              from employment pipelines to therapy access to holiday meals.
-            </p>
-          </motion.div>
-
-          {/* Partner logo grid */}
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 md:gap-8 items-center justify-items-center mb-16"
-          >
-            {partners.map((partner) => (
-              <motion.div
-                key={partner.name}
-                variants={itemVariants}
-                className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 w-full flex items-center justify-center h-20 hover:shadow-md transition-shadow"
-              >
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  width={120}
-                  height={48}
-                  className="object-contain max-h-12"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Staffmark video spotlight */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg bg-fg-blue/10">
-                    <Handshake className="w-5 h-5 text-fg-blue" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-lg font-bold text-fg-navy">Partner Spotlight: Staffmark Group</h3>
-                </div>
-                <p className="text-gray-600 mb-6">
-                  Staffmark Group created a first-of-its-kind employment pipeline for our
-                  community&nbsp;&mdash; connecting foster youth to career advisors, interview
-                  prep, resume building, and real job opportunities.
-                </p>
-              </div>
-              <div className="relative w-full aspect-video">
-                <iframe
-                  src="https://www.youtube.com/embed/lhtbPMxTCCI"
-                  title="Staffmark Group x Foster Greatness Partnership"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                />
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </section>
 
@@ -659,34 +644,113 @@ export default function ImpactPage() {
             ))}
           </div>
 
-          {/* Needs breakdown chart */}
-          <motion.div
-            variants={itemVariants}
-            className="bg-white rounded-2xl p-6 md:p-10 shadow-md border border-gray-100 mb-12"
-          >
-            <h3 className="text-xl font-bold text-fg-navy mb-2">
-              What Our Community Needs
-            </h3>
-            <p className="text-sm text-gray-500 mb-8">
-              Top resource request themes from our members in 2025
-            </p>
-
+          {/* Resource Requests chart + Resource Finder screenshot */}
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {/* Needs breakdown chart */}
             <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-              className="space-y-5"
+              variants={itemVariants}
+              className="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100"
             >
-              {resourceNeeds.map((need) => (
-                <NeedsBar
-                  key={need.label}
-                  {...need}
-                  maxCount={maxNeed}
-                />
-              ))}
+              <h3 className="text-xl font-bold text-fg-navy mb-2">
+                What Our Resource Requests Showed Us
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Top resource request themes from our members in 2025
+              </p>
+
+              {/* Community foundation callout */}
+              <motion.div
+                variants={itemVariants}
+                className="bg-gradient-to-r from-fg-teal/10 to-fg-blue/10 rounded-xl p-4 mb-6 border border-fg-teal/20"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="p-1.5 rounded-lg bg-fg-teal/20 shrink-0 mt-0.5">
+                    <Users className="w-4 h-4 text-fg-teal" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-fg-navy">
+                      100% of members who made a resource request needed community &amp; peer support to access that support.
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Every member who signs up for Foster Greatness is signing up for community first.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={containerVariants}
+                className="space-y-4"
+              >
+                {resourceNeeds.map((need) => (
+                  <NeedsBar
+                    key={need.label}
+                    {...need}
+                    maxCount={maxNeed}
+                  />
+                ))}
+              </motion.div>
             </motion.div>
-          </motion.div>
+
+            {/* Resource Finder + Benefits Screener */}
+            <div className="space-y-6">
+              {/* Resource Benefits Screener highlight */}
+              <motion.div
+                variants={itemVariants}
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-gray-100"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-xl bg-fg-teal/10">
+                    <Shield className="w-5 h-5 text-fg-teal" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-lg font-bold text-fg-navy">Resource Benefits Screener</h3>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Our Benefits Screener helps community members identify programs and
+                  benefits they may qualify for&nbsp;&mdash; from housing assistance and
+                  SNAP to education grants and healthcare. One tool, hundreds of
+                  possibilities.
+                </p>
+                <Link
+                  href="/services"
+                  className="inline-flex items-center gap-2 text-fg-blue font-semibold text-sm hover:text-fg-navy transition-colors"
+                >
+                  Try the Resource Finder
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </motion.div>
+
+              {/* Resource Finder snapshot */}
+              <motion.div
+                variants={itemVariants}
+                className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden"
+              >
+                <div className="px-6 pt-6 pb-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-fg-blue/10">
+                      <Search className="w-5 h-5 text-fg-blue" aria-hidden="true" />
+                    </div>
+                    <h3 className="text-lg font-bold text-fg-navy">Local Resource Finder</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Connecting members to local services across food, housing, healthcare,
+                    employment, and more&nbsp;&mdash; by ZIP code.
+                  </p>
+                </div>
+                <div className="relative w-full aspect-[4/3]">
+                  <Image
+                    src="/images/resource-finder.jpeg"
+                    alt="Foster Greatness Resource Finder tool showing local food support programs near a ZIP code"
+                    fill
+                    className="object-cover object-top"
+                  />
+                </div>
+              </motion.div>
+            </div>
+          </div>
 
           <TestimonialCard {...testimonials.resources} />
         </motion.div>
@@ -715,7 +779,7 @@ export default function ImpactPage() {
 
           <div className="grid sm:grid-cols-3 gap-6 mb-12">
             {storyStats.map((stat) => (
-              <StatCard key={stat.label} {...stat} />
+              <ImageStatCard key={stat.label} {...stat} />
             ))}
           </div>
 
@@ -753,13 +817,15 @@ export default function ImpactPage() {
                   </p>
                 </motion.div>
 
-                {/* Cohort headshots */}
+                {/* Cohort headshots — all 7 storytellers */}
                 <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
                   <div className="flex -space-x-3">
                     {storytellersCohort.map((member) => (
-                      <div
+                      <Link
                         key={member.name}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white overflow-hidden relative"
+                        href="/storytellers-collective"
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white overflow-hidden relative block hover:scale-110 hover:z-10 transition-transform"
+                        title={member.name}
                       >
                         <Image
                           src={member.image}
@@ -767,13 +833,10 @@ export default function ImpactPage() {
                           fill
                           className="object-cover"
                         />
-                      </div>
+                      </Link>
                     ))}
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-full w-12 h-12 md:w-14 md:h-14 flex items-center justify-center border-2 border-white/20">
-                    <span className="text-white text-sm font-bold">+4</span>
-                  </div>
-                  <span className="text-white/70 text-sm ml-1">9 storytellers in our pilot cohort</span>
+                  <span className="text-white/70 text-sm ml-1">7 storytellers in our pilot cohort</span>
                 </motion.div>
 
                 {/* Emmerald's testimonial */}
@@ -872,17 +935,17 @@ export default function ImpactPage() {
                 {/* Scale pitch */}
                 <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <p className="text-white/70 text-sm leading-relaxed max-w-lg">
-                    <span className="text-white font-semibold">9 storytellers in our pilot.</span>{' '}
+                    <span className="text-white font-semibold">7 storytellers in our pilot.</span>{' '}
                     With your support, we can train the next generation of foster youth
                     advocates&nbsp;&mdash; giving them the platform, tools, and community to
                     turn lived experience into systemic change.
                   </p>
                   <Link
                     href="/donate"
-                    className="shrink-0 inline-flex items-center gap-2 bg-white text-fg-navy px-6 py-3 rounded-full font-bold text-sm hover:bg-fg-light-blue transition-all"
+                    className="shrink-0 inline-flex items-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold text-base hover:bg-fg-light-blue hover:scale-[1.02] transition-all shadow-lg"
                   >
                     Fund the Next Cohort
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    <ArrowRight className="w-5 h-5" aria-hidden="true" />
                   </Link>
                 </motion.div>
               </div>
@@ -892,7 +955,167 @@ export default function ImpactPage() {
       </section>
 
       {/* ----------------------------------------------------------------- */}
-      {/* Section 6: Call to Action */}
+      {/* Section 6: NNFSC — Investing in Lived Experience Leadership */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={containerVariants}
+          className="max-w-5xl mx-auto"
+        >
+          <motion.div
+            variants={itemVariants}
+            className="bg-gradient-to-br from-fg-navy via-[#1e3460] to-fg-blue rounded-2xl p-8 md:p-12 overflow-hidden relative"
+          >
+            <div className="absolute top-0 left-0 w-72 h-72 bg-fg-orange/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-0 w-64 h-64 bg-fg-teal/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+
+            <div className="relative z-10">
+              <motion.div variants={itemVariants} className="mb-8">
+                <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white/80 mb-4">
+                  <Heart className="w-3 h-3" aria-hidden="true" />
+                  Fiscal Sponsorship
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                  National Network for Fostering Sibling Connections
+                </h3>
+                <p className="text-white/80 max-w-3xl leading-relaxed">
+                  In 2025, Foster Greatness brought on the National Network for Fostering
+                  Sibling Connections (NNFSC) as a program under fiscal sponsorship&nbsp;&mdash;
+                  an investment in lived experience leadership and a commitment to ensuring
+                  sibling relationships are no longer treated as optional in foster care.
+                </p>
+              </motion.div>
+
+              {/* NNFSC photo + key stats */}
+              <motion.div variants={itemVariants} className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="rounded-xl overflow-hidden relative aspect-video">
+                  <Image
+                    src="/images/impact/national-siblings.jpeg"
+                    alt="National Network for Fostering Sibling Connections national call"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { value: '500+', label: 'Leaders Trained' },
+                    { value: '200+', label: 'Volunteers Nationwide' },
+                    { value: '50', label: 'State Legal Research' },
+                    { value: '$40K+', label: 'Raised in Year One' },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10"
+                    >
+                      <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                      <div className="text-xs text-white/70">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Why this matters */}
+              <motion.div variants={itemVariants} className="mb-8">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                  <p className="text-white/90 text-sm leading-relaxed mb-4">
+                    Founded by <strong className="text-white">Lily Colby, Esq.</strong>, NNFSC built
+                    a national movement in its first year: convening monthly national calls, training
+                    500+ professionals, launching the nation&apos;s first Sibling Connections Healing
+                    Circles, hosting a National Symposium in Sacramento, and partnering with the
+                    American Bar Association on 50-state legal research.
+                  </p>
+                  <p className="text-white/90 text-sm leading-relaxed">
+                    An estimated <strong className="text-white">200,000 foster youth</strong> are
+                    separated from at least one sibling. NNFSC is turning laws on the books into
+                    real-world practice&nbsp;&mdash; equipping lawyers, judges, social workers,
+                    and caregivers with the tools to keep siblings connected.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Jordan's quote */}
+              <motion.blockquote
+                variants={itemVariants}
+                className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8"
+              >
+                <Quote className="w-6 h-6 text-fg-teal/50 mb-3" aria-hidden="true" />
+                <p className="text-white/90 leading-relaxed italic mb-4 text-sm">
+                  &ldquo;I met my sister for the first time when I was 19 years old. We grew up in
+                  the same area but knew nothing about each other. That&apos;s not a rare story.
+                  It&apos;s happening to siblings in foster care across the country every single day.
+                  When I learned about the work NNFSC was doing to change that, I knew they belonged
+                  within Foster Greatness. I&apos;m proud to support a network that&apos;s fighting to
+                  keep siblings connected, because every child in care deserves the chance to know
+                  their brothers and sisters.&rdquo;
+                </p>
+                <footer className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                    <Image
+                      src="/images/team/jordan-bartlett.webp"
+                      alt="Jordan Bartlett"
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-white font-semibold text-sm">Jordan Bartlett</span>
+                    <span className="text-white/50 text-sm ml-2">Foster Greatness Co-Founder</span>
+                  </div>
+                </footer>
+              </motion.blockquote>
+
+              {/* Isabel's connection */}
+              <motion.div variants={itemVariants} className="bg-white rounded-2xl p-6 md:p-8 mb-8">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="shrink-0 mx-auto md:mx-0">
+                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden relative shadow-lg">
+                      <Image
+                        src="/images/team/isabel-stasa.webp"
+                        alt="Isabel Stasa"
+                        fill
+                        className="object-cover object-top"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-lg font-bold text-fg-navy mb-2">A Personal Mission</h4>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      Isabel Stasa, Director of Foster Greatness, was separated from her two youngest
+                      siblings when she entered foster care at age 13. She never shared a home with them
+                      again. Years later, a chance encounter in a restaurant revealed that one of her
+                      siblings had been adopted, relocated, and given a completely new name&nbsp;&mdash;
+                      information she had never been told. Isabel&apos;s lived experience and policy
+                      expertise laid the foundation for the fiscal sponsorship that launched NNFSC in 2025.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Support CTA */}
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <p className="text-white/70 text-sm leading-relaxed max-w-lg">
+                  <span className="text-white font-semibold">200,000 siblings separated.</span>{' '}
+                  Your support helps NNFSC train advocates, develop legal tools, and build the
+                  movement to keep brothers and sisters connected.
+                </p>
+                <Link
+                  href="/donate"
+                  className="shrink-0 inline-flex items-center gap-2 bg-white text-fg-navy px-8 py-4 rounded-full font-bold text-base hover:bg-fg-light-blue hover:scale-[1.02] transition-all shadow-lg"
+                >
+                  Support This Work
+                  <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Section 7: Call to Action */}
       {/* ----------------------------------------------------------------- */}
       <section className="py-16 md:py-24 px-4">
         <motion.div
@@ -935,6 +1158,79 @@ export default function ImpactPage() {
                   Join Our Community
                   <Users className="w-5 h-5" aria-hidden="true" />
                 </a>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Section 7: Partners — Stronger Together (moved to bottom) */}
+      {/* ----------------------------------------------------------------- */}
+      <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={containerVariants}
+          className="max-w-5xl mx-auto"
+        >
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
+              Stronger Together
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Our {partners.length} partners help us expand what&apos;s possible&nbsp;&mdash;
+              from employment pipelines to therapy access to holiday meals.
+            </p>
+          </motion.div>
+
+          {/* Partner logo grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 md:gap-8 items-center justify-items-center mb-16"
+          >
+            {partners.map((partner) => (
+              <motion.div
+                key={partner.name}
+                variants={itemVariants}
+                className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 w-full flex items-center justify-center h-20 hover:shadow-md transition-shadow"
+              >
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={120}
+                  height={48}
+                  className="object-contain max-h-12"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Staffmark video spotlight */}
+          <motion.div variants={itemVariants} className="mb-6">
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-fg-blue/10">
+                    <Handshake className="w-5 h-5 text-fg-blue" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-lg font-bold text-fg-navy">Partner Spotlight: Staffmark Group</h3>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  Staffmark Group created a first-of-its-kind employment pipeline for our
+                  community&nbsp;&mdash; connecting foster youth to career advisors, interview
+                  prep, resume building, and real job opportunities.
+                </p>
+              </div>
+              <div className="relative w-full aspect-video">
+                <iframe
+                  src="https://www.youtube.com/embed/lhtbPMxTCCI"
+                  title="Staffmark Group x Foster Greatness Partnership"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                />
               </div>
             </div>
           </motion.div>
