@@ -118,7 +118,7 @@ const partners = [
   { name: 'Cetera', logo: '/images/partners/cetera.png' },
   { name: 'Str8Up Employment Services', logo: '/images/partners/str8up.png' },
   { name: 'National Foster Youth Institute', logo: '/images/partners/nfyi.png' },
-  { name: 'For Others', logo: '/images/partners/for-others.png' },
+  { name: 'For Others', logo: '/images/partners/for-others.svg' },
   { name: 'Doing Good Works', logo: '/images/partners/dgw-branded.png' },
 ];
 
@@ -742,7 +742,7 @@ export default function ImpactPage() {
                 </div>
                 <div className="relative w-full aspect-[4/3]">
                   <Image
-                    src="/images/resource-finder.jpeg"
+                    src="/images/updated-resource-finder.png"
                     alt="Foster Greatness Resource Finder tool showing local food support programs near a ZIP code"
                     fill
                     className="object-cover object-top"

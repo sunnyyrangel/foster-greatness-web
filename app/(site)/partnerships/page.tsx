@@ -100,7 +100,7 @@ const currentPartners = [
   {
     name: 'For Others',
     description: 'For Others featured the Foster Greatness Community as a powerful, leading app for those directly impacted by foster care in their blog, helping amplify awareness of our platform.',
-    logo: '/images/partners/for-others.png',
+    logo: '/images/partners/for-others.svg',
     impact: 'Featured partnership and awareness'
   },
   {
