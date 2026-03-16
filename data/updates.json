@@ -1,6 +1,16 @@
 {
-  "featured": "storyteller-collective",
+  "featured": "tax-support-2026",
   "updates": [
+    {
+      "id": "tax-support-2026",
+      "type": "page",
+      "title": "Free Tax Filing Support for Foster Youth",
+      "description": "California foster youth may qualify for up to $1,189 through the Foster Youth Tax Credit — plus CalEITC, YCTC, and federal credits. We'll walk you through every step.",
+      "date": "2026-03-16",
+      "link": "/tax-support",
+      "linkText": "Check Your Eligibility",
+      "image": "/images/tax-support.svg"
+    },
     {
       "id": "storyteller-collective",
       "type": "page",
