@@ -5,11 +5,31 @@
       "id": "tax-support-2026",
       "type": "page",
       "title": "Free Tax Filing Support for Foster Youth",
-      "description": "California foster youth may qualify for up to $1,189 through the Foster Youth Tax Credit — plus CalEITC, YCTC, and federal credits. We'll walk you through every step.",
+      "description": "Free tax filing support for current and former foster youth. Find credits you qualify for, connect with free tax prep, and get walk-through help from our team.",
       "date": "2026-03-16",
       "link": "/tax-support",
-      "linkText": "Check Your Eligibility",
+      "linkText": "Get Free Tax Help",
       "image": "/images/tax-support.svg"
+    },
+    {
+      "id": "resource-finder",
+      "type": "page",
+      "title": "Resource Finder: 500,000+ Programs at Your Fingertips",
+      "description": "Search for housing, food, healthcare, jobs, education, legal help, and more by ZIP code. Includes community-recommended resources vetted by foster youth.",
+      "date": "2026-03-17",
+      "link": "/services",
+      "linkText": "Search Resources Near You",
+      "image": "/images/resource-finder-screenshot.png"
+    },
+    {
+      "id": "impact-report-2025",
+      "type": "page",
+      "title": "2025 Impact Report: No One Should Navigate Life Alone",
+      "description": "2,147 community members, 62 events hosted, 178 individuals supported through resource navigation. See how our community made an impact together in 2025.",
+      "date": "2026-03-02",
+      "link": "/impact",
+      "linkText": "Read the Impact Report",
+      "image": "/images/impact/events-hosted.jpg"
     },
     {
       "id": "storyteller-collective",

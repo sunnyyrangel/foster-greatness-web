@@ -87,7 +87,7 @@ export default function ResourcesPage() {
           </p>
 
           <a
-            href="https://community.fostergreatness.co"
+            href="https://community.fostergreatness.co/c/resource-specialist/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-white text-fg-navy px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
@@ -103,23 +103,65 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* Statistics Section for GEO */}
-      <section className="py-12 px-4 bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-fg-navy">23,000+</div>
-              <p className="text-sm text-gray-600 mt-1">Youth age out of foster care annually in the U.S.</p>
-              <p className="text-xs text-gray-400 mt-1">Source: <a href="https://www.acf.hhs.gov" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-blue">ACF/HHS</a></p>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-fg-navy">20%</div>
-              <p className="text-sm text-gray-600 mt-1">Become homeless immediately after aging out</p>
-              <p className="text-xs text-gray-400 mt-1">Source: <a href="https://nfyi.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-blue">NFYI</a></p>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-fg-navy">2,000+</div>
-              <p className="text-sm text-gray-600 mt-1">Foster youth in our nationwide community</p>
+      {/* Resource Finder Tool */}
+      <section className="py-16 px-4 bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-gradient-to-br from-fg-teal/10 to-fg-blue/10 rounded-3xl p-8 md:p-12 border border-fg-teal/20">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 bg-fg-teal/10 text-fg-teal px-4 py-2 rounded-full mb-4">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <span className="text-sm font-semibold">New Tool</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-fg-navy mb-4">
+                  Resource Finder
+                </h2>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Search over 500,000 programs and services across the U.S. by ZIP code. Find housing, food, healthcare, employment, education, legal help, and more — all in one place. Includes community-recommended resources vetted by foster youth.
+                </p>
+                <div className="flex flex-wrap gap-3 mb-6">
+                  {['Housing', 'Food', 'Healthcare', 'Jobs', 'Education', 'Legal'].map((tag) => (
+                    <span key={tag} className="text-xs font-semibold bg-white text-fg-navy px-3 py-1.5 rounded-full border border-gray-200">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Link
+                  href="/services"
+                  className="inline-flex items-center gap-2 bg-fg-navy text-white px-8 py-4 rounded-full font-bold hover:bg-fg-blue transition-colors shadow-lg"
+                >
+                  Search Resources Near You
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
+              <div className="relative">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-fg-navy flex items-center justify-center">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 h-10 bg-gray-100 rounded-lg flex items-center px-4">
+                      <span className="text-sm text-gray-400">Enter your ZIP code...</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { cat: 'Food & Nutrition', count: '48 programs' },
+                      { cat: 'Housing & Shelter', count: '31 programs' },
+                      { cat: 'Healthcare', count: '27 programs' },
+                    ].map((item) => (
+                      <div key={item.cat} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <span className="text-sm font-medium text-fg-navy">{item.cat}</span>
+                        <span className="text-xs text-fg-blue font-semibold">{item.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

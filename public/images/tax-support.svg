@@ -21,22 +21,20 @@
   <!-- Accent bar -->
   <rect x="80" y="180" width="6" height="120" rx="3" fill="url(#accent)"/>
 
-  <!-- Dollar amount -->
-  <text x="120" y="248" font-family="system-ui, -apple-system, sans-serif" font-size="88" font-weight="800" fill="#00c8b7" letter-spacing="-2">$1,189</text>
-
-  <!-- Subtitle -->
-  <text x="120" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="500" fill="white" opacity="0.8">California Foster Youth Tax Credit</text>
+  <!-- Main headline -->
+  <text x="120" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="white" letter-spacing="-2">File Your Taxes</text>
+  <text x="120" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#00c8b7" letter-spacing="-2">for Free</text>
 
   <!-- Divider -->
-  <rect x="120" y="330" width="400" height="2" rx="1" fill="white" opacity="0.15"/>
+  <rect x="120" y="340" width="400" height="2" rx="1" fill="white" opacity="0.15"/>
 
   <!-- Description -->
-  <text x="120" y="375" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="white" opacity="0.7">Free filing support + walk-through help</text>
-  <text x="120" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="white" opacity="0.7">for current &amp; former foster youth</text>
+  <text x="120" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="white" opacity="0.7">Free filing support, tax credits, &amp; walk-through help</text>
+  <text x="120" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="white" opacity="0.7">for current &amp; former foster youth</text>
 
   <!-- Tax season badge -->
-  <rect x="120" y="450" width="220" height="44" rx="22" fill="#fa8526"/>
-  <text x="230" y="479" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">TAX SEASON 2026</text>
+  <rect x="120" y="460" width="280" height="44" rx="22" fill="#fa8526"/>
+  <text x="260" y="489" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">FILE BY APRIL 15, 2026</text>
 
   <!-- FG Logo text -->
   <text x="120" y="570" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="white" opacity="0.5" letter-spacing="3">FOSTER GREATNESS</text>
