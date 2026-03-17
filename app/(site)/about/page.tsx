@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronDown, ImageIcon } from 'lucide-react';
+import FederalEndorsementBanner from '@/components/shared/FederalEndorsementBanner';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -128,6 +129,13 @@ export default function AboutPage() {
             </motion.div>
           </div>
         </motion.section>
+
+        {/* Federal Endorsement */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <FederalEndorsementBanner variant="compact" />
+          </div>
+        </div>
 
         {/* Vision & Core Values */}
         <motion.section

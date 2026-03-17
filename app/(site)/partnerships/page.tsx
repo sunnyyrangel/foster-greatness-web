@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Script from 'next/script';
 import ContactSection from '@/components/site/ContactSection';
+import FederalEndorsementBanner from '@/components/shared/FederalEndorsementBanner';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -235,6 +236,11 @@ export default function PartnershipsPage() {
             </div>
           </motion.div>
         </motion.section>
+
+        {/* Federal Endorsement */}
+        <div className="mb-10 md:mb-12">
+          <FederalEndorsementBanner variant="compact" />
+        </div>
 
         {/* Current Partners */}
         <motion.section

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/data/site';
+import FederalEndorsementBanner from '@/components/shared/FederalEndorsementBanner';
 import {
   Users,
   Heart,
@@ -423,6 +424,13 @@ export default function ImpactPage() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* ----------------------------------------------------------------- */}
+      {/* Federal Endorsement */}
+      {/* ----------------------------------------------------------------- */}
+      <div className="max-w-4xl mx-auto px-4 pt-12 md:pt-16">
+        <FederalEndorsementBanner variant="compact" />
+      </div>
 
       {/* ----------------------------------------------------------------- */}
       {/* A Letter from Our Director */}

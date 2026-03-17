@@ -24,6 +24,7 @@ import {
   UpdateListItem,
   itemVariants,
 } from '@/components/site/home';
+import FederalEndorsementBanner from '@/components/shared/FederalEndorsementBanner';
 import type { CircleEvent, Update, Newsletter } from '@/components/site/home';
 
 export default function Home() {
@@ -128,6 +129,11 @@ export default function Home() {
             <TestimonialSection />
           </ErrorBoundary>
         </motion.section>
+
+        {/* Federal Endorsement */}
+        <ErrorBoundary fallback={<SectionErrorFallback sectionName="federal endorsement" />}>
+          <FederalEndorsementBanner variant="prominent" />
+        </ErrorBoundary>
 
         {/* Updates as news feed with images */}
         <motion.section
