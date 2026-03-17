@@ -119,9 +119,12 @@ export default function Home() {
             <p className="text-fg-navy/60 mt-1">Latest news, events, and opportunities from our community</p>
           </motion.div>
 
-          {/* Featured card */}
-          <div className="mb-8">
+          {/* Featured cards - 3 column grid */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             {featuredUpdate && <FeaturedCard update={featuredUpdate} />}
+            {otherUpdates.slice(0, 2).map((update) => (
+              <FeaturedCard key={update.id} update={update} />
+            ))}
           </div>
 
           {/* Testimonials Carousel - inside What's Happening */}
@@ -144,7 +147,7 @@ export default function Home() {
           className="mb-10 md:mb-12"
         >
           <div className="space-y-4 mb-8">
-            {otherUpdates.map((update) => (
+            {otherUpdates.slice(2).map((update) => (
               <UpdateListItem key={update.id} update={update} />
             ))}
           </div>
