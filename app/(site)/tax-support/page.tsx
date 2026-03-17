@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   DollarSign,
   FileText,
@@ -16,11 +17,11 @@ import {
 export const metadata: Metadata = {
   title: 'Tax Support for Foster Youth | Foster Greatness',
   description:
-    'Free tax filing help for current and former foster youth. Learn about the California Foster Youth Tax Credit (up to $1,189), find free VITA tax prep sites, and get walk-through support from our team.',
+    'Free tax filing help for current and former foster youth. Find free VITA tax prep sites, learn about tax credits you may qualify for, and get walk-through support from our team.',
   openGraph: {
     title: 'Tax Support for Foster Youth | Foster Greatness',
     description:
-      'You could be owed up to $1,189. Free tax filing support for foster youth — credits, VITA sites, and walk-through help.',
+      'Free tax filing support for foster youth — find credits you qualify for, free VITA sites, and walk-through help from our team.',
   },
 };
 
@@ -116,18 +117,18 @@ export default function TaxSupportPage() {
             <span className="text-sm font-semibold text-white/90">2025 Tax Year &middot; File by April 15, 2026</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            You Could Be Owed Up to{' '}
-            <span className="text-fg-teal">$1,189</span>
+            File Your Taxes for{' '}
+            <span className="text-fg-teal">Free</span>
           </h1>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-            California&rsquo;s Foster Youth Tax Credit puts money back in your pocket &mdash; and we&rsquo;ll walk you through every step of filing.
+            Free tax filing support for current and former foster youth. We&rsquo;ll help you find credits you qualify for, connect you with free tax prep, and walk you through every step.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="#am-i-eligible"
+              href="#how-to-file"
               className="inline-flex items-center justify-center gap-2 bg-fg-teal text-fg-navy font-semibold px-8 py-4 rounded-xl hover:bg-fg-teal/90 transition-all text-lg"
             >
-              Check If You&rsquo;re Eligible
+              See Your Free Filing Options
               <ArrowRight className="w-5 h-5" />
             </a>
             <a
@@ -148,8 +149,97 @@ export default function TaxSupportPage() {
         <div className="max-w-5xl mx-auto flex items-center justify-center gap-3 text-center">
           <Clock className="w-5 h-5 text-fg-orange flex-shrink-0" />
           <p className="text-sm md:text-base font-medium text-fg-navy">
-            <strong>Tax filing deadline:</strong> April 15, 2026. Don&rsquo;t leave money on the table &mdash; the FYTC is fully refundable, meaning you get cash back even if you owe no taxes.
+            <strong>Tax filing deadline:</strong> April 15, 2026. Don&rsquo;t leave money on the table &mdash; you may qualify for refundable tax credits that put cash back in your pocket, even if you owe no taxes.
           </p>
+        </div>
+      </section>
+
+      {/* ==================== UPCOMING TAX WORKSHOPS ==================== */}
+      <section className="relative py-16 md:py-20 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="inline-block text-xs font-bold tracking-widest text-fg-blue uppercase mb-3">Free Workshops</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Upcoming Tax Workshops</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Join our free virtual workshops to learn tax basics and get your questions answered live.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Tax Tactics Workshop */}
+            <div className="rounded-2xl border-2 border-fg-blue/20 bg-fg-blue/5 overflow-hidden flex flex-col">
+              <div className="relative h-48 w-full">
+                <Image
+                  src="https://assets-v2.circle.so/2p7leeiossp5miad9x3ylt7czr3r"
+                  alt="Tax Tactics workshop cover"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 bg-fg-blue/10 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-fg-blue" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-fg-navy">March 19, 2026</p>
+                  <p className="text-xs text-gray-500">2:00 PM &ndash; 3:00 PM ET</p>
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Tax Tactics: File Your Taxes Confidently</h3>
+              <p className="text-sm text-gray-600 mb-4 flex-1">
+                Filing your taxes can feel overwhelming &mdash; but we&rsquo;re here to help! Join this workshop to learn tax basics, understand common forms, and get tips for gig and consulting work. You&rsquo;ll walk away with a tax resource guide full of free tools.
+              </p>
+              <p className="text-xs text-gray-500 mb-4">Hosted by Jamie Bennett</p>
+              <a
+                href="https://community.fostergreatness.co/c/general-events/tax-tactics-file-your-taxes-confidently"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-fg-blue text-white font-semibold px-6 py-3 rounded-xl hover:bg-fg-blue/90 transition-all text-sm"
+              >
+                Register Free
+                <ExternalLink className="w-4 h-4" />
+              </a>
+              </div>
+            </div>
+
+            {/* For the Love of Money Workshop */}
+            <div className="rounded-2xl border-2 border-fg-orange/20 bg-fg-orange/5 overflow-hidden flex flex-col">
+              <div className="relative h-48 w-full">
+                <Image
+                  src="https://assets-v2.circle.so/zgn030whdgr1rsq8n8ano4ika33z"
+                  alt="For the Love of Money workshop cover"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 bg-fg-orange/10 rounded-xl flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-fg-orange" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-fg-navy">April 4, 2026</p>
+                  <p className="text-xs text-gray-500">12:00 PM &ndash; 1:00 PM ET</p>
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">For the Love of Money! (And Keeping It Too)</h3>
+              <p className="text-sm text-gray-600 mb-4 flex-1">
+                An hour-long session covering tax basics, common forms, and key considerations for those doing gig or consulting work. Includes a tax resource guide with free information to help you keep more of what you earn.
+              </p>
+              <p className="text-xs text-gray-500 mb-4">Hosted by Jamie Bennett &middot; In partnership with Cetera</p>
+              <a
+                href="https://community.fostergreatness.co/c/general-events/for-the-love-of-money-and-keeping-it-too"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-fg-orange text-white font-semibold px-6 py-3 rounded-xl hover:bg-fg-orange/90 transition-all text-sm"
+              >
+                Register Free
+                <ExternalLink className="w-4 h-4" />
+              </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -157,10 +247,10 @@ export default function TaxSupportPage() {
       <section id="am-i-eligible" className="relative py-16 md:py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="inline-block text-xs font-bold tracking-widest text-fg-blue uppercase mb-3">Step 1</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Am I Eligible?</h2>
+            <span className="inline-block text-xs font-bold tracking-widest text-fg-blue uppercase mb-3">California Residents</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">CA Foster Youth Tax Credit</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The California Foster Youth Tax Credit (FYTC) is specifically for people with foster care experience. Check if you qualify:
+              If you were in foster care in California, you may qualify for an additional refundable credit worth up to $1,189. Check if you&rsquo;re eligible:
             </p>
           </div>
 
@@ -274,7 +364,7 @@ export default function TaxSupportPage() {
       </section>
 
       {/* ==================== SECTION 4: HOW TO FILE ==================== */}
-      <section className="relative py-16 md:py-20 px-4 bg-white">
+      <section id="how-to-file" className="relative py-16 md:py-20 px-4 bg-white scroll-mt-24">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold tracking-widest text-fg-blue uppercase mb-3">Step 4</span>
