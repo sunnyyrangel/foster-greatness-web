@@ -68,6 +68,7 @@ export default function Header() {
   };
 
   const resourcesLinks = [
+    { label: 'Resource Hub', href: '/resources', description: 'All resources and support services' },
     { label: 'Tax Support', href: '/tax-support', description: 'Free tax filing help for foster youth' },
     { label: 'Find Local Services', href: '/services', description: 'Search 500,000+ resources by ZIP' },
   ];

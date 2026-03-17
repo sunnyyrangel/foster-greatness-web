@@ -19,11 +19,11 @@
       "date": "2026-03-17",
       "link": "/services",
       "linkText": "Search Resources Near You",
-      "image": "/images/resource-finder.jpeg"
+      "image": "/images/resource-finder-preview.svg"
     },
     {
       "id": "impact-report-2025",
-      "type": "page",
+      "type": "news",
       "title": "2025 Impact Report: No One Should Navigate Life Alone",
       "description": "2,147 community members, 62 events hosted, 178 individuals supported through resource navigation. See how our community made an impact together in 2025.",
       "date": "2026-03-02",

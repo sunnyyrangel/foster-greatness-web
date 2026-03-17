@@ -70,12 +70,12 @@ export function FeaturedCard({ update }: { update: Update }) {
     >
       {/* Image on top */}
       {update.image && (
-        <div className="relative h-48 md:h-56 w-full overflow-hidden">
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
           <Image
             src={update.image}
             alt={update.title}
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             priority
           />
