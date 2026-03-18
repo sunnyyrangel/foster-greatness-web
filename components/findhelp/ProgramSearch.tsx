@@ -265,6 +265,10 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     setFilterOpenNow(false);
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
+    // Transition to results view immediately so skeleton shows while loading
+    setStep('results');
+    setProgramsLoading(true);
+    // Fire all three fetches in parallel for faster results
     fetchPrograms(tagIds, 0, false, undefined, emptyAttrTags);
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
@@ -370,6 +374,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     clearFilters();
     const emptyAttrTags = new Set<string>();
     setSelectedAttributeTags(emptyAttrTags);
+    // Show skeleton immediately, fire all fetches in parallel
+    setProgramsLoading(true);
     fetchPrograms(tagIds, 0, false, undefined, emptyAttrTags);
     fetchCommunityResources(zip, label);
     fetchInformationalResources(zip, label);
@@ -467,7 +473,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     const init = async () => {
       const result = await fetchTags(initialZip, initialServiceTag);
 
-      // If category was auto-selected, fire the program search immediately
+      // If category was auto-selected, fire all searches in parallel
       if (result?.matched && result.tagIds) {
         const emptyAttrTags = new Set<string>();
         fetchPrograms(result.tagIds, 0, false, undefined, emptyAttrTags);
@@ -972,13 +978,32 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
             </div>
           )}
 
-          {/* Loading state */}
+          {/* Loading state — skeleton cards */}
           {programsLoading && (
-            <div className="flex items-center justify-center py-16">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-fg-blue mx-auto mb-3" />
-                <p className="text-gray-500">Finding programs...</p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-fg-blue" />
+                <p className="text-sm text-gray-500">Finding programs near {zip}...</p>
               </div>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1 space-y-3">
+                      <div className="h-5 bg-gray-200 rounded w-3/4" />
+                      <div className="h-4 bg-gray-100 rounded w-1/2" />
+                      <div className="space-y-2 pt-1">
+                        <div className="h-3 bg-gray-100 rounded w-full" />
+                        <div className="h-3 bg-gray-100 rounded w-5/6" />
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        <div className="h-7 bg-gray-100 rounded-full w-16" />
+                        <div className="h-7 bg-gray-100 rounded-full w-20" />
+                      </div>
+                    </div>
+                    <div className="w-8 h-8 bg-gray-100 rounded-lg flex-shrink-0" />
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 

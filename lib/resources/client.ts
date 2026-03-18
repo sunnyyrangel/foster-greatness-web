@@ -2,6 +2,25 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase/client';
 import type { ResourceRow, CommunityResource, InformationalResourceRow, InformationalResource } from './types';
 import { toCommunityResource, toInformationalResource } from './types';
 
+// Cache ZIP → state lookups to avoid redundant RPC calls
+const zipStateCache = new Map<string, string | null>();
+
+/**
+ * Resolve a ZIP code to its US state abbreviation.
+ * Uses an in-memory cache so repeated lookups for the same ZIP are instant.
+ */
+export async function resolveZipToState(zip: string): Promise<string | null> {
+  if (zipStateCache.has(zip)) {
+    return zipStateCache.get(zip)!;
+  }
+  if (!isSupabaseConfigured || !supabase) {
+    return null;
+  }
+  const { data: userState } = await supabase.rpc('zip_to_state', { zip });
+  zipStateCache.set(zip, userState ?? null);
+  return userState ?? null;
+}
+
 export interface SearchResourcesParams {
   zip: string;
   category: string; // Findhelp category label like "Education" or "Housing"
@@ -25,8 +44,8 @@ export async function searchResources(
     return { resources: [], count: 0 };
   }
 
-  // Derive user's state from ZIP for state-level matching
-  const { data: userState } = await supabase.rpc('zip_to_state', { zip: params.zip });
+  // Derive user's state from ZIP (cached after first call)
+  const userState = await resolveZipToState(params.zip);
 
   // Run 3 queries in parallel: local, state-level, national
   const [localResult, stateResult, nationalResult] = await Promise.all([
@@ -110,12 +129,8 @@ export async function searchInformationalResources(
     return { resources: [], count: 0 };
   }
 
-  // Derive state from ZIP using the zip_to_state() RPC
-  let userState: string | null = null;
-  if (params.zip) {
-    const { data: stateData } = await supabase.rpc('zip_to_state', { zip: params.zip });
-    userState = stateData ?? null;
-  }
+  // Derive state from ZIP (cached after first call for the same ZIP)
+  const userState = params.zip ? await resolveZipToState(params.zip) : null;
 
   // Call the search RPC (no text search — just geography filtering)
   const { data, error } = await supabase.rpc('search_informational_resources', {
