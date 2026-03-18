@@ -152,25 +152,10 @@ export default function EventsPage() {
                 </div>
               </div>
 
-              {/* Stats overlay */}
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl px-6 py-4 flex gap-8">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-fg-navy">500+</div>
-                  <div className="text-xs text-gray-500">Events Hosted</div>
-                </div>
-                <div className="w-px bg-gray-200" />
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-fg-navy">310</div>
-                  <div className="text-xs text-gray-500">Attendees</div>
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>
       </section>
-
-      {/* Spacer for stats card overlap */}
-      <div className="h-8 bg-[#fafbfc]" />
 
       {/* Events Grid */}
       <section className="py-16 px-4">
