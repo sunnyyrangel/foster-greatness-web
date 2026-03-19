@@ -88,7 +88,10 @@ const nextConfig: NextConfig = {
         https://js.stripe.com
         https://*.typeform.com
         https://*.vercel-scripts.com
-        https://vercel.live;
+        https://vercel.live
+        https://www.googletagmanager.com
+        https://www.google.com
+        https://googleads.g.doubleclick.net;
       style-src 'self' 'unsafe-inline'
         https://js.stripe.com
         https://*.typeform.com;
@@ -98,7 +101,9 @@ const nextConfig: NextConfig = {
         https://assets-v2.circle.so
         https://placehold.co
         https://*.typeform.com
-        https://api.mapbox.com;
+        https://api.mapbox.com
+        https://www.googletagmanager.com
+        https://googleads.g.doubleclick.net;
       font-src 'self' data:;
       connect-src 'self'
         https://api.beehiiv.com
@@ -109,7 +114,10 @@ const nextConfig: NextConfig = {
         https://*.vercel-scripts.com
         https://api.mapbox.com
         https://events.mapbox.com
-        https://*.typeform.com;
+        https://*.typeform.com
+        https://www.googletagmanager.com
+        https://www.google-analytics.com
+        https://googleads.g.doubleclick.net;
       frame-src 'self'
         https://js.stripe.com
         https://form.typeform.com

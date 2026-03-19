@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Mail, Heart } from 'lucide-react';
 import { siteConfig } from '@/data';
+import CommunityJoinLink from '@/components/shared/CommunityJoinLink';
 
 export default function Footer() {
   return (
@@ -16,14 +17,12 @@ export default function Footer() {
               <Mail className="w-4 h-4" />
               Contact Us
             </Link>
-            <a
+            <CommunityJoinLink
               href={siteConfig.links.community}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-colors"
             >
               Join the Community
-            </a>
+            </CommunityJoinLink>
           </div>
         </div>
       </div>
@@ -45,7 +44,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-4">Community</h3>
             <ul className="space-y-2">
-              <li><a href={siteConfig.links.community} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition">Join Community</a></li>
+              <li><CommunityJoinLink href={siteConfig.links.community} className="text-gray-300 hover:text-white transition">Join Community</CommunityJoinLink></li>
               <li><Link href="/thriver-stories" className="text-gray-300 hover:text-white transition">Thriver Stories</Link></li>
               <li><Link href="/events" className="text-gray-300 hover:text-white transition">Events</Link></li>
               <li><Link href="/storytellers-collective" className="text-gray-300 hover:text-white transition">Storytellers Collective</Link></li>

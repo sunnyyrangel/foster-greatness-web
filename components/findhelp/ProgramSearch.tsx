@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, trackGoogleConversion, CONVERSION_LABELS } from '@/lib/analytics';
 import { List, Map, Heart, ArrowLeft, Search, MapPin, ExternalLink, Clock, DollarSign, X, ChevronLeft, ChevronRight, HandHeart } from 'lucide-react';
 import type { ServiceTag, ProgramLite, Office, OfficeHours, Availability, FreeOrReduced, NextStep } from '@/lib/findhelp';
 import { matchesOpenNowFilter } from '@/lib/findhelp';
@@ -250,6 +250,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     fetchTags(zipCode);
     geocodeZip(zipCode);
     trackEvent('service_search', { zip: zipCode, channel: widget ? 'embed' : 'web' });
+    trackGoogleConversion(CONVERSION_LABELS.service_search);
   };
 
   // Handle category selection

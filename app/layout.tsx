@@ -33,6 +33,18 @@ export default function RootLayout({
             __html: JSON.stringify(websiteJsonLd),
           }}
         />
+        {/* Google Ads (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11440847917" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-11440847917');
+            `,
+          }}
+        />
         {/* PieEye Cookie Consent */}
         <script
           src="https://cdn.cookie.pii.ai/1/release/1.5/main.js"

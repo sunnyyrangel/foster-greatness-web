@@ -8,6 +8,32 @@
 
 type EventProperties = Record<string, string | number | boolean | undefined>;
 
+// Google Ads conversion tracking
+// Replace 'CONVERSION_LABEL' with actual labels from Google Ads when available
+const GOOGLE_ADS_ID = 'AW-11440847917';
+
+export const CONVERSION_LABELS = {
+  service_search: 'REPLACE_WITH_LABEL',    // TODO: Add label from Google Ads
+  community_join: 'REPLACE_WITH_LABEL',    // TODO: Add label from Google Ads
+} as const;
+
+/**
+ * Fire a Google Ads conversion event.
+ * Safe to call even if gtag hasn't loaded — silently no-ops.
+ */
+export function trackGoogleConversion(label: string): void {
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === 'function') {
+      w.gtag('event', 'conversion', {
+        send_to: `${GOOGLE_ADS_ID}/${label}`,
+      });
+    }
+  } catch {
+    // Silently swallow — ads tracking should never affect UX
+  }
+}
+
 /**
  * Track a custom event to Supabase.
  *
