@@ -69,6 +69,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   // Loading states
   const [tagsLoading, setTagsLoading] = useState(false);
   const [programsLoading, setProgramsLoading] = useState(!!(initialZip && (initialServiceTag || initialTerms)));
+  const [mapSearching, setMapSearching] = useState(false); // True when "search this area" is in progress
   const [loadingMore, setLoadingMore] = useState(false);
 
   // Error states
@@ -182,6 +183,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
         setProgramsError(error instanceof Error ? error.message : 'Failed to search programs');
       } finally {
         setProgramsLoading(false);
+        setMapSearching(false);
         setLoadingMore(false);
       }
     },
@@ -298,7 +300,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
     setCurrentPage(1);
     setCommunityResources([]);
     setInformationalResources([]);
-    setProgramsLoading(true);
+    setMapSearching(true); // Don't set programsLoading — keeps map visible
     setFilterFree(false);
     setFilterOpenNow(false);
     setFilterCommunityApproved(false);
@@ -1031,7 +1033,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
           )}
 
           {/* Loading state — skeleton cards */}
-          {programsLoading && (
+          {programsLoading && !mapSearching && (
             <div className="space-y-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-fg-blue" />
@@ -1086,7 +1088,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
           )}
 
           {/* Results view — show if we have any results (community, findhelp, or informational) */}
-          {!programsLoading && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
+          {(!programsLoading || mapSearching) && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
             <>
               {resultsTab === 'guides' ? (
                 /* Guides tab — full width, all breakpoints */

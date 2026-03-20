@@ -312,11 +312,13 @@ export default function ProgramMap({
       markersRef.current.push(marker);
     });
 
-    // If no markers within radius, fall back to center point
-    if (bounds.isEmpty()) {
-      bounds.extend([center.lng, center.lat]);
+    // Only fit bounds if this wasn't a "search this area" reload
+    if (!userPannedRef.current) {
+      if (bounds.isEmpty()) {
+        bounds.extend([center.lng, center.lat]);
+      }
+      map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
     }
-    map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
   }, [officesWithCoords]);
 
   // Update marker styles when hover/selection changes (no marker rebuild)
