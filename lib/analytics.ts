@@ -13,8 +13,8 @@ type EventProperties = Record<string, string | number | boolean | undefined>;
 const GOOGLE_ADS_ID = 'AW-11440847917';
 
 export const CONVERSION_LABELS = {
-  service_search: 'REPLACE_WITH_LABEL',    // TODO: Add label from Google Ads
-  community_join: 'REPLACE_WITH_LABEL',    // TODO: Add label from Google Ads
+  service_search: 'Ydl3CJScsYwcEK34tc8q',
+  community_join: 'dy69CMuBoIwcEK34tc8q',
 } as const;
 
 /**
