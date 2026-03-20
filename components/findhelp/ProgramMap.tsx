@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapPin } from 'lucide-react';
+import { MapPin, Search } from 'lucide-react';
 import type { ProgramLite, Office } from '@/lib/findhelp';
 import { escapeHTML } from '@/lib/findhelp';
 
@@ -14,6 +14,8 @@ interface ProgramMapProps {
   center?: { lat: number; lng: number };
   hoveredProgramId?: string | null;
   onProgramHover?: (programId: string | null) => void;
+  currentZip?: string;
+  onSearchArea?: (zip: string) => void;
 }
 
 // Get all offices with coordinates from programs
@@ -123,6 +125,8 @@ export default function ProgramMap({
   center: propCenter,
   hoveredProgramId,
   onProgramHover,
+  currentZip,
+  onSearchArea,
 }: ProgramMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -130,6 +134,9 @@ export default function ProgramMap({
   const markerElementsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const popupRef = useRef<mapboxgl.Popup | null>(null);
   const popupFromClickRef = useRef(false);
+  const [showSearchArea, setShowSearchArea] = useState(false);
+  const [searchingArea, setSearchingArea] = useState(false);
+  const userPannedRef = useRef(false);
 
   const officesWithCoords = useMemo(() => getOfficesWithCoords(programs), [programs]);
 
@@ -180,12 +187,32 @@ export default function ProgramMap({
       }
     });
 
+    // Show "Search this area" button when user drags/zooms the map
+    if (onSearchArea) {
+      map.on('dragend', () => {
+        userPannedRef.current = true;
+        setShowSearchArea(true);
+      });
+      map.on('zoomend', () => {
+        // Only show on user-initiated zoom (not fitBounds)
+        if (userPannedRef.current) {
+          setShowSearchArea(true);
+        }
+      });
+    }
+
     return () => {
       map.remove();
       mapRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Clear "search this area" when new results load
+  useEffect(() => {
+    setShowSearchArea(false);
+    userPannedRef.current = false;
+  }, [programs]);
 
   // Create markers when programs change (not on selection/hover)
   const updateMarkers = useCallback(() => {
@@ -347,8 +374,40 @@ export default function ProgramMap({
   }
 
   return (
-    <div className="w-full h-full min-h-[400px] rounded-xl overflow-hidden">
+    <div className="relative w-full h-full min-h-[400px] rounded-xl overflow-hidden">
       <div ref={mapContainerRef} style={{ width: '100%', height: '100%', minHeight: '400px' }} />
+      {showSearchArea && onSearchArea && (
+        <button
+          disabled={searchingArea}
+          onClick={async () => {
+            const map = mapRef.current;
+            if (!map) return;
+            setSearchingArea(true);
+            const mapCenter = map.getCenter();
+            const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+            if (!token) return;
+            try {
+              const res = await fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${mapCenter.lng},${mapCenter.lat}.json?types=postcode&country=US&limit=1&access_token=${token}`
+              );
+              const data = await res.json();
+              const newZip = data.features?.[0]?.text;
+              if (newZip && /^\d{5}$/.test(newZip)) {
+                onSearchArea(newZip);
+                setShowSearchArea(false);
+              }
+            } catch {
+              // Silently fail
+            } finally {
+              setSearchingArea(false);
+            }
+          }}
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-2 px-4 py-2.5 bg-white text-fg-navy font-semibold text-sm rounded-full shadow-lg border border-gray-200 hover:bg-fg-navy hover:text-white transition-colors disabled:opacity-50"
+        >
+          <Search className="w-4 h-4" />
+          {searchingArea ? 'Searching...' : 'Search this area'}
+        </button>
+      )}
     </div>
   );
 }

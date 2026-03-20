@@ -140,7 +140,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
 
   // Fetch programs
   const fetchPrograms = useCallback(
-    async (tagId: string, cursorValue: number = 0, append: boolean = false, terms?: string, attrTags?: Set<string>) => {
+    async (tagId: string, cursorValue: number = 0, append: boolean = false, terms?: string, attrTags?: Set<string>, overrideZip?: string) => {
       if (append) {
         setLoadingMore(true);
       } else {
@@ -150,7 +150,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
 
       try {
         const params = new URLSearchParams({
-          zip,
+          zip: overrideZip || zip,
           cursor: cursorValue.toString(),
           limit: widget ? '6' : '20',
         });
@@ -288,6 +288,29 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
       fetchPrograms(selectedTag || '', cursor, true, searchTerms || undefined, selectedAttributeTags);
     }
   };
+
+  // Handle "Search this area" from map
+  const handleSearchArea = useCallback((newZip: string) => {
+    setZip(newZip);
+    setZipInput(newZip);
+    geocodeZip(newZip);
+    setCursor(0);
+    setCurrentPage(1);
+    setCommunityResources([]);
+    setInformationalResources([]);
+    setProgramsLoading(true);
+    setFilterFree(false);
+    setFilterOpenNow(false);
+    setFilterCommunityApproved(false);
+    const emptyAttrTags = new Set<string>();
+    setSelectedAttributeTags(emptyAttrTags);
+    fetchPrograms(selectedTag || '', 0, false, searchTerms || undefined, emptyAttrTags, newZip);
+    if (selectedTagLabel) {
+      fetchCommunityResources(newZip, selectedTagLabel);
+      fetchInformationalResources(newZip, selectedTagLabel);
+    }
+    trackEvent('service_search_area', { zip: newZip, category: selectedTagLabel });
+  }, [selectedTag, searchTerms, selectedTagLabel, fetchPrograms, fetchCommunityResources, fetchInformationalResources, geocodeZip]);
 
   // Handle back navigation
   const handleBack = () => {
@@ -1133,6 +1156,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                           hoveredProgramId={hoveredProgramId}
                           onProgramHover={handleMapHover}
                           center={zipCenter}
+                          currentZip={zip}
+                          onSearchArea={handleSearchArea}
                         />
                       </div>
                     </div>
@@ -1202,6 +1227,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                           onProgramSelect={handleProgramClick}
                           selectedProgramId={modalProgramId}
                           center={zipCenter}
+                          currentZip={zip}
+                          onSearchArea={handleSearchArea}
                         />
                       </div>
                     )}
