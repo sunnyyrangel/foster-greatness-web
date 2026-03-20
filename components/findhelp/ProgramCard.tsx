@@ -174,8 +174,12 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-xs text-gray-500 truncate">{program.provider_name}</span>
               {source === 'community' && (
-                <span className="flex-shrink-0 text-xs font-medium text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded">
-                  Community
+                <span className="relative group/badge flex-shrink-0 inline-flex items-center gap-0.5 text-xs font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: '#b2f5ea', color: '#065f46' }}>
+                  <svg className="w-2.5 h-2.5" fill="#065f46" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                  Community Approved
+                  <span className="absolute left-0 top-full mt-1.5 w-56 px-3 py-2 rounded-lg text-xs font-normal text-white bg-gray-900 shadow-lg opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all z-50 pointer-events-none">
+                    Vetted and approved by the Foster Greatness community
+                  </span>
                 </span>
               )}
               {(() => {
@@ -251,8 +255,12 @@ export default function ProgramCard({ program, onClick, isHighlighted, onMouseEn
       {/* Badges */}
       <div className="flex flex-wrap gap-2 mb-3">
         {source === 'community' && (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
-            Community Recommended
+          <span className="relative group/badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#b2f5ea', color: '#065f46' }}>
+            <svg className="w-3.5 h-3.5" fill="#065f46" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+            Community Approved
+            <span className="absolute left-0 top-full mt-1.5 w-56 px-3 py-2 rounded-lg text-xs font-normal text-white bg-gray-900 shadow-lg opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all z-50 pointer-events-none">
+              Vetted and approved by the Foster Greatness community
+            </span>
           </span>
         )}
 

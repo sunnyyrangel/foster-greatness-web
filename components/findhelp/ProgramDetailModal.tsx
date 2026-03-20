@@ -364,11 +364,35 @@ export default function ProgramDetailModal({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="mb-2">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
-                      Community Recommended
+                    <span className="relative group/badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#b2f5ea', color: '#065f46' }}>
+                      <svg className="w-3.5 h-3.5" fill="#065f46" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                      Community Approved
+                      <span className="absolute left-0 top-full mt-1.5 w-56 px-3 py-2 rounded-lg text-xs font-normal text-white bg-gray-900 shadow-lg opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all z-50 pointer-events-none">
+                        Vetted and approved by the Foster Greatness community
+                      </span>
                     </span>
                   </div>
                   <h2 className="text-2xl font-bold text-fg-navy">{communityResource.name}</h2>
+                  {communityResource.provider_name && communityResource.provider_name !== communityResource.name && (
+                    <p className="text-sm text-gray-500 mt-1">{communityResource.provider_name}</p>
+                  )}
+                  {/* Reach badge */}
+                  {(() => {
+                    const { coverage_level, states } = communityResource;
+                    if (coverage_level === 'national') return (
+                      <span className="inline-flex items-center gap-1 mt-2 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-fg-blue">
+                        <Globe className="w-3 h-3" />
+                        Available Nationwide
+                      </span>
+                    );
+                    if ((coverage_level === 'statewide' || coverage_level === 'multi_state') && states.length > 0) return (
+                      <span className="inline-flex items-center gap-1 mt-2 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-fg-blue">
+                        <Globe className="w-3 h-3" />
+                        {states.length === 1 ? `Statewide (${states[0]})` : states.length <= 3 ? `Available in ${states.join(', ')}` : `Available in ${states.length} states`}
+                      </span>
+                    );
+                    return null;
+                  })()}
                 </div>
                 <button
                   onClick={handleSaveToggle}
@@ -394,6 +418,22 @@ export default function ProgramDetailModal({
                 <div>
                   <h3 className="font-semibold text-fg-navy mb-2">Eligibility</h3>
                   <p className="text-gray-600">{communityResource.eligibility}</p>
+                </div>
+              )}
+
+              {/* Service Area */}
+              {communityResource.coverage_level && (
+                <div>
+                  <h3 className="font-semibold text-fg-navy mb-2">Service Area</h3>
+                  <p className="text-gray-600">
+                    {communityResource.coverage_level === 'national'
+                      ? 'Available Nationwide'
+                      : communityResource.coverage_level === 'local'
+                        ? `Local — ${[communityResource.city, communityResource.state, communityResource.zip].filter(Boolean).join(', ') || 'See contact info for details'}`
+                        : communityResource.states.length > 0
+                          ? `Available in ${communityResource.states.join(', ')}`
+                          : 'See contact info for details'}
+                  </p>
                 </div>
               )}
 
@@ -432,12 +472,43 @@ export default function ProgramDetailModal({
                 )}
               </div>
 
-              {/* Category */}
-              <div>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                  {communityResource.service_tags?.[0] ?? 'Community Resource'}
-                </span>
-              </div>
+              {/* Languages */}
+              {communityResource.languages && communityResource.languages.length > 0 && communityResource.languages[0] !== 'en' && (
+                <div>
+                  <h3 className="font-semibold text-fg-navy mb-2 flex items-center gap-2">
+                    <Languages className="w-4 h-4" />
+                    Languages
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {communityResource.languages.map((lang) => (
+                      <span key={lang} className="px-2.5 py-1 bg-blue-50 text-fg-blue rounded-full text-xs font-medium">
+                        {lang === 'en' ? 'English' : lang === 'es' ? 'Spanish' : lang === 'zh' ? 'Chinese' : lang === 'vi' ? 'Vietnamese' : lang === 'ko' ? 'Korean' : lang === 'tl' ? 'Tagalog' : lang === 'fr' ? 'French' : lang === 'ar' ? 'Arabic' : lang.toUpperCase()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Service Tags */}
+              {communityResource.service_tags && communityResource.service_tags.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-fg-navy mb-2">Services</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {communityResource.service_tags.map((tag) => (
+                      <button
+                        key={tag}
+                        onClick={() => onTagSearch?.(tag, tag)}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-fg-blue/10 hover:text-fg-blue transition-colors"
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                  {onTagSearch && (
+                    <p className="text-xs text-gray-400 mt-2">Click a tag to search for similar programs</p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

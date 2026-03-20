@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Heart, ArrowRight } from 'lucide-react';
+import { Heart, ArrowRight, Shield } from 'lucide-react';
 import { getDonateCampaigns, siteConfig, homepageConfig } from '@/data';
 import CampaignCard from '@/components/site/CampaignCard';
 
@@ -39,9 +39,17 @@ export default function DonatePage() {
             Support Foster Greatness
           </h1>
 
-          <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-8">
             Your generosity creates lifelong community and belonging for current and former foster youth nationwide.
           </p>
+
+          <a
+            href={siteConfig.donation.generalStripeLink}
+            className="inline-flex items-center gap-3 bg-white text-fg-navy px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+          >
+            <Heart className="w-5 h-5 text-fg-blue" />
+            Donate Now
+          </a>
         </div>
       </section>
 
@@ -70,32 +78,28 @@ export default function DonatePage() {
       {/* General Donation */}
       <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
-            <div className="text-center mb-8">
-              <div className="inline-flex p-4 rounded-2xl bg-gradient-to-br from-fg-blue/10 to-fg-navy/10 mb-6">
-                <Heart className="w-10 h-10 text-fg-blue" />
-              </div>
-              <h2 className="text-3xl font-bold text-fg-navy mb-4">
-                Support Our Mission
-              </h2>
-              <p className="text-lg text-gray-600 max-w-xl mx-auto">
-                Make a general donation to support all Foster Greatness programs and help us create belonging for foster youth everywhere.
-              </p>
+          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100 text-center">
+            <h2 className="text-3xl font-bold text-fg-navy mb-4">
+              Support Our Mission
+            </h2>
+            <p className="text-lg text-gray-600 max-w-xl mx-auto mb-8">
+              Your donation directly funds programs creating lifelong community and belonging for foster youth everywhere.
+            </p>
+
+            <a
+              href={siteConfig.donation.generalStripeLink}
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-fg-navy to-fg-blue text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              <Heart className="w-5 h-5" />
+              Donate Now
+            </a>
+
+            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
+              <Shield className="w-4 h-4" />
+              <span>Secure payment powered by Stripe</span>
             </div>
 
-            <div className="flex justify-center mb-8">
-              <a
-                href={siteConfig.donation.generalStripeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-fg-navy to-fg-blue text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-              >
-                <Heart className="w-5 h-5" />
-                Make a Donation
-              </a>
-            </div>
-
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-sm text-gray-500 mt-4">
               Questions? Contact us at{' '}
               <a href={`mailto:${siteConfig.donation.contactEmail}`} className="text-fg-blue hover:underline">
                 {siteConfig.donation.contactEmail}

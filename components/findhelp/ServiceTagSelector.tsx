@@ -220,7 +220,7 @@ export function groupTagsByCategory(tags: ServiceTag[]): Map<string, { tags: Ser
 interface ServiceTagSelectorProps {
   tags: ServiceTag[];
   selectedTag: string | null;
-  onSelect: (tagIds: string, label: string) => void;
+  onSelect: (tagIds: string, label: string, categoryId: string) => void;
   isLoading?: boolean;
 }
 
@@ -269,7 +269,7 @@ export default function ServiceTagSelector({
           return (
             <button
               key={category.id}
-              onClick={() => onSelect(tagIds, category.label)}
+              onClick={() => onSelect(tagIds, category.label, category.id)}
               className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all hover:shadow-md ${
                 isSelected
                   ? 'border-fg-blue bg-fg-blue/5 shadow-md'

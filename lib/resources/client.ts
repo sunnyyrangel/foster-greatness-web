@@ -23,8 +23,22 @@ export async function resolveZipToState(zip: string): Promise<string | null> {
 
 export interface SearchResourcesParams {
   zip: string;
-  category: string; // Findhelp category label like "Education" or "Housing"
+  category: string; // UI category label like "Education", "Care", "Housing"
 }
+
+/** Map short UI category labels to the full SDOH tags stored in Supabase */
+const UI_TO_DB_TAGS: Record<string, string[]> = {
+  'Food': ['Food & Nutrition'],
+  'Housing': ['Housing & Shelter'],
+  'Health': ['Healthcare'],
+  'Care': ['Family & Childcare'],
+  'Money': ['Employment & Income'],
+  'Transit': ['Transportation'],
+  'Legal': ['Legal Services'],
+  // These match directly
+  'Education': ['Education'],
+  'Work': ['Employment & Income'],
+};
 
 export interface SearchResourcesResult {
   resources: CommunityResource[];
@@ -47,7 +61,11 @@ export async function searchResources(
   // Derive user's state from ZIP (cached after first call)
   const userState = await resolveZipToState(params.zip);
 
+  // Map UI category to DB service_tags (fall back to raw label if no mapping)
+  const dbTags = UI_TO_DB_TAGS[params.category] || [params.category];
+
   // Run 3 queries in parallel: local, state-level, national
+  // Query for each mapped tag and combine results
   const [localResult, stateResult, nationalResult] = await Promise.all([
     // 1. Local: exact ZIP match
     supabase
@@ -56,7 +74,7 @@ export async function searchResources(
       .eq('coverage_level', 'local')
       .eq('zip', params.zip)
       .eq('status', 'approved')
-      .contains('service_tags', [params.category]),
+      .overlaps('service_tags', dbTags),
 
     // 2. State-level: statewide or multi_state containing user's state
     userState
@@ -66,7 +84,7 @@ export async function searchResources(
           .in('coverage_level', ['statewide', 'multi_state'])
           .contains('states', [userState])
           .eq('status', 'approved')
-          .contains('service_tags', [params.category])
+          .overlaps('service_tags', dbTags)
       : Promise.resolve({ data: [] as ResourceRow[], error: null }),
 
     // 3. National
@@ -75,7 +93,7 @@ export async function searchResources(
       .select('*')
       .eq('coverage_level', 'national')
       .eq('status', 'approved')
-      .contains('service_tags', [params.category]),
+      .overlaps('service_tags', dbTags),
   ]);
 
   if (localResult.error) throw new Error(`Supabase query failed: ${localResult.error.message}`);

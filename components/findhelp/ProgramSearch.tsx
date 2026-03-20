@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { trackEvent, trackGoogleConversion, CONVERSION_LABELS } from '@/lib/analytics';
-import { List, Map, Heart, ArrowLeft, Search, MapPin, ExternalLink, Clock, DollarSign, X, ChevronLeft, ChevronRight, HandHeart } from 'lucide-react';
+import { List, Map, Heart, ArrowLeft, Search, MapPin, ExternalLink, Clock, DollarSign, X, ChevronLeft, ChevronRight, HandHeart, ShieldCheck } from 'lucide-react';
 import type { ServiceTag, ProgramLite, Office, OfficeHours, Availability, FreeOrReduced, NextStep } from '@/lib/findhelp';
 import { matchesOpenNowFilter } from '@/lib/findhelp';
 import type { CommunityResource, InformationalResource } from '@/lib/resources';
@@ -40,6 +40,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   const [tags, setTags] = useState<ServiceTag[]>([]);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedTagLabel, setSelectedTagLabel] = useState<string>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
   const [programs, setPrograms] = useState<ProgramLite[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [cursor, setCursor] = useState(0);
@@ -52,6 +53,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   // Filter state
   const [filterFree, setFilterFree] = useState(false);
   const [filterOpenNow, setFilterOpenNow] = useState(false);
+  const [filterCommunityApproved, setFilterCommunityApproved] = useState(false);
   const [selectedAttributeTags, setSelectedAttributeTags] = useState<Set<string>>(new Set());
 
   // Community resources state
@@ -105,13 +107,16 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
       // If autoSelectTag provided (deep link), skip category step and go straight to results
       if (autoSelectTag && loadedTags.length > 0) {
         const grouped = groupTagsByCategory(loadedTags);
+
+        // Match by category ID first (e.g. serviceTag=care), then fall back to raw tag IDs
         for (const category of CATEGORIES) {
           const group = grouped.get(category.id);
           if (!group) continue;
           const tagIds = group.tags.map((t: ServiceTag) => t.id).join(',');
-          if (tagIds === autoSelectTag || autoSelectTag.split(',').some((id: string) => tagIds.includes(id))) {
+          if (category.id === autoSelectTag || tagIds === autoSelectTag) {
             setSelectedTag(tagIds);
             setSelectedTagLabel(category.label);
+            setSelectedCategoryId(category.id);
             setStep('results');
             setProgramsLoading(true);
             return { matched: true, tagIds, label: category.label };
@@ -254,9 +259,10 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   };
 
   // Handle category selection
-  const handleCategorySelect = useCallback((tagIds: string, label: string) => {
+  const handleCategorySelect = useCallback((tagIds: string, label: string, categoryId: string) => {
     setSelectedTag(tagIds);
     setSelectedTagLabel(label);
+    setSelectedCategoryId(categoryId);
     setCursor(0);
     setCurrentPage(1);
     setCommunityResources([]);
@@ -394,22 +400,24 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
   }, [tags]);
 
   // Client-side filtered programs
-  const clientFiltersActive = filterFree || filterOpenNow;
+  const clientFiltersActive = filterFree || filterOpenNow || filterCommunityApproved;
   const serverFiltersActive = selectedAttributeTags.size > 0;
   const filtersActive = clientFiltersActive || serverFiltersActive;
   const filteredPrograms = useMemo(() => {
-    if (!clientFiltersActive) return programs;
+    if (filterCommunityApproved) return []; // Hide Findhelp programs, only show community resources
+    if (!filterFree && !filterOpenNow) return programs;
     return programs.filter((p) => {
       if (filterFree && p.free_or_reduced !== 'free') return false;
       if (filterOpenNow && !matchesOpenNowFilter(p)) return false;
       return true;
     });
-  }, [programs, filterFree, filterOpenNow, clientFiltersActive]);
+  }, [programs, filterFree, filterOpenNow, filterCommunityApproved]);
 
   // Helper to clear filters
   const clearFilters = useCallback(() => {
     setFilterFree(false);
     setFilterOpenNow(false);
+    setFilterCommunityApproved(false);
   }, []);
 
   // Handle attribute tag filter change (server-side filter)
@@ -737,7 +745,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
             {/* View on map — widget only */}
             {widget && resultsTab !== 'guides' && (
               <a
-                href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
+                href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedCategoryId ? `&serviceTag=${selectedCategoryId}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}&view=map`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm font-medium bg-fg-blue/10 text-fg-blue hover:bg-fg-blue/20 px-3 py-1.5 rounded-lg transition-colors"
@@ -896,6 +904,24 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                     <HandHeart className="w-3.5 h-3.5" />
                     Foster Youth
                   </button>
+                  {communityResources.length > 0 && (
+                    <button
+                      onClick={() => {
+                        const next = !filterCommunityApproved;
+                        setFilterCommunityApproved(next);
+                        trackEvent('service_filter_toggle', { filter: 'community_approved', active: next, zip });
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                        filterCommunityApproved
+                          ? 'ring-1 ring-teal-300'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      style={filterCommunityApproved ? { backgroundColor: '#b2f5ea', color: '#065f46' } : undefined}
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      Community Approved
+                    </button>
+                  )}
                   <AttributeTagFilter
                     selectedTags={selectedAttributeTags}
                     onChange={handleAttributeTagChange}
@@ -920,7 +946,9 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                     <>
                       {clientFiltersActive && (
                         <span className="text-xs text-gray-400">
-                          Showing {filteredPrograms.length} of {programs.length} loaded
+                          {filterCommunityApproved
+                            ? `Showing ${communityResources.length} community ${communityResources.length === 1 ? 'resource' : 'resources'}`
+                            : `Showing ${filteredPrograms.length} of ${programs.length} loaded`}
                         </span>
                       )}
                       <button
@@ -1008,8 +1036,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
             </div>
           )}
 
-          {/* Error state */}
-          {programsError && !programsLoading && (
+          {/* Error state — only show if no community resources to fall back on */}
+          {programsError && !programsLoading && communityResources.length === 0 && (
             <div className="text-center py-16">
               <p className="text-red-600 mb-4">{programsError}</p>
               <button
@@ -1034,8 +1062,8 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
             </div>
           )}
 
-          {/* Results view */}
-          {!programsLoading && !programsError && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
+          {/* Results view — show if we have any results (community, findhelp, or informational) */}
+          {!programsLoading && (programs.length > 0 || communityResources.length > 0 || informationalResources.length > 0) && (
             <>
               {resultsTab === 'guides' ? (
                 /* Guides tab — full width, all breakpoints */
@@ -1188,7 +1216,7 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                         {totalCount > pageSize && (
                           <div className="mt-4 text-center">
                             <a
-                              href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedTag ? `&serviceTag=${selectedTag}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
+                              href={`${widget ? 'https://www.fostergreatness.co' : ''}/services?zip=${zip}${selectedCategoryId ? `&serviceTag=${selectedCategoryId}` : ''}${searchTerms ? `&terms=${encodeURIComponent(searchTerms)}` : ''}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-sm font-medium text-fg-blue hover:text-fg-navy transition-colors"
