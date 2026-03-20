@@ -244,7 +244,7 @@ Use Tailwind classes: `text-fg-navy`, `bg-fg-blue`, etc.
 - **Database**: Supabase (gift-drive features)
 - **Payments**: Stripe
 - **Animation**: Framer Motion
-- **Analytics**: Vercel Web Analytics
+- **Analytics**: Vercel Web Analytics, Google Ads Conversion Tracking
 
 ## Development
 
@@ -271,6 +271,7 @@ npm start       # Production server
 - `components/site/ContactSection.tsx` - Contact section with Typeform
 - `components/site/DonateSection.tsx` - Reusable donation section
 - `components/shared/TypeformEmbed.tsx` - Typeform embed (use for ALL Typeform embeds)
+- `components/shared/CommunityJoinLink.tsx` - Community join link wrapper (fires Google Ads conversion)
 - `components/StripeBuyButton.tsx` - Stripe embed
 
 ### Campaign Pages
@@ -364,6 +365,41 @@ trackEvent('service_contact_click', { type: 'call', program: 'Food Bank' });
 - `zip`, `category`, `program_name` are extracted into indexed columns; everything else goes into JSONB `properties`
 
 **API Route:** `POST /api/analytics/track` (60 req/min, always returns 200)
+
+### Google Ads Conversion Tracking
+
+**Tag ID:** `AW-11440847917`
+**Location:** `app/layout.tsx` (root layout `<head>`)
+
+**Utility:** `lib/analytics.ts` — `trackGoogleConversion(label)` + `CONVERSION_LABELS`
+
+```typescript
+import { trackGoogleConversion, CONVERSION_LABELS } from '@/lib/analytics';
+
+// Fire a conversion event
+trackGoogleConversion(CONVERSION_LABELS.service_search);
+trackGoogleConversion(CONVERSION_LABELS.community_join);
+```
+
+**Tracked Conversions:**
+
+| Conversion | Label | Trigger Location |
+|------------|-------|------------------|
+| Search for Resource | `Ydl3CJScsYwcEK34tc8q` | ZIP submit in `ProgramSearch.tsx` |
+| Join Community | `dy69CMuBoIwcEK34tc8q` | All community join links via `CommunityJoinLink` component |
+
+**CommunityJoinLink Component** (`components/shared/CommunityJoinLink.tsx`):
+Use this wrapper for any community join `<a>` tag to automatically fire the Google Ads conversion. Used in Header (desktop + mobile) and Footer (banner + nav link).
+
+```tsx
+import CommunityJoinLink from '@/components/shared/CommunityJoinLink';
+
+<CommunityJoinLink href="https://community.fostergreatness.co" className="...">
+  Join the Community
+</CommunityJoinLink>
+```
+
+**CSP:** `googletagmanager.com`, `google.com`, `googleads.g.doubleclick.net` whitelisted in `next.config.ts` (script-src, connect-src, img-src)
 
 ---
 
