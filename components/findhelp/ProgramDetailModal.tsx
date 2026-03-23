@@ -23,6 +23,7 @@ import type { Program, Office, NextStep } from '@/lib/findhelp';
 import { cleanDescriptionBlock, formatOfficeHours, formatAddress } from '@/lib/findhelp';
 import type { CommunityResource } from '@/lib/resources';
 import { useResourceBoard } from './ResourceBoardContext';
+import ResourceFeedback from './ResourceFeedback';
 
 interface ProgramDetailModalProps {
   programId: string;
@@ -512,6 +513,17 @@ export default function ProgramDetailModal({
             </div>
           )}
 
+          {/* Resource Feedback — community resource */}
+          {communityResource && !loading && (
+            <ResourceFeedback
+              programId={communityResource.id}
+              programName={communityResource.name}
+              source="community"
+              category=""
+              zip={zip}
+            />
+          )}
+
           {program && !loading && !error && (
             <div className="space-y-6">
               {/* Title and Save */}
@@ -666,6 +678,15 @@ export default function ProgramDetailModal({
                   </div>
                 </div>
               )}
+
+              {/* Resource Feedback — findhelp program */}
+              <ResourceFeedback
+                programId={program.id}
+                programName={program.name}
+                source="findhelp"
+                category=""
+                zip={zip}
+              />
             </div>
           )}
         </div>

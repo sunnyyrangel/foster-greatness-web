@@ -32,6 +32,12 @@ export default function AdminLayout({
                 Analytics
               </a>
               <a
+                href="/admin/feedback"
+                className={`transition-colors ${pathname === '/admin/feedback' ? 'text-white' : 'text-white/70 hover:text-white'}`}
+              >
+                Feedback
+              </a>
+              <a
                 href="/admin/submissions"
                 className={`transition-colors ${pathname === '/admin/submissions' ? 'text-white' : 'text-white/70 hover:text-white'}`}
               >

@@ -15,6 +15,7 @@ import ProgramDetailModal from './ProgramDetailModal';
 import InformationalResourceCard from './InformationalResourceCard';
 import ProgramMap from './ProgramMap';
 import AttributeTagFilter from './AttributeTagFilter';
+import ToolFeedback from './ToolFeedback';
 
 type ViewMode = 'list' | 'map';
 type SearchStep = 'zip' | 'category' | 'results';
@@ -1258,6 +1259,13 @@ function ProgramSearchInner({ initialZip, initialProgramId, initialView, initial
                       </>
                     )}
                   </div>
+
+                  {/* Tool Feedback */}
+                  {!widget && (
+                    <div className="mt-6">
+                      <ToolFeedback zip={zip} category={selectedTagLabel} />
+                    </div>
+                  )}
 
                   {/* Suggest a Resource CTA */}
                   {!widget && (
