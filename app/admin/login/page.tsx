@@ -25,12 +25,12 @@ export default function AdminLoginPage() {
       if (res.ok) {
         window.location.href = '/admin/analytics';
         return;
-      } else {
-        setError('Invalid username or password');
       }
+
+      setError('Invalid username or password');
+      setLoading(false);
     } catch {
       setError('Something went wrong. Please try again.');
-    } finally {
       setLoading(false);
     }
   }
