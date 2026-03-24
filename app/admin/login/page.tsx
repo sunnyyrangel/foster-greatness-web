@@ -23,7 +23,8 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push('/admin/analytics');
+        window.location.href = '/admin/analytics';
+        return;
       } else {
         setError('Invalid username or password');
       }
