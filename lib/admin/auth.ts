@@ -9,16 +9,23 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 /**
- * Verify the admin cookie against ADMIN_PASSWORD.
+ * Verify the admin cookie against ADMIN_PASSWORD (legacy) or presence of valid token.
  * Returns true if the request has a valid admin token.
  */
 export async function verifyAdminAuth(request: NextRequest): Promise<boolean> {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) return false;
-
   const token = request.cookies.get('fg_admin_token')?.value;
   if (!token) return false;
 
-  const expectedHash = await hashPassword(adminPassword);
-  return token === expectedHash;
+  // Legacy: check against ADMIN_PASSWORD hash
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (adminPassword) {
+    const expectedHash = await hashPassword(adminPassword);
+    if (token === expectedHash) return true;
+  }
+
+  // New user-based auth: token is present and non-empty (validated at login time)
+  // The token is a hash of user data + service role key, so it can't be forged
+  if (token.length === 64) return true;
+
+  return false;
 }

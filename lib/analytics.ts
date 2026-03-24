@@ -42,6 +42,11 @@ export function trackGoogleConversion(label: string): void {
  */
 export function trackEvent(eventName: string, properties: EventProperties = {}): void {
   try {
+    // Skip tracking for admin users (fg_admin cookie set on admin login)
+    if (typeof document !== 'undefined' && document.cookie.includes('fg_admin=1')) {
+      return;
+    }
+
     const payload = JSON.stringify({ event_name: eventName, properties });
 
     // Prefer sendBeacon — survives tel:/mailto: navigations

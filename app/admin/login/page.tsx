@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,13 +19,13 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (res.ok) {
         router.push('/admin/analytics');
       } else {
-        setError('Invalid password');
+        setError('Invalid username or password');
       }
     } catch {
       setError('Something went wrong. Please try again.');
@@ -41,7 +42,22 @@ export default function AdminLoginPage() {
             Admin Login
           </h2>
 
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fg-blue focus:border-transparent"
+            placeholder="Enter your username"
+            required
+            autoFocus
+            autoComplete="username"
+          />
+
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2 mt-4">
             Password
           </label>
           <input
@@ -50,9 +66,9 @@ export default function AdminLoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fg-blue focus:border-transparent"
-            placeholder="Enter admin password"
+            placeholder="Enter your password"
             required
-            autoFocus
+            autoComplete="current-password"
           />
 
           {error && (
