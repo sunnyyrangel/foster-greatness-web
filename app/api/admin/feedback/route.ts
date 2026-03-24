@@ -1,30 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, rateLimitHeaders } from '@/lib/rate-limit';
 import { getFeedbackSummary } from '@/lib/admin/feedback-queries';
+import { verifyAdminAuth } from '@/lib/admin/auth';
 import { captureException } from '@/lib/sentry-utils';
 
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
 export async function GET(request: NextRequest) {
-  // Defense-in-depth: verify admin cookie
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const token = request.cookies.get('fg_admin_token')?.value;
-  if (!token) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const expectedHash = await hashPassword(adminPassword);
-  if (token !== expectedHash) {
+  const isAuthed = await verifyAdminAuth(request);
+  if (!isAuthed) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
