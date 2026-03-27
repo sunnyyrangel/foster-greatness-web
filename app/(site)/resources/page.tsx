@@ -38,21 +38,21 @@ const resourceAreas = [
 const steps = [
   {
     number: '01',
-    title: 'Create an Account',
-    description: 'Sign up for free at our community platform to access all resource support services.',
-    image: '/images/web images/create-an-account.jpg',
+    title: 'Search by ZIP Code',
+    description: 'Use our Resource Finder to search over 500,000 programs near you — housing, food, healthcare, jobs, and more.',
+    image: '/images/resource-finder-preview.svg',
   },
   {
     number: '02',
-    title: 'Submit Request Form',
-    description: 'Complete the "Access Resource Support" form in the Resource Support section.',
-    image: '/images/web images/submit-request-form.jpg',
+    title: 'Browse & Connect',
+    description: 'Explore results by category, view program details, and contact organizations directly.',
+    image: '/images/support-request-preview.svg',
   },
   {
     number: '03',
-    title: 'Get Help Finding Resources',
-    description: 'Not sure where to start? Submit a request and our team will help point you in the right direction.',
-    image: '/images/web images/connect-with-a-specialist.jpg',
+    title: 'Need More Help?',
+    description: 'Submit a support request through our community and our team will help connect you to the right resources.',
+    image: '/images/community-belonging-preview.svg',
   },
 ];
 
@@ -175,29 +175,21 @@ export default function ResourcesPage() {
               How It Works
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Getting support is simple. Submit a request and our team will help point you in the right direction.
+              Find resources instantly with our Resource Finder, or submit a request for personalized help from our team.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
               <div key={step.number} className="flex flex-col">
-                {/* Phone Mockup with Screenshot */}
-                <div className="mb-6 flex justify-center">
-                  <div className="relative w-32 h-56 bg-fg-navy rounded-[1.75rem] border-4 border-fg-navy shadow-lg overflow-hidden">
-                    {/* Phone notch */}
-                    <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-12 h-4 bg-black rounded-full z-10" />
-                    {/* Screen content */}
-                    <div className="absolute inset-1 rounded-[1.25rem] overflow-hidden bg-white">
-                      <Image
-                        src={step.image}
-                        alt={step.title}
-                        fill
-                        className="object-cover object-top"
-                      />
-                    </div>
-                    {/* Home indicator */}
-                    <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-10 h-1 bg-white/50 rounded-full z-10" />
+                <div className="mb-6 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                  <div className="relative aspect-[3/2]">
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </div>
 
