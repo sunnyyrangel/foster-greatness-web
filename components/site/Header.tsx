@@ -41,6 +41,7 @@ export default function Header() {
   };
 
   const aboutLinks = [
+    { label: 'About Us', href: '/about', description: 'Our mission and values' },
     { label: 'Impact Report', href: '/impact', description: 'See our community impact' },
   ];
 
