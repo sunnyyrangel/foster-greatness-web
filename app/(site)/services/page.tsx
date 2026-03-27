@@ -122,21 +122,20 @@ export default async function ServicesPage({
             </div>
 
             <h2 className="text-2xl md:text-3xl font-bold text-fg-navy mb-4">
-              Ask Our Resource Navigator Team
+              Get Help Finding Resources!
             </h2>
 
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              Our Resource Navigators can help you navigate options and connect with programs
-              that fit your specific situation. Join our community to get personalized support.
+              Not sure where to start? Submit a request and our team will help point you in the right direction!
             </p>
 
             <a
-              href="https://community.fostergreatness.co"
+              href="https://community.fostergreatness.co/c/find-help-foster-greatness/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-fg-navy text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-fg-blue transition-all"
             >
-              Connect with a Navigator
+              Submit a Request
               <ArrowRight className="w-5 h-5" />
             </a>
 
