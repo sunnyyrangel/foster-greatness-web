@@ -13,6 +13,7 @@ import ContactClickBreakdown from '@/components/admin/ContactClickBreakdown';
 import BoardExportsCard from '@/components/admin/BoardExportsCard';
 import TopKeywordsTable from '@/components/admin/TopKeywordsTable';
 import ChannelBreakdown from '@/components/admin/ChannelBreakdown';
+import ActivityHeatmap from '@/components/admin/ActivityHeatmap';
 
 export default function AnalyticsDashboard() {
   const [range, setRange] = useState('30d');
@@ -89,6 +90,9 @@ export default function AnalyticsDashboard() {
             <StatCard label="Programs Saved" value={data.eventCounts.saves} icon={Bookmark} />
             <StatCard label="Board Exports" value={data.eventCounts.exports} icon={Download} />
           </div>
+
+          {/* Activity Heatmap */}
+          <ActivityHeatmap data={data.activityHeatmap} />
 
           {/* Top ZIPs + Category Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

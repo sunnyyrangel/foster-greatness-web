@@ -15,6 +15,7 @@ export interface AnalyticsSummary {
   timeline: Array<{ date: string; searches: number; views: number }>;
   topKeywords: Array<{ term: string; count: number }>;
   channelBreakdown: { web: number; embed: number };
+  activityHeatmap: Array<{ date: string; count: number }>;
 }
 
 function emptyResult(): AnalyticsSummary {
@@ -28,6 +29,7 @@ function emptyResult(): AnalyticsSummary {
     timeline: [],
     topKeywords: [],
     channelBreakdown: { web: 0, embed: 0 },
+    activityHeatmap: [],
   };
 }
 
@@ -227,6 +229,29 @@ export async function getAnalyticsSummary(
   }
   const channelBreakdown = { web: webCount, embed: embedCount };
 
+  // Activity heatmap (daily totals from all events)
+  const heatmapCounts = new Map<string, number>();
+  for (const row of allEvents.data ?? []) {
+    const props = row.properties as Record<string, unknown> | null;
+    const createdAt = props?.created_at as string | undefined;
+    if (createdAt) {
+      const day = createdAt.slice(0, 10);
+      heatmapCounts.set(day, (heatmapCounts.get(day) ?? 0) + 1);
+    }
+  }
+  // Also count from search and view events which have created_at directly
+  for (const row of searchEvents.data ?? []) {
+    const day = (row.created_at as string).slice(0, 10);
+    heatmapCounts.set(day, (heatmapCounts.get(day) ?? 0) + 1);
+  }
+  for (const row of viewEvents.data ?? []) {
+    const day = (row.created_at as string).slice(0, 10);
+    heatmapCounts.set(day, (heatmapCounts.get(day) ?? 0) + 1);
+  }
+  const activityHeatmap = [...heatmapCounts.entries()]
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
   return {
     eventCounts,
     topZips,
@@ -237,5 +262,6 @@ export async function getAnalyticsSummary(
     timeline,
     topKeywords,
     channelBreakdown,
+    activityHeatmap,
   };
 }
