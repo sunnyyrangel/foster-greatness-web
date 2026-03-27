@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0067a2"/>
+      <stop offset="100%" style="stop-color:#004d7a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)" rx="16"/>
+
+  <!-- Calendar icon -->
+  <circle cx="300" cy="148" r="60" fill="white" opacity="0.1"/>
+  <rect x="258" y="124" width="84" height="72" rx="10" fill="white" opacity="0.9"/>
+  <rect x="258" y="124" width="84" height="22" rx="10" fill="#fa8526"/>
+  <rect x="258" y="138" width="84" height="8" fill="#fa8526"/>
+  <line x1="282" y1="118" x2="282" y2="132" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="318" y1="118" x2="318" y2="132" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="300" y="182" font-family="system-ui, -apple-system, sans-serif" font-size="30" font-weight="700" fill="#1a2949" text-anchor="middle">12</text>
+
+  <!-- Accent dots -->
+  <circle cx="205" cy="125" r="10" fill="#00c8b7" opacity="0.35"/>
+  <circle cx="390" cy="182" r="7" fill="#faca2c" opacity="0.35"/>
+
+  <!-- Title -->
+  <text x="300" y="278" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="700" fill="white" text-anchor="middle">Upcoming Events</text>
+  <text x="300" y="316" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="white" opacity="0.7" text-anchor="middle">Connect with community</text>
+
+  <rect x="240" y="348" width="120" height="4" rx="2" fill="#00c8b7" opacity="0.6"/>
+</svg>
