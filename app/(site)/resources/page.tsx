@@ -46,13 +46,13 @@ const steps = [
     number: '02',
     title: 'Browse & Connect',
     description: 'Explore results by category, view program details, and contact organizations directly.',
-    image: '/images/support-request-preview.svg',
+    image: '/images/search-results-preview.svg',
   },
   {
     number: '03',
     title: 'Need More Help?',
     description: 'Submit a support request through our community and our team will help connect you to the right resources.',
-    image: '/images/community-belonging-preview.svg',
+    image: '/images/support-request-preview.svg',
   },
 ];
 
