@@ -36,10 +36,10 @@ export default function CommunitySection() {
           {/* Image */}
           <motion.div variants={itemVariants} className="relative h-64 sm:h-80 lg:h-96">
             <Image
-              src="/images/digital-community-image.png"
+              src="/images/digital-community-image.webp"
               alt="Foster Greatness community members"
               fill
-              className="object-contain"
+              className="object-cover rounded-2xl"
             />
           </motion.div>
         </div>

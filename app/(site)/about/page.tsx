@@ -484,11 +484,17 @@ export default function AboutPage() {
                   {/* Double the logos for seamless loop */}
                   {[...Array(2)].map((_, setIndex) => (
                     <div key={setIndex} className="flex gap-8 flex-shrink-0">
-                      {Array.from({ length: 9 }, (_, i) => ({
-                        id: i + 1,
-                        image: `/images/partners/${i + 1}.png`,
-                        alt: `Partner ${i + 1}`
-                      })).map((partner) => (
+                      {[
+                        { id: 'smg', image: '/images/partners/smg.png', alt: 'Staffmark Group' },
+                        { id: 'eatwell', image: '/images/partners/eatwell.png', alt: 'EatWell' },
+                        { id: 'firststar', image: '/images/partners/firststar.png', alt: 'First Star' },
+                        { id: 'lotus', image: '/images/partners/lotus-grove.png', alt: 'Lotus Grove Counseling' },
+                        { id: 'ahw', image: '/images/partners/a-home-within.png', alt: 'A Home Within' },
+                        { id: 'yvr', image: '/images/partners/youth-voices-rising.png', alt: 'Youth Voices Rising' },
+                        { id: 'cetera', image: '/images/partners/cetera.png', alt: 'Cetera' },
+                        { id: 'str8up', image: '/images/partners/str8up.png', alt: 'Str8Up Employment Services' },
+                        { id: 'nfyi', image: '/images/partners/nfyi.png', alt: 'National Foster Youth Institute' },
+                      ].map((partner) => (
                         <div
                           key={`${setIndex}-${partner.id}`}
                           className="w-40 h-40 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-fg-navy/5 flex items-center justify-center p-4 hover:shadow-md transition-shadow"

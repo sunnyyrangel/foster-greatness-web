@@ -4,12 +4,17 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { containerVariants, itemVariants } from './animations';
 
-// Partners 1-9, excluding 10 (DGW Branded logo)
-const partners = Array.from({ length: 9 }, (_, i) => ({
-  id: i + 1,
-  image: `/images/partners/${i + 1}.png`,
-  alt: `Partner ${i + 1}`
-}));
+const partners = [
+  { name: 'Staffmark Group', image: '/images/partners/smg.png' },
+  { name: 'EatWell', image: '/images/partners/eatwell.png' },
+  { name: 'First Star', image: '/images/partners/firststar.png' },
+  { name: 'Lotus Grove Counseling', image: '/images/partners/lotus-grove.png' },
+  { name: 'A Home Within', image: '/images/partners/a-home-within.png' },
+  { name: 'Youth Voices Rising', image: '/images/partners/youth-voices-rising.png' },
+  { name: 'Cetera', image: '/images/partners/cetera.png' },
+  { name: 'Str8Up Employment Services', image: '/images/partners/str8up.png' },
+  { name: 'National Foster Youth Institute', image: '/images/partners/nfyi.png' },
+];
 
 export default function PartnersSection() {
   return (
@@ -36,12 +41,12 @@ export default function PartnersSection() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-10 items-center justify-items-center">
           {partners.map((partner) => (
             <div
-              key={partner.id}
+              key={partner.name}
               className="w-full max-w-[160px] h-24 relative grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300"
             >
               <Image
                 src={partner.image}
-                alt={partner.alt}
+                alt={partner.name}
                 fill
                 className="object-contain"
               />
