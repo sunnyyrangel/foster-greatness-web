@@ -4,15 +4,15 @@ import { generatePageMetadata, generateBreadcrumbJsonLd, generateFaqJsonLd, site
 const resourceFaqs = [
   {
     question: "What resources are available for foster youth?",
-    answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Foster Greatness provides free 1:1 support from Resource Specialists to help you navigate and access these resources."
+    answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Not sure where to start? Submit a request and our team will help point you in the right direction."
   },
   {
     question: "How do I access foster youth resources through Foster Greatness?",
-    answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. A dedicated Resource Specialist will contact you within 24-48 hours (Monday-Friday) to provide personalized assistance."
+    answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. Our team will help point you in the right direction."
   },
   {
     question: "Are Foster Greatness resources free?",
-    answer: "Yes, all Foster Greatness resources and support services are completely free. This includes 1:1 Resource Specialist support, benefits screening, career services, and community access."
+    answer: "Yes, all Foster Greatness resources and support services are completely free. This includes help finding resources, benefits screening, career services, and community access."
   },
   {
     question: "Do I need to be currently in foster care to access resources?",
@@ -24,13 +24,13 @@ const resourceFaqs = [
   },
   {
     question: "How can I get help with housing as a foster youth?",
-    answer: "Foster Greatness Resource Specialists can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
+    answer: "Foster Greatness can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
   }
 ];
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Free Resources for Foster Youth | Housing, Jobs, Education Support',
-  description: 'Access free resources for current and former foster youth: housing assistance, job training, scholarships, benefits screening, and 1:1 support from Resource Specialists. No age limit.',
+  description: 'Access free resources for current and former foster youth: housing assistance, job training, scholarships, benefits screening, and help finding resources. No age limit.',
   path: '/resources',
 });
 

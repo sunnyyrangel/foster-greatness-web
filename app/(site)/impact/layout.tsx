@@ -4,7 +4,7 @@ import { generatePageMetadata, generateBreadcrumbJsonLd, generateFaqJsonLd, site
 const impactFaqs = [
   {
     question: "What is Foster Greatness's impact?",
-    answer: "In 2025, Foster Greatness grew to 2,147 community members (1,042 new), hosted 62 events including 34 community gatherings and 22 workshops, served 178 individuals through resource navigation, fulfilled 220 resource requests, and connected 463 members to wish opportunities through One Simple Wish."
+    answer: "In 2025, Foster Greatness grew to 2,147 community members (1,042 new), hosted 62 events including 34 community gatherings and 22 workshops, served 178 individuals through resource navigation, and fulfilled 220 resource requests."
   },
   {
     question: "How many foster youth does Foster Greatness serve?",

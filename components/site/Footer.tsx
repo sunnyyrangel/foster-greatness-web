@@ -29,7 +29,7 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* About */}
           <div>
             <h3 className="font-bold text-lg mb-4">About</h3>
@@ -51,12 +51,21 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Resources */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">Resources</h3>
+            <ul className="space-y-2">
+              <li><Link href="/resources" className="text-gray-300 hover:text-white transition">Resource Support</Link></li>
+              <li><Link href="/services" className="text-gray-300 hover:text-white transition">Find Local Services</Link></li>
+              <li><Link href="/tax-support" className="text-gray-300 hover:text-white transition">Tax Support</Link></li>
+            </ul>
+          </div>
+
           {/* Get Involved */}
           <div>
             <h3 className="font-bold text-lg mb-4">Get Involved</h3>
             <ul className="space-y-2">
               <li><Link href="/donate" className="text-gray-300 hover:text-white transition">Donate</Link></li>
-              <li><Link href="/gingerbread" className="text-gray-300 hover:text-white transition">Gingerbread Contest</Link></li>
               <li><Link href="/partnerships" className="text-gray-300 hover:text-white transition">Partnerships</Link></li>
             </ul>
           </div>

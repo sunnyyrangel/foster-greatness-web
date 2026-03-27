@@ -61,15 +61,15 @@ export default function Header() {
 
   // Resources dropdown
   const resourcesCta = {
-    title: 'Resource Support',
-    description: 'Connect with a Resource Specialist for personalized support navigating resources',
-    href: 'https://community.fostergreatness.co/c/resource-specialist/',
-    cta: 'Get Support',
-    external: true,
+    title: 'Resource Finder',
+    description: 'Search over 500,000 programs and services across the U.S. by ZIP code',
+    href: '/services',
+    cta: 'Find Resources',
+    external: false,
   };
 
   const resourcesLinks = [
-    { label: 'Resource Hub', href: '/resources', description: 'All resources and support services' },
+    { label: 'Resource Support', href: '/resources', description: 'All resources and support services' },
     { label: 'Tax Support', href: '/tax-support', description: 'Free tax filing help for foster youth' },
     { label: 'Find Local Services', href: '/services', description: 'Search 500,000+ resources by ZIP' },
   ];
@@ -293,24 +293,22 @@ export default function Header() {
                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50">
                       <div className="bg-white rounded-2xl shadow-[0_25px_60px_-15px_rgba(26,41,73,0.25)] border border-gray-100 overflow-hidden animate-menuIn">
                         <div className="flex">
-                          {/* Left Column - Resource Support CTA */}
+                          {/* Left Column - Resource Finder CTA */}
                           <div className="w-64 bg-gradient-to-br from-fg-teal to-fg-blue p-6 flex flex-col justify-between">
                             <div>
                               <h3 className="text-white font-bold text-lg mb-2">{resourcesCta.title}</h3>
                               <p className="text-white/80 text-sm leading-relaxed">{resourcesCta.description}</p>
                             </div>
-                            <a
+                            <Link
                               href={resourcesCta.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
                               onClick={closeMenus}
                               className="mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-fg-navy font-semibold rounded-full hover:bg-fg-light-blue transition-colors text-sm"
                             >
                               {resourcesCta.cta}
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                               </svg>
-                            </a>
+                            </Link>
                           </div>
 
                           {/* Right Column - Resource Links */}
@@ -614,11 +612,9 @@ export default function Header() {
             <div>
               <div className="text-xs font-bold text-fg-orange uppercase tracking-wider mb-2 px-1">Resources</div>
 
-              {/* Resource Support CTA - Prominent */}
-              <a
+              {/* Resource Finder CTA - Prominent */}
+              <Link
                 href={resourcesCta.href}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="block mb-3 p-4 bg-gradient-to-r from-fg-teal to-fg-blue rounded-xl text-white"
               >
                 <div className="font-bold text-base mb-1">{resourcesCta.title}</div>
@@ -626,10 +622,10 @@ export default function Header() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-fg-navy font-semibold rounded-full text-sm">
                   {resourcesCta.cta}
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
-              </a>
+              </Link>
 
               {/* Resource Links */}
               <div className="grid grid-cols-2 gap-2">

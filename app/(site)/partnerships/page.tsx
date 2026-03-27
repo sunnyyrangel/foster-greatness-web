@@ -39,12 +39,6 @@ const currentPartners = [
     impact: 'Comprehensive employment pipeline program'
   },
   {
-    name: 'One Simple Wish',
-    description: 'Our partnership ensures those directly impacted by foster care always have access to support and well-wishes. Each holiday season, we host a large "Holiday Wish Round-Up" allowing individuals with lived experience, regardless of age, to submit their holiday wishes. Year-round, we connect individuals to One Simple Wish through our resource support services.',
-    logo: '/images/partners/osw.png',
-    impact: 'Year-round wish fulfillment for all ages'
-  },
-  {
     name: 'EatWell',
     description: 'Every year, we partner with EatWell to host a virtual live Thanksgiving Community Gathering. This partnership provides former foster youth and their families with meals for Thanksgiving week, creates a Foster Greatness Community Cookbook with recipes for allies and community members, and hosts a virtual cooking class and gathering.',
     logo: '/images/partners/eatwell.png',
@@ -55,12 +49,6 @@ const currentPartners = [
     description: 'We hosted the 2025 First Star Creation Conference virtually in the Foster Greatness Community. We\'ve created a private space within our app for First Star program alumni to connect, share updates, and stay engaged while accessing resources, events, and opportunities throughout the Foster Greatness Community.',
     logo: '/images/partners/firststar.png',
     impact: 'Virtual conference hosting and alumni community space'
-  },
-  {
-    name: 'Foster Care Alumni of America',
-    description: 'A partnership in shared effort to set the standard of empowerment and support for individuals of all ages impacted by foster care. This strengthens our impact by connecting us with organizations respected by all generations of foster youth and alumni. We ensure our members access FCAA\'s monthly policy calls and they share our events and opportunities with their members.',
-    logo: '/images/partners/fcalumni.png',
-    impact: 'Cross-generational advocacy and policy engagement'
   },
   {
     name: 'Lotus Grove Counseling & Consulting Services',
@@ -97,12 +85,6 @@ const currentPartners = [
     description: 'Our partnership with the National Foster Youth Institute connects our community with leadership development and advocacy opportunities at the national level.',
     logo: '/images/partners/nfyi.png',
     impact: 'National leadership and advocacy opportunities'
-  },
-  {
-    name: 'For Others',
-    description: 'For Others featured the Foster Greatness Community as a powerful, leading app for those directly impacted by foster care in their blog, helping amplify awareness of our platform.',
-    logo: '/images/partners/for-others.svg',
-    impact: 'Featured partnership and awareness'
   },
   {
     name: 'Doing Good Works',

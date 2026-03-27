@@ -95,7 +95,7 @@ const faqs = [
   },
   {
     question: "Can I get help after aging out of foster care?",
-    answer: "Yes! Foster Greatness provides free, lifelong support for current and former foster youth with no age limit. You can access 1:1 resource specialist support, benefits screening, career services, peer community, and crisis fund assistance regardless of how long ago you aged out."
+    answer: "Yes! Foster Greatness provides free, lifelong support for current and former foster youth with no age limit. You can access help finding resources, benefits screening, career services, peer community, and crisis fund assistance regardless of how long ago you aged out."
   },
   {
     question: "What percentage of foster youth become homeless after aging out?",
@@ -340,7 +340,7 @@ export default function AgingOutPage() {
           </div>
 
           <p className="text-sm text-gray-500 mt-4">
-            Contact your state's child welfare agency or a Foster Greatness Resource Specialist to learn about programs in your state.
+            Contact your state's child welfare agency or Foster Greatness to learn about programs in your state.
           </p>
         </div>
       </section>
@@ -364,8 +364,8 @@ export default function AgingOutPage() {
           <div className="grid sm:grid-cols-3 gap-6 mb-10 text-left">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <CheckCircle2 className="w-8 h-8 text-fg-yellow mb-3" />
-              <h3 className="font-bold mb-2">1:1 Resource Support</h3>
-              <p className="text-white/70 text-sm">Personal assistance navigating housing, benefits, and services</p>
+              <h3 className="font-bold mb-2">Get Help Finding Resources</h3>
+              <p className="text-white/70 text-sm">Not sure where to start? Submit a request and our team will help point you in the right direction</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <CheckCircle2 className="w-8 h-8 text-fg-yellow mb-3" />

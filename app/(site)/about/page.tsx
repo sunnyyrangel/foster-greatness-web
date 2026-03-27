@@ -56,7 +56,7 @@ export default function AboutPage() {
     },
     {
       question: "Does Foster Greatness provide monetary support?",
-      answer: "We connect members with resources including scholarships, wish granting through One Simple Wish, and access to various support programs. Our Resource Specialists can help you find the specific assistance you need."
+      answer: "We connect members with resources including scholarships and access to various support programs. Not sure where to start? Submit a request and our team will help point you in the right direction."
     }
   ];
 
@@ -293,17 +293,17 @@ export default function AboutPage() {
                     image: '/images/web images/local-resource-finder.webp',
                     title: 'Local Resource Finder',
                     desc: 'Get connected to the support you deserve! Our Resource Hub is a free, one-stop tool for current and former foster youth to instantly find benefits and resources.',
-                    tags: 'Housing • Food Security • Scholarships • Job Opportunities • Wish Granting • Basic Needs'
+                    tags: 'Housing • Food Security • Scholarships • Job Opportunities • Basic Needs'
                   },
                   {
                     image: '/images/web images/one-on-one custom support.webp',
-                    title: 'One-on-One Custom Support',
-                    desc: 'Our Resource Specialists collaborate with you to understand your unique situation and identify tailored solutions, whether you are seeking scholarships, rent assistance, food aid, or other resources.'
+                    title: 'Get Help Finding Resources',
+                    desc: 'Not sure where to start? Submit a request and our team will help point you in the right direction — whether you need scholarships, rent assistance, food aid, or other resources.'
                   },
                   {
                     image: '/images/web images/onesimplewish partnership.jpg',
-                    title: 'One Simple Wish Partnership',
-                    desc: 'Foster Greatness proudly partners with One Simple Wish. Connect with our Resource Specialists to determine your eligibility to submit a wish.'
+                    title: 'Community & Belonging',
+                    desc: 'Join a nationwide community of current and former foster youth. Connect with others who understand your experience and build lasting relationships.'
                   }
                 ].map((item, i) => (
                   <motion.div
@@ -506,7 +506,7 @@ export default function AboutPage() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
                   { name: 'Isabel Stasa', role: 'Director of Community Affairs and Social Impact', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp', position: 'object-top' },
-                  { name: 'Lillee Taylor', role: 'Resource Specialist', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp', position: 'object-center' },
+                  { name: 'Lillee Taylor', role: 'Community Support', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp', position: 'object-center' },
                   { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp', position: 'object-top' },
                   { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp', position: 'object-top' },
                   { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp', position: 'object-top' },

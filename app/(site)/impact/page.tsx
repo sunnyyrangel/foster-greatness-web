@@ -109,24 +109,21 @@ const storytellersCohort = [
 
 const partners = [
   { name: 'Staffmark Group', logo: '/images/partners/smg.png' },
-  { name: 'One Simple Wish', logo: '/images/partners/osw.png' },
   { name: 'EatWell', logo: '/images/partners/eatwell.png' },
   { name: 'First Star', logo: '/images/partners/firststar.png' },
-  { name: 'Foster Care Alumni of America', logo: '/images/partners/fcalumni.png' },
   { name: 'Lotus Grove Counseling', logo: '/images/partners/lotus-grove.png' },
   { name: 'A Home Within', logo: '/images/partners/a-home-within.png' },
   { name: 'Youth Voices Rising', logo: '/images/partners/youth-voices-rising.png' },
   { name: 'Cetera', logo: '/images/partners/cetera.png' },
   { name: 'Str8Up Employment Services', logo: '/images/partners/str8up.png' },
   { name: 'National Foster Youth Institute', logo: '/images/partners/nfyi.png' },
-  { name: 'For Others', logo: '/images/partners/for-others.svg' },
   { name: 'Doing Good Works', logo: '/images/partners/dgw-branded.png' },
 ];
 
 const testimonials = {
   community: {
     quote:
-      'I aged out at 18 years old, Christmas Day, with nowhere to go, no money in my pocket and no idea what to do. It was a very lonely time. This is when I found Foster Greatness and One Simple Wish. It felt like a dream come true to find people who actually cared and wanted to help me achieve my goals. Having a support system like FG has given me hope again.',
+      'I aged out at 18 years old, Christmas Day, with nowhere to go, no money in my pocket and no idea what to do. It was a very lonely time. This is when I found Foster Greatness. It felt like a dream come true to find people who actually cared and wanted to help me achieve my goals. Having a support system like FG has given me hope again.',
     name: 'Cara',
     role: 'Community Member',
     image: null as string | null,

@@ -20,7 +20,7 @@ const agingOutFaqs = [
   },
   {
     question: "Can I get help after aging out of foster care?",
-    answer: "Yes! Foster Greatness provides free, lifelong support for current and former foster youth with no age limit. You can access 1:1 resource specialist support, benefits screening, career services, peer community, and crisis fund assistance regardless of how long ago you aged out."
+    answer: "Yes! Foster Greatness provides free, lifelong support for current and former foster youth with no age limit. You can access help finding resources, benefits screening, career services, peer community, and crisis fund assistance regardless of how long ago you aged out."
   },
   {
     question: "What percentage of foster youth become homeless after aging out?",

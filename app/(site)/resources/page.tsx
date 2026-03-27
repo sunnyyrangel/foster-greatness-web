@@ -50,8 +50,8 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Connect with a Specialist',
-    description: 'A resource specialist will reach out within 24-48 hours (Mon-Fri, 9AM-5PM PST).',
+    title: 'Get Help Finding Resources',
+    description: 'Not sure where to start? Submit a request and our team will help point you in the right direction.',
     image: '/images/web images/connect-with-a-specialist.jpg',
   },
 ];
@@ -83,7 +83,7 @@ export default function ResourcesPage() {
           </h1>
 
           <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-8">
-            Personalized 1:1 support for current and former foster youth. Access housing assistance, job training, scholarships, benefits screening, and more—completely free, with no age limit.
+            Free support for current and former foster youth. Access housing assistance, job training, scholarships, benefits screening, and more—completely free, with no age limit.
           </p>
 
           <a
@@ -175,7 +175,7 @@ export default function ResourcesPage() {
               How It Works
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Getting support is simple. Our process connects you with a dedicated specialist who understands your unique needs.
+              Getting support is simple. Submit a request and our team will help point you in the right direction.
             </p>
           </div>
 
@@ -217,16 +217,6 @@ export default function ResourcesPage() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
-              <span>Response within 24-48 hours</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              <span>Monday-Friday, 9AM-5PM PST</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -238,7 +228,7 @@ export default function ResourcesPage() {
               What We Can Help With
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our resource specialists can connect you with support across all areas of life.
+              We can help connect you with support across all areas of life.
             </p>
           </div>
 
@@ -418,13 +408,19 @@ export default function ResourcesPage() {
 
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
               <div className="text-center mb-6">
-                <div className="text-6xl mb-4">💼</div>
-                <h3 className="text-xl font-bold text-fg-navy">Employment Readiness Program</h3>
-                <p className="text-gray-600 mt-2">Coming Soon</p>
+                <div className="text-6xl mb-4">🚀</div>
+                <h3 className="text-xl font-bold text-fg-navy">Thriver Pathways</h3>
+                <div className="inline-flex items-center gap-2 bg-fg-teal/10 text-fg-teal px-3 py-1 rounded-full mt-2">
+                  <span className="text-xs font-semibold">First Cohort Complete</span>
+                </div>
               </div>
 
-              <p className="text-gray-600 text-center mb-6">
-                Our new cohort-based program will teach employment basics and prepare you for the next steps in your career journey.
+              <p className="text-gray-600 text-center mb-4">
+                Our first cohort just wrapped up! Participants explored personal mission, interview mastery, professional networking, workplace rights, and resume crafting — plus earned a $100 career readiness stipend.
+              </p>
+
+              <p className="text-gray-600 text-center mb-6 font-medium">
+                Results coming soon. Stay tuned for more opportunities to join future cohorts.
               </p>
 
               <div className="text-center text-sm text-gray-500">
@@ -451,15 +447,15 @@ export default function ResourcesPage() {
             {[
               {
                 question: "What resources are available for foster youth?",
-                answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Foster Greatness provides free 1:1 support from Resource Specialists to help you navigate and access these resources."
+                answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Not sure where to start? Submit a request and our team will help point you in the right direction."
               },
               {
                 question: "How do I access foster youth resources through Foster Greatness?",
-                answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. A dedicated Resource Specialist will contact you within 24-48 hours (Monday-Friday) to provide personalized assistance."
+                answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. Our team will help point you in the right direction."
               },
               {
                 question: "Are Foster Greatness resources free?",
-                answer: "Yes, all Foster Greatness resources and support services are completely free. This includes 1:1 Resource Specialist support, benefits screening, career services, and community access."
+                answer: "Yes, all Foster Greatness resources and support services are completely free. This includes help finding resources, benefits screening, career services, and community access."
               },
               {
                 question: "Do I need to be currently in foster care to access resources?",
@@ -471,7 +467,7 @@ export default function ResourcesPage() {
               },
               {
                 question: "How can I get help with housing as a foster youth?",
-                answer: "Foster Greatness Resource Specialists can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
+                answer: "Foster Greatness can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
               }
             ].map((faq, index) => (
               <details
@@ -498,7 +494,7 @@ export default function ResourcesPage() {
             Ready to Get Support?
           </h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join our community and connect with a resource specialist who can help you access the support you deserve.
+            Join our community and get help finding the support you deserve.
           </p>
           <a
             href="https://community.fostergreatness.co"

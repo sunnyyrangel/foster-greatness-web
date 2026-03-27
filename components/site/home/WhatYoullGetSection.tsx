@@ -8,7 +8,7 @@ import { containerVariants, itemVariants } from './animations';
 const communityFeatures = [
   {
     title: 'Resource Support',
-    description: 'One-on-one support with dedicated professionals for housing, benefits, and more.',
+    description: 'Not sure where to start? Submit a request and our team will help point you in the right direction.',
     image: '/images/community-screenshot-1.png',
     cta: 'Request Support',
     link: 'https://community.fostergreatness.co/c/resource-specialist/',

@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     question: "Does Foster Greatness provide monetary support?",
-    answer: "We connect members with resources including scholarships, wish granting through One Simple Wish, and access to various support programs. Our Resource Specialists can help you find the specific assistance you need."
+    answer: "We connect members with resources including scholarships and access to various support programs. Not sure where to start? Submit a request and our team will help point you in the right direction."
   }
 ];
 
