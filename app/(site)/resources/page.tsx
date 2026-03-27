@@ -1,60 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Home, Utensils, Briefcase, DollarSign, Users, ArrowRight, CheckCircle2, Clock, MessageCircle, ChevronDown } from 'lucide-react';
-
-const resourceAreas = [
-  {
-    icon: Home,
-    title: 'Housing Support',
-    description: 'Help finding stable housing, navigating rental assistance, and accessing transitional living programs.',
-  },
-  {
-    icon: Utensils,
-    title: 'Food Security',
-    description: 'Connect with food assistance programs, SNAP benefits, and local food resources.',
-  },
-  {
-    icon: Briefcase,
-    title: 'Career Services',
-    description: 'Resume building, mock interviews, career advising, skill development, and job placement support.',
-  },
-  {
-    icon: DollarSign,
-    title: 'Financial Benefits',
-    description: 'Discover benefits you qualify for including healthcare, education funds, tax credits, and more.',
-  },
-  {
-    icon: Heart,
-    title: 'Mental Health',
-    description: 'Access free and low-cost therapy services, support groups, and wellness resources.',
-  },
-  {
-    icon: Users,
-    title: 'Community Connection',
-    description: 'Build relationships with others who share your experience and find your belonging.',
-  },
-];
-
-const steps = [
-  {
-    number: '01',
-    title: 'Search by ZIP Code',
-    description: 'Use our Resource Finder to search over 500,000 programs near you — housing, food, healthcare, jobs, and more.',
-    image: '/images/resource-finder-preview.svg',
-  },
-  {
-    number: '02',
-    title: 'Browse & Connect',
-    description: 'Explore results by category, view program details, and contact organizations directly.',
-    image: '/images/search-results-preview.svg',
-  },
-  {
-    number: '03',
-    title: 'Need More Help?',
-    description: 'Submit a support request through our community and our team will help connect you to the right resources.',
-    image: '/images/support-request-preview.svg',
-  },
-];
+import { Heart, Home, Utensils, Briefcase, DollarSign, Users, ArrowRight, CheckCircle2, Clock, Calendar, ChevronDown, Search } from 'lucide-react';
 
 export default function ResourcesPage() {
   return (
@@ -68,7 +14,7 @@ export default function ResourcesPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-fg-navy via-fg-navy to-fg-blue py-20 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-fg-navy via-fg-navy to-fg-blue py-16 md:py-20 px-4 overflow-hidden">
         <div className="absolute top-0 left-0 w-72 h-72 bg-fg-blue/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-fg-orange/10 rounded-full blur-3xl translate-y-1/2 translate-x-1/2" />
 
@@ -79,50 +25,161 @@ export default function ResourcesPage() {
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Free Resources for Foster Youth
+            Resources & Support
           </h1>
 
           <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-8">
-            Free support for current and former foster youth. Access housing assistance, job training, scholarships, benefits screening, and more—completely free, with no age limit.
+            Everything you need in one place — find local services, attend community events, screen for benefits, access career support, and more. Completely free, no age limit.
           </p>
 
-          <a
-            href="https://community.fostergreatness.co/c/resource-specialist/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-white text-fg-navy px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-          >
-            Access Resource Support
-            <ArrowRight className="w-5 h-5" />
-          </a>
-
-          {/* Last updated for freshness signal */}
-          <p className="mt-6 text-white/50 text-sm">
-            Last updated: December 2025
-          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-3 bg-white text-fg-navy px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              <Search className="w-5 h-5" />
+              Find Resources Near You
+            </Link>
+            <a
+              href="#events"
+              className="inline-flex items-center gap-3 border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all"
+            >
+              <Calendar className="w-5 h-5" />
+              View Events
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* Resource Finder Tool */}
-      <section className="py-16 px-4 bg-white border-b border-gray-100">
+      {/* Quick Access Cards */}
+      <section className="py-16 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto -mt-24">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Resource Finder */}
+            <Link href="/services" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-fg-teal/10 flex items-center justify-center mb-4 group-hover:bg-fg-teal/20 transition-colors">
+                <Search className="w-6 h-6 text-fg-teal" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Resource Finder</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Search 500,000+ programs by ZIP code — housing, food, healthcare, jobs, education, and more.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Search now <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+
+            {/* Events */}
+            <a href="#events" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-fg-blue/10 flex items-center justify-center mb-4 group-hover:bg-fg-blue/20 transition-colors">
+                <Calendar className="w-6 h-6 text-fg-blue" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Community Events</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Workshops, panel discussions, cooking nights, support spaces, and more — all free and virtual.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                View events <ArrowRight className="w-4 h-4" />
+              </span>
+            </a>
+
+            {/* Benefits Screener */}
+            <a href="#benefits-screener" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-fg-orange/10 flex items-center justify-center mb-4 group-hover:bg-fg-orange/20 transition-colors">
+                <DollarSign className="w-6 h-6 text-fg-orange" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Benefits Screener</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Discover benefits you qualify for — SNAP, healthcare, education funds, tax credits, and more.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Take screener <ArrowRight className="w-4 h-4" />
+              </span>
+            </a>
+
+            {/* Career Support */}
+            <a href="#career" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-fg-navy/10 flex items-center justify-center mb-4 group-hover:bg-fg-navy/15 transition-colors">
+                <Briefcase className="w-6 h-6 text-fg-navy" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Career Support</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Resume building, mock interviews, career advising, and job placement through our Staffmark partnership.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Learn more <ArrowRight className="w-4 h-4" />
+              </span>
+            </a>
+
+            {/* Crisis Fund */}
+            <a href="#crisis-fund" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mb-4 group-hover:bg-red-100 transition-colors">
+                <Heart className="w-6 h-6 text-red-500" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Crisis Fund</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Emergency financial assistance for unexpected hardships — rent, utilities, transportation, and more.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Get help <ArrowRight className="w-4 h-4" />
+              </span>
+            </a>
+
+            {/* Submit Request */}
+            <a href="https://community.fostergreatness.co/c/find-help-foster-greatness/" target="_blank" rel="noopener noreferrer" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-fg-blue/30 transition-all hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-fg-blue/10 flex items-center justify-center mb-4 group-hover:bg-fg-blue/20 transition-colors">
+                <Users className="w-6 h-6 text-fg-blue" />
+              </div>
+              <h3 className="text-lg font-bold text-fg-navy mb-2">Submit a Request</h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-3">Not sure where to start? Our team will help point you in the right direction.</p>
+              <span className="text-fg-blue font-semibold text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                Submit request <ArrowRight className="w-4 h-4" />
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Events Section */}
+      <section id="events" className="py-16 px-4 scroll-mt-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-fg-blue/10 text-fg-blue px-4 py-2 rounded-full mb-4">
+                <Calendar className="w-4 h-4" />
+                <span className="text-sm font-semibold">Community Events</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-fg-navy">
+                Upcoming Events
+              </h2>
+              <p className="text-gray-600 mt-2">Workshops, panels, cooking nights, and more — all free and virtual.</p>
+            </div>
+            <a
+              href="https://community.fostergreatness.co/c/general-events/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-fg-blue font-semibold hover:text-fg-navy transition-colors shrink-0"
+            >
+              View all events <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <iframe
+              src="/widgets/circle-events"
+              className="w-full border-none"
+              style={{ height: 260 }}
+              loading="lazy"
+              title="Upcoming community events"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Resource Finder Feature */}
+      <section className="py-16 px-4 bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="bg-gradient-to-br from-fg-teal/10 to-fg-blue/10 rounded-3xl p-8 md:p-12 border border-fg-teal/20">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 bg-fg-teal/10 text-fg-teal px-4 py-2 rounded-full mb-4">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <span className="text-sm font-semibold">New Tool</span>
-                </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-fg-navy mb-4">
                   Resource Finder
                 </h2>
                 <p className="text-gray-600 leading-relaxed mb-6">
-                  Search over 500,000 programs and services across the U.S. by ZIP code. Find housing, food, healthcare, employment, education, legal help, and more — all in one place. Includes community-recommended resources vetted by foster youth.
+                  Search over 500,000 programs and services across the U.S. by ZIP code. Find housing, food, healthcare, employment, education, legal help, and more — all in one place.
                 </p>
-                <div className="flex flex-wrap gap-3 mb-6">
-                  {['Housing', 'Food', 'Healthcare', 'Jobs', 'Education', 'Legal'].map((tag) => (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {['Housing', 'Food', 'Healthcare', 'Jobs', 'Education', 'Legal', 'Family', 'Transit'].map((tag) => (
                     <span key={tag} className="text-xs font-semibold bg-white text-fg-navy px-3 py-1.5 rounded-full border border-gray-200">
                       {tag}
                     </span>
@@ -136,31 +193,13 @@ export default function ResourcesPage() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
-              <div className="relative">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-fg-navy flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1 h-10 bg-gray-100 rounded-lg flex items-center px-4">
-                      <span className="text-sm text-gray-400">Enter your ZIP code...</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      { cat: 'Food & Nutrition', count: '48 programs' },
-                      { cat: 'Housing & Shelter', count: '31 programs' },
-                      { cat: 'Healthcare', count: '27 programs' },
-                    ].map((item) => (
-                      <div key={item.cat} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                        <span className="text-sm font-medium text-fg-navy">{item.cat}</span>
-                        <span className="text-xs text-fg-blue font-semibold">{item.count}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/resource-finder-preview.svg"
+                  alt="Resource Finder tool preview"
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
@@ -180,7 +219,26 @@ export default function ResourcesPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {steps.map((step, i) => (
+            {[
+              {
+                number: '01',
+                title: 'Search by ZIP Code',
+                description: 'Use our Resource Finder to search over 500,000 programs near you — housing, food, healthcare, jobs, and more.',
+                image: '/images/resource-finder-preview.svg',
+              },
+              {
+                number: '02',
+                title: 'Browse & Connect',
+                description: 'Explore results by category, view program details, and contact organizations directly.',
+                image: '/images/search-results-preview.svg',
+              },
+              {
+                number: '03',
+                title: 'Need More Help?',
+                description: 'Submit a support request through our community and our team will help connect you to the right resources.',
+                image: '/images/support-request-preview.svg',
+              },
+            ].map((step, i, arr) => (
               <div key={step.number} className="flex flex-col">
                 <div className="mb-6 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                   <div className="relative aspect-[3/2]">
@@ -198,8 +256,7 @@ export default function ResourcesPage() {
                   <h3 className="text-xl font-bold text-fg-navy mb-3">{step.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{step.description}</p>
 
-                  {/* Arrow between cards */}
-                  {i < steps.length - 1 && (
+                  {i < arr.length - 1 && (
                     <div className="hidden md:flex absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
                       <ArrowRight className="w-8 h-8 text-fg-blue/30" />
                     </div>
@@ -208,11 +265,10 @@ export default function ResourcesPage() {
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* Resource Areas */}
+      {/* What We Can Help With */}
       <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -225,7 +281,14 @@ export default function ResourcesPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resourceAreas.map((area) => {
+            {[
+              { icon: Home, title: 'Housing Support', description: 'Help finding stable housing, navigating rental assistance, and accessing transitional living programs.' },
+              { icon: Utensils, title: 'Food Security', description: 'Connect with food assistance programs, SNAP benefits, and local food resources.' },
+              { icon: Briefcase, title: 'Career Services', description: 'Resume building, mock interviews, career advising, skill development, and job placement support.' },
+              { icon: DollarSign, title: 'Financial Benefits', description: 'Discover benefits you qualify for including healthcare, education funds, tax credits, and more.' },
+              { icon: Heart, title: 'Mental Health', description: 'Access free and low-cost therapy services, support groups, and wellness resources.' },
+              { icon: Calendar, title: 'Events & Workshops', description: 'Free virtual workshops, panel discussions, cooking nights, support spaces, and community gatherings.' },
+            ].map((area) => {
               const Icon = area.icon;
               return (
                 <div
@@ -244,7 +307,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* Benefits Screener Section - Enhanced Visual Design */}
+      {/* Benefits Screener */}
       <section id="benefits-screener" className="py-20 px-4 scroll-mt-24 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
@@ -261,14 +324,10 @@ export default function ResourcesPage() {
           </div>
 
           <div className="bg-gradient-to-br from-fg-navy via-fg-blue to-fg-navy rounded-3xl p-8 md:p-12 text-white relative overflow-hidden shadow-2xl">
-            {/* Animated background elements */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-fg-yellow/20 rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-fg-teal/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/5 rounded-full" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full" />
 
             <div className="relative z-10">
-              {/* Benefit cards grid */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
                 {[
                   { icon: '🍽️', label: 'SNAP & Food Benefits' },
@@ -277,10 +336,10 @@ export default function ResourcesPage() {
                   { icon: '💰', label: 'Tax Credits' },
                   { icon: '🏠', label: 'Housing Assistance' },
                   { icon: '⚡', label: 'Utility Programs' },
-                ].map((benefit, i) => (
+                ].map((benefit) => (
                   <div
                     key={benefit.label}
-                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 flex items-center gap-3 hover:bg-white/20 transition-all hover:scale-105 cursor-default group"
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 flex items-center gap-3 hover:bg-white/20 transition-all cursor-default group"
                   >
                     <span className="text-2xl group-hover:scale-110 transition-transform">{benefit.icon}</span>
                     <span className="font-medium text-sm md:text-base">{benefit.label}</span>
@@ -302,7 +361,7 @@ export default function ResourcesPage() {
                   href="https://app.singlestop.org/fostergreatness/main"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-fg-yellow text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-white transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform"
+                  className="inline-flex items-center gap-2 bg-fg-yellow text-fg-navy px-8 py-4 rounded-full font-bold hover:bg-white transition-colors shadow-lg"
                 >
                   Take the Free Screener
                   <ArrowRight className="w-5 h-5" />
@@ -313,7 +372,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* Crisis Fund Section - Moved before Career Support for emphasis */}
+      {/* Crisis Fund */}
       <section id="crisis-fund" className="py-16 px-4 scroll-mt-24">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-gray-100 text-center">
@@ -353,7 +412,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* Career Support Section */}
+      {/* Career Support */}
       <section id="career" className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white scroll-mt-24">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -423,31 +482,28 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-lg text-gray-600">
-              Common questions about foster youth resources and support
-            </p>
           </div>
 
           <div className="space-y-4">
             {[
               {
                 question: "What resources are available for foster youth?",
-                answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, and benefits screening. Not sure where to start? Submit a request and our team will help point you in the right direction."
+                answer: "Foster youth can access housing assistance, food security programs (SNAP), career services including resume building and job placement, educational scholarships, mental health support, benefits screening, and community events. Not sure where to start? Submit a request and our team will help point you in the right direction."
               },
               {
                 question: "How do I access foster youth resources through Foster Greatness?",
-                answer: "Join our free community at community.fostergreatness.co, then submit a resource support request. Our team will help point you in the right direction."
+                answer: "Use our Resource Finder to search by ZIP code, browse community events, or join our free community at community.fostergreatness.co and submit a resource support request."
               },
               {
                 question: "Are Foster Greatness resources free?",
-                answer: "Yes, all Foster Greatness resources and support services are completely free. This includes help finding resources, benefits screening, career services, and community access."
+                answer: "Yes, all Foster Greatness resources and support services are completely free. This includes the Resource Finder, benefits screening, career services, events, and community access."
               },
               {
                 question: "Do I need to be currently in foster care to access resources?",
@@ -458,8 +514,8 @@ export default function ResourcesPage() {
                 answer: "The Crisis Fund provides emergency financial assistance to foster youth community members facing unexpected hardships. This can help with urgent needs like rent, utilities, transportation, or other immediate expenses."
               },
               {
-                question: "How can I get help with housing as a foster youth?",
-                answer: "Foster Greatness can help you find stable housing, navigate rental assistance programs, access transitional living programs, and connect with housing voucher programs. Join our community and submit a resource request to get started."
+                question: "What events does Foster Greatness offer?",
+                answer: "We host free virtual events including financial literacy workshops, cooking nights, open mic nights, panel discussions on foster care policy, career development workshops, and community support spaces. All events are open to community members."
               }
             ].map((faq, index) => (
               <details
@@ -479,7 +535,7 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-16 px-4 bg-gradient-to-b from-white to-fg-light-blue">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-6">
@@ -488,15 +544,24 @@ export default function ResourcesPage() {
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
             Join our community and get help finding the support you deserve.
           </p>
-          <a
-            href="https://community.fostergreatness.co"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-fg-navy text-white px-10 py-5 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-fg-blue transition-all"
-          >
-            Join Foster Greatness Community
-            <ArrowRight className="w-5 h-5" />
-          </a>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-3 bg-fg-navy text-white px-10 py-5 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-fg-blue transition-all"
+            >
+              <Search className="w-5 h-5" />
+              Find Resources
+            </Link>
+            <a
+              href="https://community.fostergreatness.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 border-2 border-fg-navy text-fg-navy px-10 py-5 rounded-full font-bold text-lg hover:bg-fg-navy hover:text-white transition-all"
+            >
+              Join Community
+              <ArrowRight className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </section>
     </main>
