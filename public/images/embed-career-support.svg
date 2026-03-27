@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8b7"/>
+      <stop offset="100%" style="stop-color:#009e90"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)" rx="16"/>
+
+  <!-- Briefcase icon -->
+  <circle cx="300" cy="145" r="60" fill="white" opacity="0.1"/>
+  <rect x="256" y="132" width="88" height="60" rx="8" fill="white" opacity="0.9"/>
+  <path d="M278 132 L278 118 Q278 110 286 110 L314 110 Q322 110 322 118 L322 132" fill="none" stroke="white" stroke-width="4.5"/>
+  <line x1="256" y1="158" x2="344" y2="158" stroke="#00c8b7" stroke-width="3"/>
+
+  <!-- Growth arrow -->
+  <path d="M382 168 L382 125 M371 138 L382 125 L393 138" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- Accent dots -->
+  <circle cx="208" cy="115" r="10" fill="white" opacity="0.2"/>
+  <circle cx="392" cy="192" r="7" fill="#faca2c" opacity="0.35"/>
+
+  <!-- Title -->
+  <text x="300" y="278" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="700" fill="white" text-anchor="middle">Career Support</text>
+  <text x="300" y="316" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="white" opacity="0.8" text-anchor="middle">Build your future</text>
+
+  <rect x="240" y="348" width="120" height="4" rx="2" fill="white" opacity="0.4"/>
+</svg>

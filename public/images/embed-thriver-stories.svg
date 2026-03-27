@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fa8526"/>
+      <stop offset="100%" style="stop-color:#e06a10"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#bg)" rx="16"/>
+
+  <!-- Play button -->
+  <circle cx="300" cy="150" r="56" fill="white" opacity="0.15"/>
+  <circle cx="300" cy="150" r="42" fill="white" opacity="0.9"/>
+  <polygon points="288,130 288,170 320,150" fill="#fa8526"/>
+
+  <!-- Film accents -->
+  <rect x="188" y="96" width="16" height="16" rx="3" fill="white" opacity="0.15"/>
+  <rect x="188" y="120" width="16" height="16" rx="3" fill="white" opacity="0.15"/>
+  <rect x="396" y="164" width="16" height="16" rx="3" fill="white" opacity="0.15"/>
+  <rect x="396" y="188" width="16" height="16" rx="3" fill="white" opacity="0.15"/>
+
+  <!-- Title -->
+  <text x="300" y="278" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="700" fill="white" text-anchor="middle">Thriver Stories</text>
+  <text x="300" y="316" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="white" opacity="0.8" text-anchor="middle">Real voices, real journeys</text>
+
+  <rect x="240" y="348" width="120" height="4" rx="2" fill="white" opacity="0.4"/>
+</svg>
