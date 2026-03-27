@@ -41,7 +41,6 @@ export default function Header() {
   };
 
   const aboutLinks = [
-    { label: 'Meet the Team', href: '/about#team', description: 'The people behind FG' },
     { label: 'Impact Report', href: '/impact', description: 'See our community impact' },
   ];
 

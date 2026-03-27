@@ -119,10 +119,10 @@ export default function AboutPage() {
                   <ArrowRight className="w-5 h-5" />
                 </a>
                 <Link
-                  href="#team"
+                  href="/impact"
                   className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors"
                 >
-                  Meet the Team
+                  See Our Impact
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -287,21 +287,56 @@ export default function AboutPage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-10 text-center">Resource Support</h2>
               </motion.div>
 
-              <div className="grid md:grid-cols-3 gap-6">
+              {/* Resource Finder Feature */}
+              <motion.div variants={itemVariants} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 mb-8">
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="h-64 md:h-auto relative">
+                    <Image
+                      src="/images/resource-finder-preview.svg"
+                      alt="FG Resource Finder"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                    <div className="inline-block mb-4 px-4 py-1.5 bg-fg-teal/10 rounded-full w-fit">
+                      <span className="text-xs font-bold tracking-wide uppercase text-fg-teal">Resource Finder</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-fg-navy mb-4">Find Local Resources Near You</h3>
+                    <p className="text-fg-navy/70 leading-relaxed mb-4">
+                      Our Resource Finder connects you to over 500,000 programs nationwide — search by ZIP code for housing, food, healthcare, jobs, education, legal aid, and more.
+                    </p>
+                    <p className="text-sm text-fg-navy/50 leading-relaxed mb-6">
+                      Not sure where to start? You can also submit a support request and our team will help point you in the right direction.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Link
+                        href="/services"
+                        className="inline-flex items-center gap-2 bg-fg-blue text-white px-6 py-3 rounded-full font-bold hover:bg-fg-navy transition-colors text-sm"
+                      >
+                        Search Resources
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        href="/resources"
+                        className="inline-flex items-center gap-2 border-2 border-fg-navy/10 text-fg-navy px-6 py-3 rounded-full font-bold hover:border-fg-blue/30 transition-colors text-sm"
+                      >
+                        Resource Support
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-6">
                 {[
                   {
-                    image: '/images/web images/local-resource-finder.webp',
-                    title: 'Local Resource Finder',
-                    desc: 'Get connected to the support you deserve! Our Resource Hub is a free, one-stop tool for current and former foster youth to instantly find benefits and resources.',
-                    tags: 'Housing • Food Security • Scholarships • Job Opportunities • Basic Needs'
+                    image: '/images/support-request-preview.svg',
+                    title: 'Submit a Support Request',
+                    desc: 'Need help navigating resources? Submit a request through our community and our team will help connect you to the right programs and opportunities.'
                   },
                   {
-                    image: '/images/web images/one-on-one custom support.webp',
-                    title: 'Get Help Finding Resources',
-                    desc: 'Not sure where to start? Submit a request and our team will help point you in the right direction — whether you need scholarships, rent assistance, food aid, or other resources.'
-                  },
-                  {
-                    image: '/images/web images/onesimplewish partnership.jpg',
+                    image: '/images/community-belonging-preview.svg',
                     title: 'Community & Belonging',
                     desc: 'Join a nationwide community of current and former foster youth. Connect with others who understand your experience and build lasting relationships.'
                   }
@@ -322,9 +357,6 @@ export default function AboutPage() {
                     <div className="p-8">
                       <h3 className="text-2xl font-bold text-fg-navy mb-4">{item.title}</h3>
                       <p className="text-fg-navy/70 mb-4 leading-relaxed">{item.desc}</p>
-                      {item.tags && (
-                        <p className="text-sm text-fg-blue font-semibold">{item.tags}</p>
-                      )}
                     </div>
                   </motion.div>
                 ))}
@@ -488,62 +520,7 @@ export default function AboutPage() {
           </div>
         </motion.section>
 
-        {/* Team Section */}
-        <motion.section
-          id="team"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="py-16 md:py-20 bg-fg-navy/[0.02] scroll-mt-24"
-        >
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <motion.div variants={itemVariants}>
-                <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-10 text-center">Meet the Team</h2>
-              </motion.div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  { name: 'Isabel Stasa', role: 'Director of Community Affairs and Social Impact', bio: 'Lived experience in foster care; first-gen graduate with honors from The University of Michigan. Roles include Foster Youth Policy Consultant, Senate Intern, Public Speaker, and National FY Advocate.', img: '/images/team/isabel-stasa.webp', position: 'object-top' },
-                  { name: 'Lillee Taylor', role: 'Community Support', bio: 'Lived experience in foster care, worked with non-profits to empower vulnerable youth populations. Skilled and passionate about family reunification, reducing homelessness and supporting foster parents.', img: '/images/team/lillee-taylor.webp', position: 'object-center' },
-                  { name: 'Sunny Rangel', role: 'Director of UX & Product Development', bio: "Background in Graphic Design, designed for Fortune 500s. Created structure and user experience for community.", img: '/images/team/sunny-rangel.webp', position: 'object-top' },
-                  { name: 'Jordan Bartlett', role: 'Co-Founder of Foster Greatness', bio: 'Personal connection to foster care, passionate about systemic change. Manages teams, donor funding and outreach communications.', img: '/images/team/jordan-bartlett.webp', position: 'object-top' },
-                  { name: 'Scott Henderson', role: 'Co-Founder of Foster Greatness', bio: 'Helps oversee projects, build partnerships, and guide the team. Dedicated to fostering a strong sense of belonging and community.', img: '/images/team/scott-henderson.webp', position: 'object-top' },
-                  { name: 'Amy', role: 'Chief Financial Officer', bio: 'Oversees financial strategy and organizational decision-making for Foster Greatness. Manages donations, grants, and ensures responsible stewardship of resources to maximize community impact.', img: '/images/team/amy.png', position: 'object-center' }
-                ].map((member, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemVariants}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-fg-navy/5 hover:shadow-md hover:border-fg-blue/30 transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div className="relative h-64 bg-gradient-to-br from-fg-navy to-fg-blue overflow-hidden">
-                      {member.img ? (
-                        <Image
-                          src={member.img}
-                          alt={`${member.name}, ${member.role}`}
-                          fill
-                          className={`object-cover ${member.position || 'object-top'}`}
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-6xl font-bold text-white/30">
-                            {member.name.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-fg-navy mb-2">{member.name}</h3>
-                      <p className="text-sm font-semibold text-fg-blue mb-3">{member.role}</p>
-                      <p className="text-sm text-fg-navy/60 leading-relaxed">{member.bio}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.section>
+        {/* Team Section - Hidden for now */}
 
         {/* FAQ Section */}
         <motion.section
