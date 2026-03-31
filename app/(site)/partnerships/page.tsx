@@ -98,7 +98,7 @@ const partnershipBenefits = [
   {
     icon: Users,
     title: 'Direct Access to Community',
-    description: 'Connect with 2,000+ foster youth and alumni nationwide through our established digital platform.'
+    description: 'Connect with 2,150+ foster youth and alumni nationwide through our established digital platform.'
   },
   {
     icon: Target,

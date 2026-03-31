@@ -5,7 +5,7 @@ import { generatePageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Foster Greatness | Lifelong Community for Foster Youth Nationwide',
-  description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Free peer support, resources, employment help, and lifelong belonging. No age limit.',
+  description: 'Join 2,150+ current and former foster youth in a lived experience-led community. Free peer support, resources, employment help, and lifelong belonging. No age limit.',
   path: '',
 });
 

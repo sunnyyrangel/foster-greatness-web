@@ -340,7 +340,7 @@ export default function StaffMarkCaseStudy() {
                 Explore Employment Opportunities
               </a>
               <a
-                href="https://community.fostergreatness.co/c/resource-specialist"
+                href="https://community.fostergreatness.co/c/find-help-foster-greatness/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 text-fg-navy font-semibold hover:text-fg-blue transition-colors"

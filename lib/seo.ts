@@ -39,7 +39,7 @@ export const defaultMetadata: Metadata = {
     default: 'Foster Greatness | Lifelong Community for Foster Youth Nationwide',
     template: '%s | Foster Greatness',
   },
-  description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Access peer support, resources, employment help, and lifelong belonging. No age limit. Free to join.',
+  description: 'Join 2,150+ current and former foster youth in a lived experience-led community. Access peer support, resources, employment help, and lifelong belonging. No age limit. Free to join.',
   keywords: siteConfig.keywords,
   authors: [{ name: 'Foster Greatness', url: siteUrl }],
   creator: 'Foster Greatness',
@@ -64,7 +64,7 @@ export const defaultMetadata: Metadata = {
     url: siteUrl,
     siteName: 'Foster Greatness',
     title: 'Foster Greatness | Lifelong Community for Foster Youth Nationwide',
-    description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Access peer support, resources, employment help, and lifelong belonging.',
+    description: 'Join 2,150+ current and former foster youth in a lived experience-led community. Access peer support, resources, employment help, and lifelong belonging.',
     images: [
       {
         url: `${siteUrl}/images/platform-preview.webp`,
@@ -77,7 +77,7 @@ export const defaultMetadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Foster Greatness | Lifelong Community for Foster Youth Nationwide',
-    description: 'Join 2,000+ current and former foster youth in a lived experience-led community. Access peer support, resources, and lifelong belonging.',
+    description: 'Join 2,150+ current and former foster youth in a lived experience-led community. Access peer support, resources, and lifelong belonging.',
     images: [`${siteUrl}/images/platform-preview.webp`],
     creator: '@fostergreatness',
   },

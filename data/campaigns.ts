@@ -83,7 +83,7 @@ export const campaigns: Campaign[] = [
   {
     id: 'gingerbread-2025',
     slug: 'gingerbread',
-    status: 'active',
+    status: 'past',
     type: 'event',
 
     title: 'Gingerbread House Contest',

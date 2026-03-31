@@ -132,7 +132,7 @@ export default function TaxSupportPage() {
               <ArrowRight className="w-5 h-5" />
             </a>
             <a
-              href="https://community.fostergreatness.co/c/resource-specialist/"
+              href="https://community.fostergreatness.co/c/find-help-foster-greatness/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/20 transition-all text-lg border border-white/20"
@@ -454,7 +454,7 @@ export default function TaxSupportPage() {
               Submit a resource request through our community and a team member will reach out to help you with your taxes.
             </p>
             <a
-              href="https://community.fostergreatness.co/c/resource-specialist/"
+              href="https://community.fostergreatness.co/c/find-help-foster-greatness/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-fg-teal text-fg-navy font-bold px-8 py-4 rounded-xl hover:bg-fg-teal/90 transition-all text-lg"

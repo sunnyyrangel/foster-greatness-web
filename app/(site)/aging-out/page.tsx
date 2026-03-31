@@ -150,7 +150,7 @@ export default function AgingOutPage() {
 
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
             <Calendar className="w-4 h-4 text-white" />
-            <span className="text-sm font-semibold text-white/90">Updated December 2025</span>
+            <span className="text-sm font-semibold text-white/90">Updated March 2026</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
@@ -350,7 +350,7 @@ export default function AgingOutPage() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
             <Users className="w-4 h-4 text-white" />
-            <span className="text-sm font-semibold text-white/90">2,000+ Members Nationwide</span>
+            <span className="text-sm font-semibold text-white/90">2,150+ Members Nationwide</span>
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold mb-6">

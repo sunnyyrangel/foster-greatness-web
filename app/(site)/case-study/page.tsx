@@ -75,7 +75,7 @@ const features = [
     subtitle: 'Circle.so + custom embeds and widgets',
     description: 'Integration with Circle.so community platform including custom HTML embeds for the welcome dashboard, an events widget that pulls live data from the Circle API, and Google Ads conversion tracking on community join links across the site.',
     stats: [
-      { label: 'Community members', value: '2,000+' },
+      { label: 'Community members', value: '2,150+' },
       { label: 'Custom widgets', value: '2' },
       { label: 'Embed components', value: '5' },
       { label: 'Event sources', value: '1' },
@@ -178,7 +178,7 @@ export default function CaseStudyPage() {
           </h1>
 
           <p className="text-xl text-white/70 max-w-3xl leading-relaxed mb-10">
-            How a small team built a full-stack platform connecting 2,000+ current and former foster youth to resources, community, career support, and belonging — powered by Next.js 16, Supabase, and a dozen integrated services.
+            How a small team built a full-stack platform connecting 2,150+ current and former foster youth to resources, community, career support, and belonging — powered by Next.js 16, Supabase, and a dozen integrated services.
           </p>
 
           <div className="flex flex-wrap gap-3 mb-12">
@@ -467,7 +467,7 @@ export default function CaseStudyPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {[
-              { value: '2,000+', label: 'Community Members' },
+              { value: '2,150+', label: 'Community Members' },
               { value: '500K+', label: 'Programs Searchable' },
               { value: '84', label: 'Career Program Applicants' },
               { value: '100%', label: 'Felt Better Equipped' },

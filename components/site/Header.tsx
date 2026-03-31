@@ -48,7 +48,7 @@ export default function Header() {
   // Community dropdown - split into two columns
   const communityJoin = {
     title: 'Join the Community',
-    description: 'Connect with 2,000+ current and former foster youth nationwide',
+    description: 'Connect with 2,150+ current and former foster youth nationwide',
     href: 'https://community.fostergreatness.co',
     cta: 'Join Now',
   };

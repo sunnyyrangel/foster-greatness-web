@@ -4,11 +4,11 @@ import { generatePageMetadata, generateBreadcrumbJsonLd, generateFaqJsonLd, site
 const impactFaqs = [
   {
     question: "What is Foster Greatness's impact?",
-    answer: "In 2025, Foster Greatness grew to 2,147 community members (1,042 new), hosted 62 events including 34 community gatherings and 22 workshops, served 178 individuals through resource navigation, and fulfilled 220 resource requests."
+    answer: "In 2025, Foster Greatness grew to 2,150+ community members (1,042 new), hosted 62 events including 34 community gatherings and 22 workshops, served 178 individuals through resource navigation, and fulfilled 220 resource requests."
   },
   {
     question: "How many foster youth does Foster Greatness serve?",
-    answer: "Foster Greatness serves 2,147+ current and former foster youth nationwide as of 2025, with 1,042 new members joining in 2025 alone. The community has no age limit — support lasts a lifetime."
+    answer: "Foster Greatness serves 2,150++ current and former foster youth nationwide as of 2025, with 1,042 new members joining in 2025 alone. The community has no age limit — support lasts a lifetime."
   },
   {
     question: "What kind of events does Foster Greatness host for foster youth?",
@@ -30,7 +30,7 @@ const impactFaqs = [
 
 export const metadata: Metadata = generatePageMetadata({
   title: '2025 Impact Report — Foster Greatness',
-  description: 'See how Foster Greatness is fighting isolation and building community for foster youth. 2,147 members, 62 events, 178 individuals supported, 7 storytellers trained, and NNFSC fiscal sponsorship launched. Read our 2025 impact report.',
+  description: 'See how Foster Greatness is fighting isolation and building community for foster youth. 2,150+ members, 62 events, 178 individuals supported, 7 storytellers trained, and NNFSC fiscal sponsorship launched. Read our 2025 impact report.',
   path: '/impact',
 });
 
@@ -50,7 +50,7 @@ export default function ImpactLayout({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: '2025 Impact Report: No One Should Navigate Life Alone',
-    description: 'Foster Greatness 2025 annual impact report. 2,147 community members, 62 events hosted, 178 individuals served through resource navigation, Storytellers Collective pilot, and NNFSC fiscal sponsorship.',
+    description: 'Foster Greatness 2025 annual impact report. 2,150+ community members, 62 events hosted, 178 individuals served through resource navigation, Storytellers Collective pilot, and NNFSC fiscal sponsorship.',
     author: {
       '@type': 'Organization',
       name: 'Foster Greatness',

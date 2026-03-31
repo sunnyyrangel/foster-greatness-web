@@ -3,7 +3,7 @@ import { generatePageMetadata, generateBreadcrumbJsonLd, siteConfig } from '@/li
 
 export const metadata: Metadata = generatePageMetadata({
   title: 'Join Foster Greatness | Free Community for Foster Youth',
-  description: 'Join 2,000+ current and former foster youth in our free community. Access peer support, resources, events, and lifelong belonging. No age limit, no cost.',
+  description: 'Join 2,150+ current and former foster youth in our free community. Access peer support, resources, events, and lifelong belonging. No age limit, no cost.',
   path: '/join',
 });
 

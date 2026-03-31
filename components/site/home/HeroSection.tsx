@@ -17,7 +17,7 @@ export default function HeroSection() {
         {/* Content */}
         <motion.div variants={itemVariants}>
           <p className="text-sm font-semibold text-fg-blue uppercase tracking-wider mb-4">
-            Join 2,000+ members nationwide
+            Join 2,150+ members nationwide
           </p>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-fg-navy mb-6 leading-[1.1] tracking-tight">
             A community you never age out of.

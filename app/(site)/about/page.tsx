@@ -408,7 +408,7 @@ export default function AboutPage() {
                   { number: '310', label: 'Event Attendees', icon: '👥' },
                   { number: '16', label: 'Panels & Workshops', icon: '🎉' },
                   { number: '77', label: 'Wishes Granted', icon: '🎁' },
-                  { number: '2,000+', label: 'Community Members', icon: '💝' }
+                  { number: '2,150+', label: 'Community Members', icon: '💝' }
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
@@ -592,7 +592,7 @@ export default function AboutPage() {
                 Ready to Join Our Community?
               </h2>
               <p className="text-xl mb-10 opacity-90 leading-relaxed">
-                Connect with 2,000+ current and former foster youth nationwide.
+                Connect with 2,150+ current and former foster youth nationwide.
                 Find belonging, support, and lifelong community.
               </p>
               <a

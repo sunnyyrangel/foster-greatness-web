@@ -11,7 +11,7 @@ const communityFeatures = [
     description: 'Not sure where to start? Submit a request and our team will help point you in the right direction.',
     image: '/images/community-screenshot-1.png',
     cta: 'Request Support',
-    link: 'https://community.fostergreatness.co/c/resource-specialist/',
+    link: 'https://community.fostergreatness.co/c/find-help-foster-greatness/',
     featured: true,
   },
   {

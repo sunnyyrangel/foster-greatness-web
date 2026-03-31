@@ -76,7 +76,7 @@ export default function DailyLifeSection() {
         className="bg-gradient-to-br from-fg-navy/[0.03] to-fg-blue/[0.05] rounded-2xl p-6 text-center"
       >
         <p className="text-fg-navy/80 mb-4 max-w-xl mx-auto">
-          <span className="font-semibold text-fg-navy">2,000+ members</span> supporting each other —
+          <span className="font-semibold text-fg-navy">2,150+ members</span> supporting each other —
           sharing jobs, answering questions, celebrating wins, and just being there.
         </p>
         <a

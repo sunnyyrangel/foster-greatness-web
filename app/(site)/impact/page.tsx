@@ -58,13 +58,13 @@ const itemVariants = {
 // ---------------------------------------------------------------------------
 
 const heroStats = [
-  { value: 2147, label: 'Community Members', icon: Users },
+  { value: 2150, label: 'Community Members', icon: Users },
   { value: 178, label: 'Individuals Supported', icon: HandHeart },
   { value: 62, label: 'Events Hosted', icon: Calendar },
 ];
 
 const communityStats = [
-  { value: '2,147', label: 'Total Members', icon: Users },
+  { value: '2,150+', label: 'Total Members', icon: Users },
   { value: '1,042', label: 'New Members in 2025', icon: Sparkles },
   { value: '11', label: 'Partners', icon: Handshake },
 ];
