@@ -3,16 +3,49 @@ import Image from 'next/image';
 import { ArrowRight, Download, Users, Briefcase, Award, BarChart3, CheckCircle2, Quote, FileText, Heart, TrendingUp, Star } from 'lucide-react';
 
 const confidenceData = [
-  { skill: 'Identifying Career Interests', before: 2.8, after: 4.4 },
-  { skill: 'LinkedIn Profile Building', before: 2.3, after: 4.2 },
-  { skill: 'Workplace Expectations & Culture', before: 3.0, after: 4.5 },
-  { skill: 'Understanding Strengths at Work', before: 3.1, after: 4.5 },
-  { skill: 'Workplace Rights (ADA, FMLA, OSHA)', before: 2.2, after: 4.0 },
-  { skill: 'Interview Preparation', before: 2.4, after: 4.2 },
-  { skill: 'Resume Crafting', before: 2.6, after: 4.3 },
-  { skill: 'Career Support Network', before: 2.5, after: 4.3 },
-  { skill: 'Cover Letter Writing', before: 2.3, after: 4.1 },
-  { skill: 'Professional CV Creation', before: 2.2, after: 4.0 },
+  { skill: 'Identifying Career Interests', before: 3, after: 3.9 },
+  { skill: 'LinkedIn Profile Building', before: 3.1, after: 4.1 },
+  { skill: 'Workplace Expectations & Culture', before: 2.8, after: 4 },
+  { skill: 'Understanding Strengths at Work', before: 2.8, after: 4.1 },
+  { skill: 'Workplace Rights (ADA, FMLA, OSHA)', before: 2.8, after: 4.1 },
+  { skill: 'Interview Preparation', before: 2.9, after: 4.2 },
+  { skill: 'Resume Crafting', before: 2.4, after: 4 },
+  { skill: 'Career Support Network', before: 2.7, after: 4.1 },
+  { skill: 'Cover Letter Writing', before: 2.1, after: 3.9 },
+  { skill: 'Professional CV Creation', before: 1.8, after: 3.7 },
+];
+
+const postProgramSkills = [
+  { skill: 'Understand workplace rights', rating: 4.65 },
+  { skill: 'Confident in resume & cover letter', rating: 4.55 },
+  { skill: 'Clear on personal strengths & values', rating: 4.4 },
+  { skill: 'Confident explaining values & strengths', rating: 4.4 },
+  { skill: 'Know key resume/cover letter components', rating: 4.4 },
+  { skill: 'Can build & maintain a network', rating: 4.4 },
+  { skill: 'Articulate professional mission', rating: 4.3 },
+  { skill: 'Know where to find resources', rating: 4.35 },
+  { skill: 'Have tools to begin job search', rating: 4.35 },
+  { skill: 'Can navigate interview successfully', rating: 4.3 },
+  { skill: 'Can identify workplace myths', rating: 4.3 },
+];
+
+const skillBySkill = [
+  { skill: 'Understanding Workplace Rights', before: 56, after: 94, growth: 1.8 },
+  { skill: 'Interview Preparation', before: 58, after: 86, growth: 1.8 },
+  { skill: 'Job Search Readiness', before: 68, after: 86, growth: 2.1 },
+  { skill: 'Crafting Resume & Cover Letter', before: 48, after: 90, growth: 2.1 },
+  { skill: 'Values, Mindsets & Strengths', before: 56, after: 90, growth: 2.1 },
+  { skill: 'Building a Professional Network', before: 52, after: 90, growth: 2.1 },
+  { skill: 'Resume & Cover Letter Components', before: 70, after: 90, growth: 1.8 },
+  { skill: 'Finding Career Resources', before: 60, after: 86, growth: 1.8 },
+];
+
+const sessionRatings = [
+  { session: 'Resume & Cover Letter Lab Session', rating: 4.4 },
+  { session: 'Purpose to Profile: Resumes & More', rating: 4.4 },
+  { session: 'Discovering Career Interests & Opportunities', rating: 4.1 },
+  { session: 'Workplace Myths v. Realities & Your Rights', rating: 3.8 },
+  { session: 'Values, Mindsets & Strengths', rating: 3.8 },
 ];
 
 export default function ThriverPathwaysPage() {
@@ -171,11 +204,9 @@ export default function ThriverPathwaysPage() {
                   </div>
                   <div className="bg-gray-100 rounded-full h-8 overflow-hidden">
                     <div
-                      className={`${step.color} h-full rounded-full transition-all flex items-center justify-end pr-3`}
+                      className={`${step.color} h-full rounded-full transition-all`}
                       style={{ width: `${step.pct}%` }}
-                    >
-                      <span className="text-xs font-bold text-white">{step.pct}%</span>
-                    </div>
+                    />
                   </div>
                 </div>
               ))}
@@ -208,7 +239,7 @@ export default function ThriverPathwaysPage() {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Real Career Outcomes</h3>
                 <p className="text-white/80 leading-relaxed">
-                  Of participants who applied for jobs during the program, 10 received interviews — and 7 accepted new career opportunities.
+                  Of participants who applied for jobs during the program, 14 received interviews — and 8 accepted new career opportunities.
                 </p>
               </div>
               <div className="text-center">
@@ -220,36 +251,134 @@ export default function ThriverPathwaysPage() {
         </div>
       </section>
 
-      {/* Confidence Outcomes */}
+      {/* Confidence Outcomes - Before & After */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">From Uncertain to Equipped</h2>
-            <p className="text-lg text-gray-600">Post-program survey participants self-rated their confidence before and after the program across ten career-readiness areas. Every area showed meaningful growth.</p>
+            <p className="text-lg text-gray-600">Participants self-rated their confidence before and after the program across ten career-readiness areas. Every area showed meaningful growth.</p>
           </div>
 
-          <div className="space-y-4">
-            {confidenceData.map((item) => (
-              <div key={item.skill} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <p className="text-sm font-semibold text-fg-navy mb-3">{item.skill}</p>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-gray-400 w-12">Before</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
-                      <div className="bg-gray-300 h-full rounded-full" style={{ width: `${(item.before / 5) * 100}%` }} />
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-gray-300" /><span className="text-xs text-gray-500 font-semibold">Before</span></div>
+              <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-fg-blue" /><span className="text-xs text-fg-blue font-semibold">After</span></div>
+            </div>
+            <div className="space-y-5">
+              {confidenceData.map((item) => (
+                <div key={item.skill}>
+                  <p className="text-sm font-semibold text-fg-navy mb-2">{item.skill}</p>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
+                        <div className="bg-gray-300 h-full rounded-full flex items-center justify-end pr-2" style={{ width: `${(item.before / 5) * 100}%` }}>
+                          <span className="text-xs font-bold text-gray-600">{Math.round(item.before)}</span>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-500 w-8">{item.before}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-fg-blue font-semibold w-12">After</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
-                      <div className="bg-fg-blue h-full rounded-full" style={{ width: `${(item.after / 5) * 100}%` }} />
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
+                        <div className="bg-fg-blue h-full rounded-full flex items-center justify-end pr-2" style={{ width: `${(item.after / 5) * 100}%` }}>
+                          <span className="text-xs font-bold text-white">{Math.round(item.after)}</span>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-xs font-bold text-fg-blue w-8">{item.after}</span>
                   </div>
                 </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-6">Self-rated on a 5-point scale (1 = not confident, 5 = extremely confident)</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Post-Program Skill Confidence */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Post-Program Skill Confidence</h2>
+            <p className="text-lg text-gray-600">At program's end, participants rated how strongly they agreed with 11 career readiness statements. Every measure landed above 4.3 out of 5.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+            <div className="space-y-4">
+              {postProgramSkills.map((item) => (
+                <div key={item.skill} className="flex items-center gap-4">
+                  <span className="text-sm text-fg-navy w-64 md:w-72 flex-shrink-0 text-right font-medium">{item.skill}</span>
+                  <div className="flex-1 bg-gray-100 rounded-full h-7 overflow-hidden">
+                    <div className="bg-fg-teal h-full rounded-full" style={{ width: `${(item.rating / 5) * 100}%` }} />
+                  </div>
+                  <span className="text-sm font-bold text-fg-navy w-10 flex-shrink-0">{item.rating.toFixed(1)}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-6">Average score among post-program survey respondents (1–5 scale)</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Skill by Skill Growth */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Skill by Skill: Growth in Every Area</h2>
+            <p className="text-lg text-gray-600">Each skill measured before and after the program. The arc of growth tells the story.</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            {skillBySkill.map((item) => (
+              <div key={item.skill} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h4 className="font-bold text-fg-navy mb-4">{item.skill}</h4>
+                <div className="flex items-end gap-6 mb-3">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-gray-400">{item.before}%</div>
+                    <p className="text-xs text-gray-400 mt-1">Before</p>
+                  </div>
+                  <div className="text-center">
+                    <ArrowRight className="w-5 h-5 text-fg-teal mx-auto mb-1" />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-fg-teal">{item.after}%</div>
+                    <p className="text-xs text-fg-teal mt-1">After</p>
+                  </div>
+                </div>
+                <div className="bg-gray-100 rounded-full h-3 overflow-hidden mb-2">
+                  <div className="bg-fg-teal h-full rounded-full" style={{ width: `${item.after}%` }} />
+                </div>
+                <p className="text-xs text-gray-500 text-right">+{item.growth} growth (5-point scale)</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What Participants Valued Most */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">What Participants Valued Most</h2>
+            <p className="text-lg text-gray-600">Participants rated each session's helpfulness for their career development.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+            <div className="space-y-4">
+              {sessionRatings.map((item) => (
+                <div key={item.session} className="flex items-center gap-4">
+                  <span className="text-sm text-fg-navy w-64 md:w-80 flex-shrink-0 text-right font-medium">{item.session}</span>
+                  <div className="flex-1 bg-gray-100 rounded-full h-7 overflow-hidden">
+                    <div className="bg-fg-orange h-full rounded-full" style={{ width: `${(item.rating / 5) * 100}%` }} />
+                  </div>
+                  <span className="text-sm font-bold text-fg-navy w-12 flex-shrink-0">{item.rating}/5</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-fg-navy/[0.03] rounded-2xl p-8 border border-fg-navy/5 mt-8">
+            <Quote className="w-8 h-8 text-fg-orange/30 mb-4" />
+            <blockquote className="text-lg text-fg-navy leading-relaxed italic mb-4">
+              "I learned my experiences are not only just valuable on paper, but can change the world! Join to learn more about yourself, find community, and to be connected to opportunities!"
+            </blockquote>
           </div>
         </div>
       </section>
