@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Download, Users, Briefcase, Award, BarChart3, CheckCircle2, Quote, FileText, Heart, TrendingUp, Star } from 'lucide-react';
 
 const confidenceData = [
@@ -104,8 +105,48 @@ export default function ThriverPathwaysPage() {
         </div>
       </section>
 
+      {/* Program Partners */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">Program Partners</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Thriver Pathways was made possible through the collaboration of Doing Good Works and Str8Up Employment Services — partners who believe that workforce development and community belonging are not separate goals.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center w-full sm:w-72">
+              <div className="w-32 h-32 relative mb-4">
+                <Image
+                  src="/images/partners/str8up.png"
+                  alt="Str8Up Employment Services"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-bold text-fg-navy text-lg">Str8Up Employment Services</h3>
+              <p className="text-sm text-gray-500 mt-2">Career readiness curriculum and workforce development expertise</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center w-full sm:w-72">
+              <div className="w-32 h-32 relative mb-4">
+                <Image
+                  src="/images/partners/dgw-circle.png"
+                  alt="Doing Good Works"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-bold text-fg-navy text-lg">Doing Good Works</h3>
+              <p className="text-sm text-gray-500 mt-2">Social enterprise powering Foster Greatness through business revenue</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Program at a Glance */}
-      <section id="results" className="py-20 px-4 bg-gray-50 scroll-mt-24">
+      <section id="results" className="py-20 px-4 bg-white scroll-mt-24">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-fg-navy mb-4">The Numbers Behind the Journey</h2>
