@@ -260,34 +260,35 @@ export default function ThriverPathwaysPage() {
           </div>
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-8">
               <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-gray-300" /><span className="text-xs text-gray-500 font-semibold">Before</span></div>
               <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-fg-blue" /><span className="text-xs text-fg-blue font-semibold">After</span></div>
             </div>
             <div className="space-y-5">
               {confidenceData.map((item) => (
-                <div key={item.skill}>
-                  <p className="text-sm font-semibold text-fg-navy mb-2">{item.skill}</p>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
-                        <div className="bg-gray-300 h-full rounded-full flex items-center justify-end pr-2" style={{ width: `${(item.before / 5) * 100}%` }}>
-                          <span className="text-xs font-bold text-gray-600">{Math.round(item.before)}</span>
-                        </div>
-                      </div>
+                <div key={item.skill} className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-fg-navy w-48 md:w-64 flex-shrink-0 text-right">{item.skill}</span>
+                  <div className="flex-1 space-y-1.5">
+                    <div className="bg-gray-100 rounded-full h-5 overflow-hidden">
+                      <div className="bg-gray-300 h-full rounded-full" style={{ width: `${(item.before / 5) * 100}%` }} />
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden">
-                        <div className="bg-fg-blue h-full rounded-full flex items-center justify-end pr-2" style={{ width: `${(item.after / 5) * 100}%` }}>
-                          <span className="text-xs font-bold text-white">{Math.round(item.after)}</span>
-                        </div>
-                      </div>
+                    <div className="bg-gray-100 rounded-full h-5 overflow-hidden">
+                      <div className="bg-fg-blue h-full rounded-full" style={{ width: `${(item.after / 5) * 100}%` }} />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-400 text-center mt-6">Self-rated on a 5-point scale (1 = not confident, 5 = extremely confident)</p>
+            {/* X-axis scale */}
+            <div className="flex items-center gap-4 mt-4">
+              <div className="w-48 md:w-64 flex-shrink-0" />
+              <div className="flex-1 flex justify-between px-1">
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <span key={n} className="text-xs text-gray-400 font-medium">{n}</span>
+                ))}
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-4">Self-rated on a 5-point scale (1 = not confident, 5 = extremely confident)</p>
           </div>
         </div>
       </section>
@@ -325,29 +326,33 @@ export default function ThriverPathwaysPage() {
             <p className="text-lg text-gray-600">Each skill measured before and after the program. The arc of growth tells the story.</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-5">
-            {skillBySkill.map((item) => (
-              <div key={item.skill} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h4 className="font-bold text-fg-navy mb-4">{item.skill}</h4>
-                <div className="flex items-end gap-6 mb-3">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-400">{item.before}%</div>
-                    <p className="text-xs text-gray-400 mt-1">Before</p>
-                  </div>
-                  <div className="text-center">
-                    <ArrowRight className="w-5 h-5 text-fg-teal mx-auto mb-1" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-fg-teal">{item.after}%</div>
-                    <p className="text-xs text-fg-teal mt-1">After</p>
+          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-gray-300" /><span className="text-xs text-gray-500 font-semibold">Before</span></div>
+              <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-fg-teal" /><span className="text-xs text-fg-teal font-semibold">After</span></div>
+            </div>
+            <div className="space-y-6">
+              {skillBySkill.map((item) => (
+                <div key={item.skill} className="flex items-center gap-4">
+                  <span className="text-sm font-medium text-fg-navy w-48 md:w-64 flex-shrink-0 text-right">{item.skill}</span>
+                  <div className="flex-1 space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                        <div className="bg-gray-300 h-full rounded-full" style={{ width: `${item.before}%` }} />
+                      </div>
+                      <span className="text-xs font-bold text-gray-400 w-10">{item.before}%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                        <div className="bg-fg-teal h-full rounded-full" style={{ width: `${item.after}%` }} />
+                      </div>
+                      <span className="text-xs font-bold text-fg-teal w-10">{item.after}%</span>
+                    </div>
                   </div>
                 </div>
-                <div className="bg-gray-100 rounded-full h-3 overflow-hidden mb-2">
-                  <div className="bg-fg-teal h-full rounded-full" style={{ width: `${item.after}%` }} />
-                </div>
-                <p className="text-xs text-gray-500 text-right">+{item.growth} growth (5-point scale)</p>
-              </div>
-            ))}
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-6">Percentage of participants rating themselves confident or very confident in each area</p>
           </div>
         </div>
       </section>
